@@ -17,8 +17,8 @@ public class ProductVariant : Entity
     public decimal? PriceOverride { get; private set; }  // null = use the product's base price
     public bool IsDeleted { get; private set; }
 
-    // PostgreSQL xmin: stops two buyers from taking the last piece at the same time.
-    public uint Version { get; private set; }
+    // Row version: stops two buyers from taking the last piece at the same time.
+    public ulong Version { get; private set; }
 
     private ProductVariant() { } // EF Core
 

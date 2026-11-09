@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Weft.Infrastructure.Persistence;
 
-// Stores any object as a PostgreSQL jsonb column, and lets EF notice when its content changes.
+// Stores any object as JSON text (nvarchar(max)), and lets EF notice when its content changes.
 internal static class JsonColumn
 {
     private static readonly JsonSerializerOptions Options = new(JsonSerializerDefaults.Web);
@@ -23,7 +23,7 @@ internal static class JsonColumn
             value => JsonSerializer.Serialize(value, Options).GetHashCode(),
             value => JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(value, Options), Options)!);
 
-        property.HasConversion(converter, comparer).HasColumnType("jsonb");
+        property.HasConversion(converter, comparer).HasColumnType("nvarchar(max)");
         return property;
     }
 }

@@ -37,7 +37,7 @@ public sealed record AdminProductRow(int Id, string Slug, string NameAr, string 
     bool IsVisible, string? ThumbnailUrl, bool LowStock);
 
 public sealed record AdminVariantDto(int Id, string Sku, string Size, ColorDto Color, int Stock,
-    decimal? PriceOverride, decimal Price, uint Version);
+    decimal? PriceOverride, decimal Price, ulong Version);
 
 public sealed record AdminProductDetail(int Id, int CategoryId, string Slug, string NameAr, string NameEn,
     string? DescriptionAr, string? DescriptionEn, decimal BasePrice, bool IsVisible,

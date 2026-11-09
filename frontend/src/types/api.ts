@@ -1430,7 +1430,7 @@ export interface components {
             priceOverride: null | number;
             /** Format: double */
             price: number;
-            /** Format: uint32 */
+            /** Format: uint64 */
             version: number;
         };
         AdminZoneDto: {
@@ -1779,7 +1779,7 @@ export interface components {
             stock: number;
             /** Format: double */
             priceOverride: null | number;
-            /** Format: uint32 */
+            /** Format: uint64 */
             version: number;
         };
         UserResponse: {

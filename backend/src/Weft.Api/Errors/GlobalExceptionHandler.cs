@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+using Microsoft.Data.SqlClient;
 using Weft.Application.Common;
 using Weft.Domain.Constants;
 using Weft.Domain.Exceptions;
@@ -24,9 +24,10 @@ public sealed class GlobalExceptionHandler(IProblemDetailsService problemDetails
             DbUpdateConcurrencyException => (StatusCodes.Status409Conflict, ErrorCodes.ConcurrencyConflict,
                 "Changed by someone else", "This item was changed by someone else. Reload it and try again."),
             // Safety nets: the use cases check these first, but two requests can still race each other.
-            DbUpdateException { InnerException: PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } } =>
+            // SQL Server error 2601/2627 = duplicate in a unique index, 547 = still referenced by a foreign key.
+            DbUpdateException { InnerException: SqlException { Number: 2601 or 2627 } } =>
                 (StatusCodes.Status409Conflict, ErrorCodes.Duplicate, "Already exists", "Something with the same name, link or SKU already exists."),
-            DbUpdateException { InnerException: PostgresException { SqlState: PostgresErrorCodes.ForeignKeyViolation } } =>
+            DbUpdateException { InnerException: SqlException { Number: 547 } } =>
                 (StatusCodes.Status409Conflict, ErrorCodes.InUse, "Still in use", "This item is still used by something else."),
             _ => (StatusCodes.Status500InternalServerError, null, "Something went wrong", null),
         };

@@ -27,7 +27,7 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
 
     public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
 
-    // Our own schema, not "public": Supabase publishes the public schema as a web API.
+    // Our own schema, not "dbo", so WEFT tables are easy to tell apart on a shared server.
     public const string Schema = "weft";
     public const string OrderNumberSequence = "OrderNumbers";
 
@@ -51,7 +51,7 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
         modelBuilder.HasDefaultSchema(Schema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(WeftDbContext).Assembly);
 
-        // WF-10001, WF-10002, ... Read with nextval() when an order is created.
+        // WF-10001, WF-10002, ... Read with NEXT VALUE FOR when an order is created.
         modelBuilder.HasSequence<long>(OrderNumberSequence).StartsAt(10001).IncrementsBy(1);
     }
 
@@ -59,6 +59,11 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
     {
         // Money: exact, 2 decimals everywhere.
         configurationBuilder.Properties<decimal>().HavePrecision(18, 2);
+
+        // All times are UTC. SQL Server's datetime2 forgets that on the way back, so mark them UTC when reading;
+        // otherwise the API would send "2026-11-09T10:00:00" without the Z and browsers would read it as local time.
+        configurationBuilder.Properties<DateTime>().HaveConversion<UtcDateTimeConverter>();
+        configurationBuilder.Properties<DateTime?>().HaveConversion<UtcDateTimeConverter>();
 
         // Enums are stored as readable text ("Shipped"), so reordering an enum never corrupts data.
         configurationBuilder.Properties<OrderStatus>().HaveConversion<string>().HaveMaxLength(30);
@@ -89,3 +94,8 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
         }
     }
 }
+
+// Writes times as UTC and reads them back marked as UTC.
+internal sealed class UtcDateTimeConverter() : Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTime, DateTime>(
+    value => value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime(),
+    value => DateTime.SpecifyKind(value, DateTimeKind.Utc));

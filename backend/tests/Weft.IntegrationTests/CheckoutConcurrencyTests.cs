@@ -5,8 +5,8 @@ using Weft.Domain.Constants;
 
 namespace Weft.IntegrationTests;
 
-[Collection(PostgresCollection.Name)]
-public sealed class CheckoutConcurrencyTests(PostgresFixture pg)
+[Collection(SqlServerCollection.Name)]
+public sealed class CheckoutConcurrencyTests(SqlServerFixture pg)
 {
     // Every buyer runs in its own DbContext (its own connection), started at the same moment.
     private async Task<List<object>> BuyAtTheSameTime(int buyers, int variantId, int zoneId)
@@ -16,7 +16,7 @@ public sealed class CheckoutConcurrencyTests(PostgresFixture pg)
         {
             await using var db = pg.NewContext();
             start.Wait();
-            try { return (object)await PostgresFixture.Checkout(db).HandleAsync(PostgresFixture.Command(zoneId, variantId, 1050), CancellationToken.None); }
+            try { return (object)await SqlServerFixture.Checkout(db).HandleAsync(SqlServerFixture.Command(zoneId, variantId, 1050), CancellationToken.None); }
             catch (Exception ex) { return ex; }
         })).ToList();
 
@@ -69,20 +69,20 @@ public sealed class CheckoutConcurrencyTests(PostgresFixture pg)
         var (variantId, zoneId) = await pg.SeedAsync(stock: 5);
 
         await using var db1 = pg.NewContext();
-        var first = await PostgresFixture.Checkout(db1).HandleAsync(PostgresFixture.Command(zoneId, variantId, 1050), CancellationToken.None);
+        var first = await SqlServerFixture.Checkout(db1).HandleAsync(SqlServerFixture.Command(zoneId, variantId, 1050), CancellationToken.None);
         await using var db2 = pg.NewContext();
-        var second = await PostgresFixture.Checkout(db2).HandleAsync(PostgresFixture.Command(zoneId, variantId, 1050), CancellationToken.None);
+        var second = await SqlServerFixture.Checkout(db2).HandleAsync(SqlServerFixture.Command(zoneId, variantId, 1050), CancellationToken.None);
 
         Assert.StartsWith("WF-1", first.Number);
         Assert.Equal(long.Parse(first.Number[3..]) + 1, long.Parse(second.Number[3..]));
     }
 
     [DockerFact]
-    public async Task The_real_schema_lives_in_weft_not_public()
+    public async Task The_real_schema_lives_in_weft_not_dbo()
     {
         await using var db = pg.NewContext();
         var tables = await db.Database
-            .SqlQueryRaw<string>("SELECT table_schema AS \"Value\" FROM information_schema.tables WHERE table_name = 'Orders'")
+            .SqlQueryRaw<string>("SELECT TABLE_SCHEMA AS [Value] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Orders'")
             .ToListAsync();
 
         Assert.Equal(["weft"], tables);

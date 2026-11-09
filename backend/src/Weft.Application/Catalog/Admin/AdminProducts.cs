@@ -249,7 +249,7 @@ public sealed class DeleteProductHandler(IAppDbContext db, IImageStorage storage
 
 // ===================== variants: #26–28 =====================
 
-public sealed record UpdateVariantCommand(string Size, int ColorId, int Stock, decimal? PriceOverride, uint Version);
+public sealed record UpdateVariantCommand(string Size, int ColorId, int Stock, decimal? PriceOverride, ulong Version);
 
 public sealed class UpdateVariantValidator : AbstractValidator<UpdateVariantCommand>
 {

@@ -4,7 +4,7 @@ using Weft.Domain.Entities;
 
 namespace Weft.Application.Common;
 
-// What the use cases need from the database. Infrastructure implements it with EF Core + PostgreSQL;
+// What the use cases need from the database. Infrastructure implements it with EF Core + SQL Server;
 // tests implement it with an in-memory database.
 public interface IAppDbContext
 {

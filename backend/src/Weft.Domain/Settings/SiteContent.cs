@@ -1,6 +1,6 @@
 namespace Weft.Domain.Settings;
 
-// The home page and footer content the owner edits. Stored as one jsonb document.
+// The home page and footer content the owner edits. Stored as one JSON document.
 public sealed record SiteContent(
     string AnnouncementAr,
     string AnnouncementEn,

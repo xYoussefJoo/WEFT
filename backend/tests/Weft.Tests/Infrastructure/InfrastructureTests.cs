@@ -38,7 +38,7 @@ public class DatabaseModelTests
     // Builds the real EF model and the SQL it would create, without needing a database.
     private static string CreateScript()
     {
-        var options = new DbContextOptionsBuilder<WeftDbContext>().UseNpgsql("Host=localhost;Database=model-only").Options;
+        var options = new DbContextOptionsBuilder<WeftDbContext>().UseSqlServer("Server=localhost;Database=model-only").Options;
         using var db = new WeftDbContext(options, TimeProvider.System);
         return db.Database.GenerateCreateScript();
     }
@@ -48,21 +48,21 @@ public class DatabaseModelTests
     {
         var sql = CreateScript();
 
-        Assert.Contains("CREATE SEQUENCE weft.\"OrderNumbers\" START WITH 10001", sql);        // order numbers
-        Assert.Contains("\"CustomerName\" character varying(100) NOT NULL", sql);        // value object columns
-        Assert.Contains("\"Content\" jsonb", sql);
-        Assert.Contains("\"Status\" character varying(30) NOT NULL", sql);               // enums as text
-        Assert.Contains("numeric(18,2)", sql);                                           // money
-        Assert.Contains("WHERE \"IsDeleted\" = false", sql);                             // one active size+color
-        Assert.Contains("CREATE TABLE weft.\"AspNetUsers\"", sql);                            // Identity
-        Assert.Contains("CREATE TABLE weft.\"DataProtectionKeys\"", sql);
-        Assert.DoesNotContain("\"Version\"", sql);                                       // xmin is a system column
+        Assert.Contains("CREATE SEQUENCE [weft].[OrderNumbers] START WITH 10001", sql);          // order numbers
+        Assert.Contains("[CustomerName] nvarchar(100) NOT NULL", sql);                    // value object columns
+        Assert.Contains("[Content] nvarchar(max) NOT NULL", sql);                         // JSON documents
+        Assert.Contains("[Status] nvarchar(30) NOT NULL", sql);                           // enums as text
+        Assert.Contains("decimal(18,2)", sql);                                            // money
+        Assert.Contains("WHERE [IsDeleted] = 0", sql);                                    // one active size+color
+        Assert.Contains("CREATE TABLE [weft].[AspNetUsers]", sql);                        // Identity
+        Assert.Contains("CREATE TABLE [weft].[DataProtectionKeys]", sql);
+        Assert.Contains("[Version] rowversion NOT NULL", sql);                            // optimistic concurrency
     }
 
     [Fact]
     public void A_variant_that_was_ordered_cannot_be_hard_deleted()
     {
-        Assert.Contains("REFERENCES weft.\"ProductVariants\" (\"Id\") ON DELETE RESTRICT", CreateScript());
+        Assert.Contains("REFERENCES [weft].[ProductVariants] ([Id]) ON DELETE NO ACTION", CreateScript());
     }
 }
 
@@ -85,15 +85,15 @@ public class CommonPasswordValidatorTests
 public class DatabaseSchemaTests
 {
     [Fact]
-    public void Nothing_is_created_in_the_public_schema()
+    public void Nothing_is_created_in_the_dbo_schema()
     {
-        // Supabase publishes the public schema as a web API, so our tables must never live there.
-        var options = new DbContextOptionsBuilder<WeftDbContext>().UseNpgsql("Host=localhost;Database=model-only").Options;
+        // WEFT tables live in their own schema, so they are easy to tell apart on a shared server.
+        var options = new DbContextOptionsBuilder<WeftDbContext>().UseSqlServer("Server=localhost;Database=model-only").Options;
         using var db = new WeftDbContext(options, TimeProvider.System);
         var sql = db.Database.GenerateCreateScript();
 
-        Assert.Contains("CREATE SCHEMA weft", sql);
-        Assert.DoesNotContain("CREATE TABLE \"", sql);  // every table is schema-qualified
-        Assert.DoesNotContain("public.", sql);
+        Assert.Contains("CREATE SCHEMA [weft]", sql);
+        Assert.DoesNotContain("CREATE TABLE [dbo]", sql);
+        Assert.DoesNotContain("CREATE TABLE [AspNet", sql); // every table is schema-qualified
     }
 }

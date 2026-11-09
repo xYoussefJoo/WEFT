@@ -11,10 +11,10 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Wef
     public WeftDbContext CreateDbContext(string[] args)
     {
         var connectionString = Environment.GetEnvironmentVariable("WEFT_DB")
-            ?? "Host=localhost;Port=5432;Database=weft;Username=weft";
+            ?? "Server=localhost;Database=weft;Trusted_Connection=True;TrustServerCertificate=True";
 
         var options = new DbContextOptionsBuilder<WeftDbContext>()
-            .UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", WeftDbContext.Schema))
+            .UseSqlServer(connectionString, sql => sql.MigrationsHistoryTable("__EFMigrationsHistory", WeftDbContext.Schema))
             .Options;
         return new WeftDbContext(options, TimeProvider.System);
     }

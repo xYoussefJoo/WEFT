@@ -46,7 +46,7 @@ erDiagram
     ProductImages {
         int Id PK
         int ProductId FK
-        string StorageKey "Supabase Storage key"
+        string StorageKey "photo storage key"
         string AltAr
         string AltEn
         int SortOrder "0 = main photo"
@@ -60,7 +60,7 @@ erDiagram
         int Stock
         decimal PriceOverride "null = base price"
         bool IsDeleted
-        uint xmin "concurrency token"
+        rowversion Version "concurrency token"
     }
     Colors {
         int Id PK
@@ -126,12 +126,12 @@ erDiagram
         string Endpoint
         string RequestHash
         int StatusCode
-        jsonb ResponseJson
+        json ResponseJson
         datetime CreatedAt "kept 24 h"
     }
     SiteSettings {
         int Id PK "single row"
-        jsonb Content "hero, contacts, social"
+        json Content "hero, contacts, social"
         datetime UpdatedAt
     }
     AspNetUsers {

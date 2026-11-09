@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Npgsql;
 using Weft.Infrastructure.Health;
 using Weft.Application.Common;
 using Weft.Application.Orders;
@@ -27,17 +26,10 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("Weft")
             ?? throw new InvalidOperationException(
-                "Connection string 'Weft' is missing. Set it with: dotnet user-secrets set \"ConnectionStrings:Weft\" \"Host=localhost;Port=5432;Database=weft;Username=weft;Password=...\"");
-
-        // Supabase's pooler allows only a few connections per project. Npgsql would open up to 100, so cap it
-        // (Database:MaxPoolSize, default 10) unless the connection string already sets its own limit.
-        var connection = new NpgsqlConnectionStringBuilder(connectionString);
-        if (connection.MaxPoolSize == new NpgsqlConnectionStringBuilder().MaxPoolSize)
-            connection.MaxPoolSize = configuration.GetValue("Database:MaxPoolSize", 10);
-        connectionString = connection.ConnectionString;
+                "Connection string 'Weft' is missing. Set it with: dotnet user-secrets set \"ConnectionStrings:Weft\" \"Server=<host>;Database=<db>;User Id=<user>;Password=...;TrustServerCertificate=True\"");
 
         services.AddSingleton(TimeProvider.System);
-        services.AddDbContext<WeftDbContext>(options => options.UseNpgsql(connectionString, npgsql => npgsql
+        services.AddDbContext<WeftDbContext>(options => options.UseSqlServer(connectionString, sql => sql
             .MigrationsHistoryTable("__EFMigrationsHistory", WeftDbContext.Schema)
             // A product with 10 photos and 20 variants is 30 rows, not 200 (one query per list).
             .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));

@@ -1,6 +1,6 @@
 # WEFT — Database
 
-PostgreSQL 17 (Supabase) · EF Core · schema `weft`. GitHub draws the diagram below automatically.
+SQL Server (MonsterASP.NET) · EF Core · schema `weft`. GitHub draws the diagram below automatically.
 
 Every table that inherits `Entity` also has `CreatedAt` and `UpdatedAt` (set automatically when saving).
 
@@ -53,7 +53,7 @@ erDiagram
     ProductImages {
         int Id PK
         int ProductId FK
-        string StorageKey "Supabase Storage key"
+        string StorageKey "photo storage key"
         string AltAr
         string AltEn
         int SortOrder "0 = main photo"
@@ -67,7 +67,7 @@ erDiagram
         int Stock
         decimal PriceOverride "null = base price"
         bool IsDeleted
-        uint xmin "concurrency token"
+        rowversion Version "concurrency token"
     }
     Colors {
         int Id PK
@@ -133,12 +133,12 @@ erDiagram
         string Endpoint
         string RequestHash
         int StatusCode
-        jsonb ResponseJson
+        json ResponseJson
         datetime CreatedAt "kept 24 h"
     }
     SiteSettings {
         int Id PK "single row"
-        jsonb Content "hero, contacts, social"
+        json Content "hero, contacts, social"
         datetime UpdatedAt
     }
     AspNetUsers {

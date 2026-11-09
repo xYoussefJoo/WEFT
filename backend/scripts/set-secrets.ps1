@@ -29,15 +29,15 @@ Write-Host 'WEFT - API secrets' -ForegroundColor Cyan
 Write-Host 'Typed secrets are hidden. Press Enter to keep a [default].'
 Write-Host ''
 
-# --- Supabase database (Connect -> Session pooler)
-$dbHost = Read-Plain 'Supabase pooler host' 'aws-1-eu-central-1.pooler.supabase.com'
-$dbUser = Read-Plain 'Database user' 'postgres.WEFT_PROJECT_REF'
+# --- SQL Server database on MonsterASP.NET (Control panel -> Databases -> connection string)
+$dbHost = Read-Plain 'Database server' 'db78891.public.databaseasp.net'
+$dbName = Read-Plain 'Database name' 'db78891'
+$dbUser = Read-Plain 'Database user' 'db78891'
 $dbPass = Read-Secret 'Database password (hidden)'
 if (-not $dbPass) { throw 'The database password is required.' }
 
-# --- Supabase Storage (Project Settings -> API Keys -> Secret keys)
-$storageKey = Read-Secret 'Supabase secret key sb_secret_... (hidden)'
-if (-not $storageKey) { throw 'The Supabase secret key is required for photo uploads.' }
+# --- Photo storage key (optional for now: press Enter to skip; photo uploads stay off until it is set)
+$storageKey = Read-Secret 'Photo storage secret key (hidden, Enter to skip)'
 
 # --- First owner account (created on first start, then the owner must change the password)
 Write-Host ''
@@ -49,16 +49,17 @@ if ($ownerPass.Length -lt 10) { throw 'The owner password must be at least 10 ch
 $ownerPass2 = Read-Secret 'Repeat the owner password (hidden)'
 if ($ownerPass -ne $ownerPass2) { throw 'The two owner passwords are different.' }
 
-$connection = "Host=$dbHost;Port=5432;Database=postgres;Username=$dbUser;Password=$(Quote-ConnValue $dbPass);SSL Mode=Require"
+$connection = "Server=$dbHost;Database=$dbName;User Id=$dbUser;Password=$(Quote-ConnValue $dbPass);Encrypt=True;TrustServerCertificate=True;MultipleActiveResultSets=True"
 
 # Piping JSON keeps special characters safe (no command-line quoting problems).
 $secrets = [ordered]@{
     'ConnectionStrings:Weft' = $connection
-    'Storage:ServiceKey'       = $storageKey
     'Seed:OwnerEmail'          = $ownerEmail.ToLowerInvariant()
     'Seed:OwnerName'           = $ownerName
     'Seed:OwnerPassword'       = $ownerPass
 }
+if ($storageKey) { $secrets['Storage:ServiceKey'] = $storageKey }
+
 $secrets | ConvertTo-Json -Compress | dotnet user-secrets set --project $project | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'dotnet user-secrets failed.' }
 

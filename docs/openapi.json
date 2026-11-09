@@ -1873,7 +1873,7 @@
           },
           "version": {
             "type": "integer",
-            "format": "uint32"
+            "format": "uint64"
           }
         }
       },
@@ -3152,7 +3152,7 @@
           },
           "version": {
             "type": "integer",
-            "format": "uint32"
+            "format": "uint64"
           }
         }
       },

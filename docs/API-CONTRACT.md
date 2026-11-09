@@ -10,7 +10,7 @@
 
 | Topic | Rule |
 |---|---|
-| Stack | ASP.NET Core 10 Web API (Controllers) · Clean Architecture · PostgreSQL 17 · EF Core migrations · Next.js frontend |
+| Stack | ASP.NET Core 10 Web API (Controllers) · Clean Architecture · SQL Server · EF Core migrations · Next.js frontend |
 | Routing | `/api/{resource}`, admin under `/api/admin/{resource}`. The browser calls `/api/*` on the site's own domain; Next.js forwards to the API |
 | Users | **One Owner account.** Customers never log in (guest checkout). The role system stays in the code so staff can be added later |
 | Auth | ASP.NET Identity httpOnly cookie `zz.auth` (Secure, SameSite=Strict, 8 h sliding). Lockout after 5 failed logins |

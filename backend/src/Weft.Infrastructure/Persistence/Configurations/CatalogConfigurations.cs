@@ -57,13 +57,13 @@ internal sealed class ProductVariantConfiguration : IEntityTypeConfiguration<Pro
 
         // One active variant per size + color. Deleted (kept-for-history) variants don't count.
         builder.HasIndex(v => new { v.ProductId, v.Size, v.ColorId })
-            .IsUnique().HasFilter("\"IsDeleted\" = false");
+            .IsUnique().HasFilter("[IsDeleted] = 0");
 
         builder.HasOne(v => v.Color).WithMany()
             .HasForeignKey(v => v.ColorId).OnDelete(DeleteBehavior.Restrict);
 
-        // PostgreSQL's built-in xmin column: the save fails if someone changed the row since we read it.
-        builder.Property(v => v.Version).IsRowVersion();
+        // SQL Server rowversion (8 bytes, read as a number): the save fails if someone changed the row since we read it.
+        builder.Property(v => v.Version).IsRowVersion().HasConversion<byte[]>();
     }
 }
 

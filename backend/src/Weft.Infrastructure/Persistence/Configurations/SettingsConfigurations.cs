@@ -15,7 +15,7 @@ internal sealed class DeliveryZoneConfiguration : IEntityTypeConfiguration<Deliv
     }
 }
 
-// The three single-row settings tables keep their whole content in one jsonb column,
+// The three single-row settings tables keep their whole content in one JSON text column,
 // so adding a field (a new social link, a new fabric) needs no migration.
 internal sealed class SiteSettingsConfiguration : IEntityTypeConfiguration<SiteSettings>
 {
@@ -35,7 +35,7 @@ internal sealed class IdempotencyRecordConfiguration : IEntityTypeConfiguration<
         builder.Property(r => r.Key).HasMaxLength(100);
         builder.Property(r => r.Endpoint).HasMaxLength(100);
         builder.Property(r => r.RequestHash).HasMaxLength(64);
-        builder.Property(r => r.ResponseJson).HasColumnType("jsonb");
+        builder.Property(r => r.ResponseJson).HasColumnType("nvarchar(max)");
         builder.HasIndex(r => r.CreatedAt); // daily clean-up of keys older than 24 h
     }
 }

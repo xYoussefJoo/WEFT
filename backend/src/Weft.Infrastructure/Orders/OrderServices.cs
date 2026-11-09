@@ -6,14 +6,14 @@ using Weft.Infrastructure.Persistence;
 
 namespace Weft.Infrastructure.Orders;
 
-// Reads the next number from the PostgreSQL sequence: unique even when two orders arrive at the same moment.
+// Reads the next number from the SQL Server sequence: unique even when two orders arrive at the same moment.
 // Runs on the same connection/transaction as the checkout. A rolled-back checkout leaves a gap, which is fine.
 public sealed class OrderNumberGenerator(WeftDbContext db) : IOrderNumberGenerator
 {
     public async Task<string> NextAsync(CancellationToken cancellationToken)
     {
         var next = await db.Database
-            .SqlQueryRaw<long>($"SELECT nextval('{WeftDbContext.Schema}.\"{WeftDbContext.OrderNumberSequence}\"') AS \"Value\"")
+            .SqlQueryRaw<long>($"SELECT NEXT VALUE FOR [{WeftDbContext.Schema}].[{WeftDbContext.OrderNumberSequence}] AS [Value]")
             .SingleAsync(cancellationToken);
         return $"WF-{next}";
     }

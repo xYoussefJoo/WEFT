@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using Testcontainers.PostgreSql;
+using Testcontainers.MsSql;
 using Weft.Application.Common;
 using Weft.Application.Orders;
 using Weft.Domain.Common;
@@ -10,11 +10,11 @@ using Weft.Infrastructure.Persistence;
 
 namespace Weft.IntegrationTests;
 
-// One real PostgreSQL 17 in Docker for all integration tests, with the real migration applied.
+// One real SQL Server 2022 in Docker for all integration tests, with the real migration applied.
 // Runs in GitHub Actions (Docker is built in). On a PC without Docker the tests are skipped, not failed.
-public sealed class PostgresFixture : IAsyncLifetime
+public sealed class SqlServerFixture : IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _container = new PostgreSqlBuilder("postgres:17-alpine").Build();
+    private readonly MsSqlContainer _container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest").Build();
 
     public async Task InitializeAsync()
     {
@@ -32,7 +32,7 @@ public sealed class PostgresFixture : IAsyncLifetime
     // A fresh DbContext = a separate "user" with its own connection, like two browsers.
     public WeftDbContext NewContext() =>
         new(new DbContextOptionsBuilder<WeftDbContext>()
-            .UseNpgsql(_container.GetConnectionString(), npgsql => npgsql
+            .UseSqlServer(_container.GetConnectionString(), sql => sql
                 .MigrationsHistoryTable("__EFMigrationsHistory", WeftDbContext.Schema)
                 .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
             .Options, TimeProvider.System);
@@ -69,9 +69,6 @@ public sealed class PostgresFixture : IAsyncLifetime
         public string PublicUrl(string objectKey) => objectKey;
         public Task UploadPublicAsync(string objectKey, byte[] content, string contentType, CancellationToken ct) => Task.CompletedTask;
         public Task DeletePublicAsync(IReadOnlyCollection<string> objectKeys, CancellationToken ct) => Task.CompletedTask;
-        public Task UploadPrivateAsync(string objectKey, byte[] content, string contentType, CancellationToken ct) => Task.CompletedTask;
-        public Task DeletePrivateAsync(IReadOnlyCollection<string> objectKeys, CancellationToken ct) => Task.CompletedTask;
-        public Task<string> SignedPrivateUrlAsync(string objectKey, TimeSpan validFor, CancellationToken ct) => Task.FromResult(objectKey);
     }
 
     private sealed class NoEmails : IEmailQueue
@@ -88,9 +85,9 @@ public sealed class PostgresFixture : IAsyncLifetime
 }
 
 [CollectionDefinition(Name)]
-public sealed class PostgresCollection : ICollectionFixture<PostgresFixture>
+public sealed class SqlServerCollection : ICollectionFixture<SqlServerFixture>
 {
-    public const string Name = "postgres";
+    public const string Name = "sqlserver";
 }
 
 public static class Docker
@@ -115,6 +112,6 @@ public sealed class DockerFactAttribute : FactAttribute
 {
     public DockerFactAttribute()
     {
-        if (!Docker.IsAvailable) Skip = "Needs Docker for a real PostgreSQL; runs in GitHub Actions CI.";
+        if (!Docker.IsAvailable) Skip = "Needs Docker for a real SQL Server; runs in GitHub Actions CI.";
     }
 }

@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
+import { siteUrl } from '@/lib/site';
 
-// Home + every visible product, for search engines. Built from NEXT_PUBLIC_SITE_URL (the live domain).
+// Home + every visible product, for search engines. Built from the live domain (see lib/site.ts).
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const site = siteUrl;
   const pages: MetadataRoute.Sitemap = [{ url: `${site}/`, changeFrequency: 'daily', priority: 1 }];
   try {
     const res = await fetch(`${process.env.API_URL ?? 'http://localhost:5055'}/api/products?page=1&pageSize=100`, { signal: AbortSignal.timeout(5000) });

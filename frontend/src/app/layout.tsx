@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Tajawal, DM_Sans } from "next/font/google";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const tajawal = Tajawal({
@@ -16,8 +17,6 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-// The live domain, set in Vercel (NEXT_PUBLIC_SITE_URL); share links and the sitemap are built from it.
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const title = "WEFT | The Thread Co.";
 const description = "WEFT — The Thread Co. هوديز بتصميم بسيط وخامات مريحة | Hoodies with a simple design and comfortable fabrics";
 

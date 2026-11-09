@@ -35,10 +35,10 @@ export default function AdminOverview() {
   const stats: [string, string, number | string | undefined, string][] = [
     ['طلبات اليوم', 'Orders today', data?.ordersToday, 'text-[#141414]'],
     ['بانتظار التأكيد', 'To confirm', data?.pendingConfirmation, 'text-[#6b5d4c]'],
-    ['للتغليف', 'To pack', data?.toPack, 'text-[#141414]'],
+    ['بانتظار التغليف', 'To pack', data?.toPack, 'text-[#141414]'],
     ['جاهز للشحن', 'Ready to ship', data?.readyToShip, 'text-emerald-800'],
     ['قيد التوصيل', 'Out for delivery', data?.outForDelivery, 'text-[#141414]'],
-    ['مبيعات 30 يومًا (مسلّمة)', 'Delivered, last 30 days', data ? money(data.deliveredRevenueLast30Days) : undefined, 'text-emerald-800'],
+    ['مبيعات آخر 30 يومًا (المُسلَّمة)', 'Delivered, last 30 days', data ? money(data.deliveredRevenueLast30Days) : undefined, 'text-emerald-800'],
   ];
 
   return (
@@ -106,7 +106,7 @@ export default function AdminOverview() {
                   <span className="text-xs text-[#6e6a63] font-mono" dir="ltr">{s.sku} · {s.size}</span>
                 </span>
                 <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-bold ${s.stock === 0 ? 'bg-red-50 text-red-700' : 'bg-[#fff7e7] text-[#6b5d4c]'}`}>
-                  {s.stock === 0 ? t('نفد', 'Sold out') : t(`${s.stock} متبقي`, `${s.stock} left`)}
+                  {s.stock === 0 ? t('نفد', 'Sold out') : t(`متبقٍ ${s.stock}`, `${s.stock} left`)}
                 </span>
               </button>
             ))}

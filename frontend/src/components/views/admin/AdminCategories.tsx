@@ -48,7 +48,7 @@ export default function AdminCategories() {
       changed(t('تم حذف القسم', 'Category deleted'));
     } catch (err) {
       showToast(err instanceof ApiError && err.code === 'IN_USE'
-        ? t('القسم به منتجات أو أقسام فرعية. انقليها أولاً.', 'This category has products or sub-categories. Move them first.')
+        ? t('القسم به منتجات أو أقسام فرعية. انقلها أولاً.', 'This category has products or sub-categories. Move them first.')
         : errorText(err, t), 'error');
     }
   };
@@ -56,7 +56,7 @@ export default function AdminCategories() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="CATEGORIES"
+        eyebrow={t('تنظيم المتجر', 'CATEGORIES')}
         title={t('الأقسام', 'Categories')}
         description={t('قسم رئيسي ثم أقسام فرعية. أضف القسم أولاً ثم أضف إليه المنتجات.', 'A main category, then sub-categories. Create the category first, then add products to it.')}
         action={<Button onClick={() => setEditing('new')}>＋ {t('قسم جديد', 'New category')}</Button>}
@@ -90,7 +90,7 @@ export default function AdminCategories() {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-1.5 self-end sm:self-auto">
-                <Button size="sm" variant="secondary" onClick={() => openProductEditor(c.id)}>＋ {t('إضافة صنف', 'Add item')}</Button>
+                <Button size="sm" variant="secondary" onClick={() => openProductEditor(c.id)}>＋ {t('إضافة منتج', 'Add item')}</Button>
                 <Button size="sm" variant="secondary" onClick={() => setEditing(c)}>{t('تعديل', 'Edit')}</Button>
                 <Button size="sm" variant="secondary" onClick={() => void toggle(c)}>{c.isVisible ? t('إخفاء', 'Hide') : t('إظهار', 'Show')}</Button>
                 <Button size="sm" variant="danger" onClick={() => void remove(c)}>{t('حذف', 'Delete')}</Button>
@@ -151,7 +151,7 @@ function CategoryForm({ category, parents, onSaved }: { category: AdminCategory 
   return (
     <form onSubmit={submit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <Field label={`${t('الاسم بالعربي', 'Arabic name')} *`} error={fieldError(error, 'nameAr')}>
-        <input required maxLength={100} autoFocus placeholder="مثال: بناطيل كتان" value={f.nameAr} onChange={(e) => setF({ ...f, nameAr: e.target.value })} className={ui.input} />
+        <input required maxLength={100} autoFocus placeholder="مثال: هوديز" value={f.nameAr} onChange={(e) => setF({ ...f, nameAr: e.target.value })} className={ui.input} />
       </Field>
       <Field label={`${t('الاسم بالإنجليزي', 'English name')} *`} error={fieldError(error, 'nameEn')}>
         <input required maxLength={100} dir="ltr" placeholder="Linen Pants" value={f.nameEn} onChange={(e) => setF({ ...f, nameEn: e.target.value })} className={ui.input} />

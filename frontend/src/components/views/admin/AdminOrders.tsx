@@ -80,7 +80,7 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
                 <tr key={o.id} onClick={() => onOpen(o.id)} className="hover:bg-[#f8f7f4] transition-colors duration-150 cursor-pointer">
                   <td className="px-5 py-4 font-mono text-xs text-[#141414] font-bold" dir="ltr">
                     {o.number}
-                    <div className="text-[10px] text-[#6e6a63] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</div>
+                    <div className="text-[10px] text-[#6e6a63] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB')}</div>
                   </td>
                   <td className="px-5 py-4">
                     <div className="font-bold text-[#141414]">{o.customerName}</div>
@@ -160,7 +160,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
     }
   };
 
-  const date = (iso: string) => new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+  const date = (iso: string) => new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
   const next = nextStatuses(order.status);
   const card = 'bg-white rounded-2xl border border-[#e6e3dd] p-6 shadow-2xs';
 

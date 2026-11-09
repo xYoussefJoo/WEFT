@@ -98,7 +98,7 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
       </section>
 
       <section className={box}>
-        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('الكولكشن الجديد', 'New collection banner')}</h3>
+        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('قسم الكولكشن', 'New collection banner')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['العنوان بالعربي', 'Title (Arabic)'], s.collection.titleAr, (v) => set('collection', { ...s.collection, titleAr: v }))}
           {field(['العنوان بالإنجليزي', 'Title (English)'], s.collection.titleEn, (v) => set('collection', { ...s.collection, titleEn: v }), { ltr: true })}

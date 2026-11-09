@@ -119,7 +119,7 @@ function OrderRow({ order, onOpen }: { order: SavedOrder; onOpen: () => void }) 
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-[#e6e3dd] text-xs text-[#6e6a63]">
-        <span>{new Date(data?.createdAt ?? order.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</span>
+        <span>{new Date(data?.createdAt ?? order.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB')}</span>
         <span className="text-base font-extrabold text-[#7a6b58]">
           {data && money(data.total)}
         </span>

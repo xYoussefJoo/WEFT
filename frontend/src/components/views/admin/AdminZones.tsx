@@ -50,8 +50,8 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
             <tr>
               <th className="py-2 text-start">{t('المحافظة', 'Governorate')}</th>
               <th className="py-2 text-start">{t('الرسوم (ج.م)', 'Fee (EGP)')}</th>
-              <th className="py-2 text-start">{t('أقل أيام', 'Min days')}</th>
-              <th className="py-2 text-start">{t('أكثر أيام', 'Max days')}</th>
+              <th className="py-2 text-start">{t('أقل مدة (أيام)', 'Min days')}</th>
+              <th className="py-2 text-start">{t('أقصى مدة (أيام)', 'Max days')}</th>
               <th className="py-2 text-start">{t('مفعلة', 'Active')}</th>
             </tr>
           </thead>
@@ -60,10 +60,10 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
               <tr key={z.id} className={z.isActive ? '' : 'opacity-60'}>
                 <td className="py-2 font-bold text-[#141414]">{pick(lang, z.nameAr, z.nameEn)}</td>
                 <td className="py-2"><input type="number" min={0} step="0.5" value={z.fee} onChange={(e) => set(z.id, { fee: Number(e.target.value) })} className={cell} aria-label={t('الرسوم', 'Fee')} /></td>
-                <td className="py-2"><input type="number" min={0} max={60} value={z.etaDaysMin} onChange={(e) => set(z.id, { etaDaysMin: Number(e.target.value) })} className={cell} aria-label={t('أقل أيام', 'Min days')} /></td>
+                <td className="py-2"><input type="number" min={0} max={60} value={z.etaDaysMin} onChange={(e) => set(z.id, { etaDaysMin: Number(e.target.value) })} className={cell} aria-label={t('أقل مدة (أيام)', 'Min days')} /></td>
                 <td className="py-2">
                   <input type="number" min={0} max={60} value={z.etaDaysMax} onChange={(e) => set(z.id, { etaDaysMax: Number(e.target.value) })}
-                    className={`${cell} ${z.etaDaysMax < z.etaDaysMin ? 'border-red-400' : ''}`} aria-label={t('أكثر أيام', 'Max days')} />
+                    className={`${cell} ${z.etaDaysMax < z.etaDaysMin ? 'border-red-400' : ''}`} aria-label={t('أقصى مدة (أيام)', 'Max days')} />
                 </td>
                 <td className="py-2"><input type="checkbox" checked={z.isActive} onChange={(e) => set(z.id, { isActive: e.target.checked })} className="accent-[#141414] w-4 h-4" aria-label={t('مفعلة', 'Active')} /></td>
               </tr>

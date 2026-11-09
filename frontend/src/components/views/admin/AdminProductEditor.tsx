@@ -123,7 +123,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
     <section className={`${ui.card} p-5 sm:p-6 space-y-6`}>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <span className="text-[11px] font-bold tracking-widest text-[#6b5d4c] uppercase">PRODUCT</span>
+          <span className="text-[11px] font-bold tracking-widest text-[#6b5d4c] uppercase">{t('المنتج', 'PRODUCT')}</span>
           <h3 className="text-lg sm:text-xl font-serif font-bold text-[#141414] mt-0.5">
             {product ? t('تعديل بيانات المنتج', 'Edit product details') : t('منتج جديد', 'New product')}
           </h3>
@@ -176,7 +176,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
         {!product && (
           <div className="sm:col-span-2 space-y-4 pt-4 border-t border-[#eeebe6]">
             <p className="text-xs text-[#6e6a63]">
-              {t('اختر المقاسات والألوان: سيتم إنشاء كل مقاس بكل لون بنفس الكمية المبدئية، وتقدر تعدّل كل واحد بعد الحفظ.',
+              {t('اختر المقاسات والألوان: سيتم إنشاء كل مقاس بكل لون بنفس الكمية المبدئية، ويمكنك تعديل كل منها بعد الحفظ.',
                 'Tick sizes and colors: every size is created in every color with the starting stock; you can change each one after saving.')}
             </p>
             <div className="flex flex-wrap gap-2" role="group" aria-label={t('المقاسات', 'Sizes')}>

@@ -168,7 +168,7 @@ export const useWeftStore = create<WeftState>((set, get) => ({
 
   money: (amount) => {
     const { lang } = get();
-    const formatted = Number(amount || 0).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-US', { maximumFractionDigits: 2 });
+    const formatted = Number(amount || 0).toLocaleString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-US', { maximumFractionDigits: 2 });
     return `${formatted} ${lang === 'ar' ? 'ج.م' : 'EGP'}`;
   },
 

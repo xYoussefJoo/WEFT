@@ -79,9 +79,9 @@ export default function AdminProducts() {
   return (
     <section className="space-y-6">
       <PageHeader
-        eyebrow="PRODUCTS"
+        eyebrow={t('الكتالوج', 'PRODUCTS')}
         title={t('المنتجات والموديلات', 'Products & styles')}
-        description={t('كل قسم ممكن يحتوي على موديلات كتير. اضغط “منتج جديد” لتفتح نافذة الإضافة.', 'Each category can hold many styles. Press “New product” to open the add window.')}
+        description={t('يمكن أن يضم كل قسم عدة موديلات. اضغط «منتج جديد» لفتح نافذة الإضافة.', 'Each category can hold many styles. Press “New product” to open the add window.')}
         action={<Button onClick={() => openProductEditor()}>＋ {t('منتج جديد', 'New product')}</Button>}
       />
 

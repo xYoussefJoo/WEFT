@@ -69,7 +69,7 @@ export default function AdminView() {
             <img src={assetPath('assets/weft-mark-white-128.webp')} alt="WEFT" className="w-12 h-12 object-contain" />
             <div>
               <strong className="block text-sm font-serif font-bold text-white">WEFT</strong>
-              <small className="text-[9px] tracking-wider text-[#dcd8d1] uppercase font-semibold">STORE MANAGEMENT</small>
+              <small className="text-[9px] tracking-wider text-[#dcd8d1] uppercase font-semibold">{t('إدارة المتجر', 'STORE MANAGEMENT')}</small>
             </div>
           </div>
 
@@ -111,7 +111,7 @@ export default function AdminView() {
       <main className="p-6 sm:p-10 min-w-0 max-w-[1450px] w-full mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e8e6e1]">
           <div>
-            <span className="text-xs font-bold tracking-widest text-[#6b5d4c] uppercase">WEFT FASHION / ADMIN</span>
+            <span className="text-xs font-bold tracking-widest text-[#6b5d4c] uppercase">{t('WEFT / لوحة الإدارة', 'WEFT / ADMIN')}</span>
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#141414] mt-0.5">
               {t(...(adminTabsLabels[tab] || adminTabsLabels.overview))}
             </h2>
@@ -130,7 +130,7 @@ export default function AdminView() {
 
         {user.mustChangePassword && (
           <div className="bg-[#fff8e9] border border-[#e8e5e0] text-[#5c5042] p-3.5 rounded-xl text-xs">
-            {t('هذه كلمة المرور الأولى. غيّرها الآن لحماية المتجر، ثم تفتح باقي الشاشات.', 'This is your first password. Change it now to protect the store; then the other screens open.')}
+            {t('هذه كلمة المرور الأولى. غيّرها الآن لحماية المتجر، وبعدها تُفتح باقي الشاشات.', 'This is your first password. Change it now to protect the store; then the other screens open.')}
           </div>
         )}
 

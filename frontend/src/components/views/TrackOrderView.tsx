@@ -67,7 +67,7 @@ function OrderDetails({ order }: { order: PublicOrder }) {
   const go = useWeftStore((state) => state.go);
 
   const date = (iso: string) =>
-    new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
+    new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
   return (
     <section className="max-w-[860px] mx-auto px-4 sm:px-6 py-12 space-y-6 animate-scale-in">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4 border-b border-[#e6e3dd]">

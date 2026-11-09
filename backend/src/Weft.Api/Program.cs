@@ -1,0 +1,157 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Serilog;
+using Weft.Api.Errors;
+using Weft.Api.Security;
+using Weft.Application;
+using Weft.Domain.Constants;
+using Weft.Infrastructure;
+using Weft.Infrastructure.Health;
+using Weft.Infrastructure.Persistence;
+
+var builder = WebApplication.CreateBuilder(args);
+StartupChecks.EnsureServerSettings(builder.Configuration, builder.Environment);
+// Don't tell attackers which server we run (the header is added after the middleware, so turn it off here).
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+// Brotli, then gzip, for JSON only. Which paths use it is decided below (PublicCatalog).
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+    options.MimeTypes = ["application/json"];
+});
+// IIS can't always tell the app its https port, so name it (only used outside Development).
+builder.Services.AddHttpsRedirection(options => options.HttpsPort = 443);
+
+builder.Host.UseSerilog((context, config) => config
+    .ReadFrom.Configuration(context.Configuration)
+    .WriteTo.Console());
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+builder.Services
+    .AddControllers(options => options.Filters.Add<ValidationFilter>())
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+// OpenAPI reads these JSON options, not the MVC ones above. Without them openapi.json shows enums as numbers
+// and every number as "integer or string", which gives the generated TypeScript types the wrong shape.
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+});
+builder.Services.AddOpenApi(options => options
+    .AddOperationTransformer<IdempotencyHeaderTransformer>()
+    .AddOperationTransformer<CamelCaseQueryTransformer>());
+
+// Errors: every failure becomes ProblemDetails. A 400 without its own code is a validation error.
+builder.Services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
+{
+    if (context.ProblemDetails.Status == StatusCodes.Status400BadRequest
+        && !context.ProblemDetails.Extensions.ContainsKey("code"))
+        context.ProblemDetails.Extensions["code"] = ErrorCodes.Validation;
+});
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(Policies.Owner, policy => policy.RequireRole(Roles.Owner));
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    // The IP is the real customer's, thanks to ClientIpMiddleware (behind Vercel).
+    static string Ip(HttpContext context) => context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+    void PerIp(string policy, int permits, TimeSpan window) => options.AddPolicy(policy, context =>
+        RateLimitPartition.GetFixedWindowLimiter(Ip(context),
+            _ => new FixedWindowRateLimiterOptions { PermitLimit = permits, Window = window }));
+
+    // Every request, on top of the per-endpoint limits: stops one IP from hammering the whole API.
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter(Ip(context),
+            _ => new FixedWindowRateLimiterOptions { PermitLimit = 300, Window = TimeSpan.FromMinutes(1) }));
+
+    PerIp(RateLimitPolicies.Login, 5, TimeSpan.FromMinutes(1));
+    PerIp(RateLimitPolicies.PlaceOrder, 10, TimeSpan.FromMinutes(10));
+    PerIp(RateLimitPolicies.Tracking, 30, TimeSpan.FromMinutes(1));
+    PerIp(RateLimitPolicies.PublicRead, 120, TimeSpan.FromMinutes(1));
+    PerIp(RateLimitPolicies.Estimate, 60, TimeSpan.FromMinutes(1));
+    options.OnRejected = (context, _) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+            context.HttpContext.Response.Headers.RetryAfter = ((int)retryAfter.TotalSeconds).ToString();
+        return ValueTask.CompletedTask;
+    };
+});
+
+var app = builder.Build();
+
+// On a server, migrations run on purpose (Database__MigrateOnStartup=true for one start), never on every restart.
+if (app.Configuration.GetValue("Database:MigrateOnStartup", app.Environment.IsDevelopment()))
+    await app.Services.MigrateAndSeedAsync();
+
+// First: the real client IP (for logs and rate limits) and the security headers (also on errors).
+app.UseMiddleware<ClientIpMiddleware>();
+app.UseMiddleware<SecurityHeadersMiddleware>();
+
+// Compress only public catalog reads: they're the biggest JSON and hold no secrets. Responses with a tracking
+// token or the owner's data stay uncompressed, which rules out BREACH-style guessing through response sizes.
+app.UseWhen(context => HttpMethods.IsGet(context.Request.Method) && PublicCatalog.IsMatch(context.Request.Path),
+    branch => branch.UseResponseCompression());
+
+// Request logging wraps the exception handler, so it logs the final status (409, 404…), not a 500.
+app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+// IIS on MonsterASP serves both http and https: send plain-http callers to https (HSTS keeps them there).
+if (!app.Environment.IsDevelopment()) app.UseHttpsRedirection();
+app.UseMiddleware<CsrfHeaderMiddleware>();
+app.UseRateLimiter();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+// GET /health -> { "status": "Healthy", "db": "Healthy", "storage": "Healthy" }. 503 only when the database is down.
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable,
+    },
+    ResponseWriter = (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        context.Response.Headers.CacheControl = "no-store";
+        string Status(string name) => report.Entries.TryGetValue(name, out var e) ? e.Status.ToString() : "Unknown";
+        return context.Response.WriteAsync(JsonSerializer.Serialize(new
+        {
+            status = report.Status.ToString(),
+            db = Status(HealthCheckNames.Database),
+            storage = Status(HealthCheckNames.Storage),
+        }));
+    },
+}).DisableRateLimiting();
+
+app.Run();
+
+// Lets integration tests start the API with WebApplicationFactory<Program>.
+public partial class Program;
+
+// The public storefront reads that are worth compressing (no tokens, no personal data in them).
+internal static class PublicCatalog
+{
+    private static readonly PathString[] Paths =
+        ["/api/categories", "/api/products", "/api/site-settings", "/api/delivery-zones", "/api/tailoring/catalog"];
+
+    public static bool IsMatch(PathString path) => Paths.Any(p => path.StartsWithSegments(p));
+}

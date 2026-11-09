@@ -1,0 +1,45 @@
+# No automatic PRs: open-pull-requests-limit 0 turns off the routine "newer version" PRs.
+# Known vulnerabilities show up only if the owner turns on Dependabot alerts (Settings -> Code security).
+# To get version updates back, raise a limit to 1-3.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /backend
+    schedule: { interval: weekly, day: sunday }
+    open-pull-requests-limit: 0
+    groups:
+      backend-minor:
+        update-types: [minor, patch]
+    ignore:
+      # Test tools: no benefit to the shop, major versions wait until after launch.
+      - dependency-name: "xunit*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "coverlet*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule: { interval: weekly, day: sunday }
+    open-pull-requests-limit: 0
+    groups:
+      frontend-minor:
+        update-types: [minor, patch]
+    ignore:
+      # @types/node stays on the major the frontend targets (20 today), not the newest Node.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # Big build/lint tool jumps need the teammate's decision, not a bot's.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: monthly }
+    open-pull-requests-limit: 0
+    groups:
+      github-actions:
+        patterns: ["*"]

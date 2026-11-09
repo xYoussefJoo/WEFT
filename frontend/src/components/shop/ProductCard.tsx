@@ -51,7 +51,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         ) : (
           <span className="text-6xl select-none group-hover:scale-110 transition-transform duration-500" aria-hidden="true">
-            👗
+            👕
           </span>
         )}
 

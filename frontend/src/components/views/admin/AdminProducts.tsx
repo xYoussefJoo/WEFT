@@ -124,7 +124,7 @@ export default function AdminProducts() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={p.thumbnailUrl} alt="" loading="lazy" className="w-full h-full object-cover" />
                     ) : (
-                      <span aria-hidden="true">👗</span>
+                      <span aria-hidden="true">👕</span>
                     )}
                   </div>
                   <div className="min-w-0">

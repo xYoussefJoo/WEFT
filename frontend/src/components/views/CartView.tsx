@@ -152,7 +152,7 @@ export default function CartView() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={c.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <span className="text-2xl" aria-hidden="true">👗</span>
+                        <span className="text-2xl" aria-hidden="true">👕</span>
                       )}
                     </div>
 

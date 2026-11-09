@@ -107,7 +107,7 @@ function OrderDetails({ order }: { order: PublicOrder }) {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={l.imageUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <span aria-hidden="true">👗</span>
+                      <span aria-hidden="true">👕</span>
                     )}
                   </div>
                   <div className="flex-1 min-w-0 text-sm">

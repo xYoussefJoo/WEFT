@@ -66,7 +66,7 @@ export default function AdminView() {
         <div className="space-y-6">
           <div className="flex items-center gap-3 pb-4 border-b border-white/15">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={assetPath('assets/logo-mark-160.webp')} alt="WEFT" className="w-12 h-12 object-contain" />
+            <img src={assetPath('assets/weft-mark-white-192.webp')} alt="WEFT" className="w-12 h-12 object-contain" />
             <div>
               <strong className="block text-sm font-serif font-bold text-white">WEFT</strong>
               <small className="text-[9px] tracking-wider text-[#d9c5a4] uppercase font-semibold">STORE MANAGEMENT</small>

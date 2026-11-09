@@ -162,7 +162,7 @@ export default function ShopView() {
         </>
       ) : (
         <div className="text-center py-20 bg-white rounded-3xl border border-[#e8dfd1] p-10 space-y-4">
-          <span className="text-5xl block animate-float select-none">👗</span>
+          <span className="text-5xl block animate-float select-none">👕</span>
           <h3 className="text-lg font-bold text-[#142b4a]">
             {q
               ? t('لا توجد نتائج لهذا البحث', 'No results for this search')

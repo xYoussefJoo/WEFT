@@ -200,7 +200,7 @@ function Details({ product }: { product: ProductDetail }) {
               />
             ) : (
               <span className="text-8xl select-none group-hover:scale-110 transition-transform duration-500" aria-hidden="true">
-                👗
+                👕
               </span>
             )}
 

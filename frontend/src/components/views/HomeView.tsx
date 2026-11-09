@@ -21,10 +21,10 @@ export default function HomeView() {
 
   // Editorial photos for category tiles that don't have their own image yet (set one in Admin → Categories).
   const tilePhotos = [
-    'assets/products/pants-beige.jpg',
-    'assets/products/blouse-cream.jpg',
-    'assets/modest-abaya-editorial.jpg',
-    'assets/products/set-beige.jpg',
+    'assets/hoodies/black.webp',
+    'assets/hoodies/cream.webp',
+    'assets/hoodies/navy.webp',
+    'assets/hoodies/olive.webp',
   ];
 
   const handleCategoryClick = (slug: string) => {
@@ -95,8 +95,8 @@ export default function HomeView() {
         <div className="relative min-h-[380px] lg:min-h-full overflow-hidden bg-[#d5b995] group reveal-right delay-200">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={assetPath(hero?.imageUrl || 'assets/modest-abaya-editorial.jpg')}
-            alt="Women's fashion editorial"
+            src={assetPath(hero?.imageUrl || 'assets/weft-hero.webp')}
+            alt="WEFT hoodies"
             className="w-full h-full object-cover object-[center_34%] group-hover:scale-[1.04] transition-transform duration-1000 ease-out"
           />
           {/* Subtle gradient vignette */}

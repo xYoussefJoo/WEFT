@@ -52,14 +52,14 @@ export default function Navbar() {
           {!logoError ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={assetPath('assets/logo-mark-160.webp')}
+              src={assetPath('assets/weft-mark-160.webp')}
               alt="WEFT"
               className="w-13 h-13 sm:w-15 sm:h-15 object-contain transition-transform duration-300 group-hover:scale-105"
               onError={() => setLogoError(true)}
             />
           ) : (
             <div className="w-12 h-12 rounded-full bg-[#142b4a] text-[#b99664] flex items-center justify-center font-serif text-2xl font-bold italic shadow-sm group-hover:scale-105 transition-transform duration-300">
-              Z
+              W
             </div>
           )}
 

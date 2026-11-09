@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={assetPath('assets/logo-footer-192.webp')}
+                src={assetPath('assets/weft-mark-white-192.webp')}
                 loading="lazy"
                 alt="WEFT"
                 className="w-16 h-16 object-contain"
@@ -44,7 +44,7 @@ export default function Footer() {
               <div>
                 <b className="text-xl font-bold tracking-tight block">WEFT</b>
                 <small className="text-[10px] tracking-widest text-[#b99664] font-semibold uppercase">
-                  MADE FOR YOUR STYLE
+                  THE THREAD CO.
                 </small>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function Footer() {
 
         {/* Copyright & Powered By Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
-          <span>{t('جميع الحقوق محفوظة © 2026 Kernel Panic', 'Copyright © 2026 Kernel Panic - All rights reserved.')}</span>
+          <span>{t('جميع الحقوق محفوظة © 2026 WEFT', 'Copyright © 2026 WEFT - All rights reserved.')}</span>
 
           <div className="flex items-center gap-2">
             <span className="text-white/50">{t('تصميم وتطوير بواسطة:', 'Powered by:')}</span>

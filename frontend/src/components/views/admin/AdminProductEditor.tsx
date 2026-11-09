@@ -165,7 +165,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
         </label>
         <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
           <span>{t('الرابط المختصر (اختياري)', 'Link name (slug, optional)')}</span>
-          <input dir="ltr" maxLength={150} placeholder="modest-abaya" value={slug} onChange={(e) => setSlug(e.target.value)} className={input} />
+          <input dir="ltr" maxLength={150} placeholder="weft-essential-hoodie" value={slug} onChange={(e) => setSlug(e.target.value)} className={input} />
           {msg('slug')}
         </label>
         <label className="flex items-center gap-2 text-sm font-bold text-[#2d3540] cursor-pointer pt-6">

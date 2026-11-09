@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Weft.Application.Common;
 using Weft.Application.Orders;
@@ -10,12 +11,22 @@ namespace Weft.Infrastructure.Orders;
 // Runs on the same connection/transaction as the checkout. A rolled-back checkout leaves a gap, which is fine.
 public sealed class OrderNumberGenerator(WeftDbContext db) : IOrderNumberGenerator
 {
+    // A plain command, not SqlQueryRaw: EF wraps raw queries in a sub-query, where SQL Server refuses NEXT VALUE FOR.
     public async Task<string> NextAsync(CancellationToken cancellationToken)
     {
-        var next = await db.Database
-            .SqlQueryRaw<long>($"SELECT NEXT VALUE FOR [{WeftDbContext.Schema}].[{WeftDbContext.OrderNumberSequence}] AS [Value]")
-            .SingleAsync(cancellationToken);
-        return $"WF-{next}";
+        await db.Database.OpenConnectionAsync(cancellationToken); // no-op when the checkout transaction already has it open
+        try
+        {
+            await using var command = db.Database.GetDbConnection().CreateCommand();
+            command.CommandText = $"SELECT NEXT VALUE FOR [{WeftDbContext.Schema}].[{WeftDbContext.OrderNumberSequence}]";
+            command.Transaction = db.Database.CurrentTransaction?.GetDbTransaction();
+            var next = Convert.ToInt64(await command.ExecuteScalarAsync(cancellationToken));
+            return $"WF-{next}";
+        }
+        finally
+        {
+            await db.Database.CloseConnectionAsync(); // only closes it if we were the ones who opened it
+        }
     }
 }
 

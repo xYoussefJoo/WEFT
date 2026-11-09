@@ -132,7 +132,7 @@ export default function AdminProducts() {
                   <div className="min-w-0">
                     <b className="block text-sm font-bold text-[#141414] truncate">
                       {pick(lang, p.nameAr, p.nameEn)}
-                      {!p.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1efeb] text-[#77736c] align-middle">{t('مخفي', 'Hidden')}</span>}
+                      {!p.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1efeb] text-[#6e6a63] align-middle">{t('مخفي', 'Hidden')}</span>}
                     </b>
                     <small className="block text-xs text-[#8a867f] mt-0.5">
                       {pick(lang, p.categoryNameAr, p.categoryNameEn)} · <strong className="text-[#6b5d4c]">{money(p.basePrice)}</strong>
@@ -157,13 +157,13 @@ export default function AdminProducts() {
               </article>
             ))
           ) : (
-            <div className="text-center py-12 text-[#77736c] text-xs">{t('لا توجد منتجات هنا بعد', 'No products here yet')}</div>
+            <div className="text-center py-12 text-[#6e6a63] text-xs">{t('لا توجد منتجات هنا بعد', 'No products here yet')}</div>
           )}
 
           {data.totalPages > 1 && (
             <nav className="flex items-center justify-center gap-3 pt-2">
               <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('السابق', 'Previous')}</button>
-              <span className="text-xs text-[#77736c]">{data.page} / {data.totalPages}</span>
+              <span className="text-xs text-[#6e6a63]">{data.page} / {data.totalPages}</span>
               <button type="button" disabled={page >= data.totalPages} onClick={() => setPage((n) => n + 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('التالي', 'Next')}</button>
             </nav>
           )}

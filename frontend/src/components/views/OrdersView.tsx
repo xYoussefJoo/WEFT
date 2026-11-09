@@ -35,7 +35,7 @@ export default function OrdersView() {
       <div className="pb-4 border-b border-[#e6e3dd]">
         <span className="text-xs text-[#7a6b58] font-bold tracking-[0.2em] uppercase">HISTORY</span>
         <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#141414] mt-1">{t('طلباتي', 'My orders')}</h2>
-        <p className="text-xs sm:text-sm text-[#77736c] mt-0.5">
+        <p className="text-xs sm:text-sm text-[#6e6a63] mt-0.5">
           {t('الطلبات التي أرسلتها من هذا الجهاز، بحالتها الحالية', 'Orders placed from this device, with their current status')}
         </p>
       </div>
@@ -72,10 +72,10 @@ export default function OrdersView() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-3xl border border-[#e6e3dd] p-16 text-center text-[#77736c] space-y-4 shadow-xs">
+        <div className="bg-white rounded-3xl border border-[#e6e3dd] p-16 text-center text-[#6e6a63] space-y-4 shadow-xs">
           <span className="text-5xl block animate-float select-none">📦</span>
           <h3 className="text-xl font-serif font-bold text-[#141414]">{t('لا توجد طلبات سابقة', 'No previous orders')}</h3>
-          <p className="text-xs text-[#77736c] max-w-sm mx-auto">
+          <p className="text-xs text-[#6e6a63] max-w-sm mx-auto">
             {t(
               'عند إتمام أي طلب ستتمكن من متابعة حالته وتفاصيله هنا.',
               'When you place an order, you will see it here.',
@@ -118,7 +118,7 @@ function OrderRow({ order, onOpen }: { order: SavedOrder; onOpen: () => void }) 
         </span>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-[#e6e3dd] text-xs text-[#77736c]">
+      <div className="flex items-center justify-between pt-2 border-t border-[#e6e3dd] text-xs text-[#6e6a63]">
         <span>{new Date(data?.createdAt ?? order.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</span>
         <span className="text-base font-extrabold text-[#7a6b58]">
           {data && money(data.total)}

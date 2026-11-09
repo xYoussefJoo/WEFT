@@ -91,8 +91,8 @@ try {
         $secrets = $null; $json = $null
     }
     elseif (-not $PublicOnly) {
-        $email = Read-Host 'Owner email [xyousefjoo@gmail.com]'
-        if (-not $email) { $email = 'xyousefjoo@gmail.com' }
+        $email = Read-Host 'Owner email'
+        if (-not $email) { throw 'The owner email is required.' }
         $secure = Read-Host 'Owner password (hidden)' -AsSecureString
     }
 

@@ -82,7 +82,7 @@ export default function AdminCategories() {
                 <div className="min-w-0">
                   <b className="block text-sm font-bold text-[#141414] truncate">
                     {c.parentId ? '↳ ' : ''}{pick(lang, c.nameAr, c.nameEn)}
-                    {!c.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1efeb] text-[#77736c] align-middle">{t('مخفي', 'Hidden')}</span>}
+                    {!c.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1efeb] text-[#6e6a63] align-middle">{t('مخفي', 'Hidden')}</span>}
                   </b>
                   <small className="block text-xs text-[#8a867f] mt-0.5">
                     {c.parentId ? t('قسم فرعي', 'Subcategory') : t('قسم رئيسي', 'Main category')} · {c.productCount} {t('منتج', 'products')} · <span dir="ltr">{c.slug}</span>

@@ -49,7 +49,7 @@ export default function AdminColors() {
                 <span className="w-10 h-10 rounded-full border border-black/10 shrink-0 shadow-inner" style={{ backgroundColor: c.hex }} />
                 <span className="min-w-0">
                   <b className="block text-sm text-[#141414] truncate">{c.nameAr} · {c.nameEn}</b>
-                  <small className="text-[11px] text-[#77736c]"><span dir="ltr" className="font-mono">{c.hex}</span> · {c.usageCount} {t('مقاس يستخدمه', 'variants')}</small>
+                  <small className="text-[11px] text-[#6e6a63]"><span dir="ltr" className="font-mono">{c.hex}</span> · {c.usageCount} {t('مقاس يستخدمه', 'variants')}</small>
                 </span>
               </span>
               <span className="flex gap-1.5 shrink-0">
@@ -105,7 +105,7 @@ function ColorForm({ color, onSaved }: { color: AdminColor | null; onSaved: () =
     <form onSubmit={submit} className="space-y-4">
       <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-[#eeebe6]">
         <span className="w-16 h-16 rounded-full border border-black/10 shadow-inner shrink-0" style={{ backgroundColor: f.hex }} aria-hidden="true" />
-        <div className="text-sm"><b className="block text-[#141414]">{f.nameAr || '—'} · {f.nameEn || '—'}</b><span className="font-mono text-xs text-[#77736c]" dir="ltr">{f.hex}</span></div>
+        <div className="text-sm"><b className="block text-[#141414]">{f.nameAr || '—'} · {f.nameEn || '—'}</b><span className="font-mono text-xs text-[#6e6a63]" dir="ltr">{f.hex}</span></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label={`${t('الاسم بالعربي', 'Arabic name')} *`}>

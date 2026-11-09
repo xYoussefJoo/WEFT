@@ -198,7 +198,7 @@ function LoginForm() {
       <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#dcd8d1] shadow-md space-y-5">
         <div className="text-center space-y-1">
           <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#141414]">{t('دخول الإدارة', 'Admin sign in')}</h2>
-          <p className="text-xs text-[#77736c]">WEFT • Management Studio</p>
+          <p className="text-xs text-[#6e6a63]">WEFT • Management Studio</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
           <label className="flex flex-col gap-1.5 text-xs sm:text-sm font-bold text-[#2a2a28]">

@@ -82,7 +82,7 @@ export default function HomeView() {
             ].map((badge) => (
               <div
                 key={badge.en}
-                className="flex items-center gap-2 text-xs text-[#77736c] font-semibold"
+                className="flex items-center gap-2 text-xs text-[#6e6a63] font-semibold"
               >
                 <span className="text-[#7a6b58] text-xs">✦</span>
                 <span>{t(badge.ar, badge.en)}</span>
@@ -123,7 +123,7 @@ export default function HomeView() {
               {t('تسوق على ذوقك', 'Find your style')}
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-[#77736c]">
+          <p className="text-xs sm:text-sm text-[#6e6a63]">
             {t('قطع مختارة بعناية تناسب يومك', 'Considered pieces for your everyday wardrobe')}
           </p>
         </div>

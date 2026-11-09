@@ -54,7 +54,7 @@ export default function ShopView() {
           <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#141414] mt-1">
             {t('المجموعة الكاملة', 'The complete collection')}
           </h2>
-          <p className="text-xs sm:text-sm text-[#77736c] mt-1 min-h-[1.25rem]">
+          <p className="text-xs sm:text-sm text-[#6e6a63] mt-1 min-h-[1.25rem]">
             {data &&
               t(
                 `تصفح ${data.totalCount} قطعة مختارة ومتاحة للطلب الفوري`,
@@ -146,7 +146,7 @@ export default function ShopView() {
               >
                 {t('السابق', 'Previous')}
               </button>
-              <span className="text-xs font-bold text-[#77736c]">
+              <span className="text-xs font-bold text-[#6e6a63]">
                 {t(`صفحة ${data.page} من ${data.totalPages}`, `Page ${data.page} of ${data.totalPages}`)}
               </span>
               <button
@@ -168,7 +168,7 @@ export default function ShopView() {
               ? t('لا توجد نتائج لهذا البحث', 'No results for this search')
               : t('لا توجد قطع متاحة حالياً في هذا القسم', 'No pieces currently available in this category')}
           </h3>
-          <p className="text-xs text-[#77736c] max-w-sm mx-auto">
+          <p className="text-xs text-[#6e6a63] max-w-sm mx-auto">
             {t('جرّب اختيار قسم آخر أو تصفح كل المعروضات.', 'Try selecting another category or view all pieces.')}
           </p>
           <button

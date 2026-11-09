@@ -39,14 +39,14 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
   return (
     <section className="bg-white p-6 rounded-2xl border border-[#e8e6e1] shadow-2xs space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-[#77736c]">{t('رسوم التوصيل تُضاف لكل طلب حسب المحافظة. المحافظات غير المفعلة لا تظهر للعملاء.', 'The fee is added to each order by governorate. Inactive ones are hidden from customers.')}</p>
+        <p className="text-xs text-[#6e6a63]">{t('رسوم التوصيل تُضاف لكل طلب حسب المحافظة. المحافظات غير المفعلة لا تظهر للعملاء.', 'The fee is added to each order by governorate. Inactive ones are hidden from customers.')}</p>
         <button type="button" disabled={busy || changed.length === 0 || invalid} onClick={() => void save()} className="px-6 py-2.5 rounded-xl bg-[#141414] text-white text-xs font-bold disabled:opacity-40 cursor-pointer">
           {busy ? '…' : t(`حفظ (${changed.length})`, `Save (${changed.length})`)}
         </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="text-[11px] text-[#77736c] uppercase border-b border-[#eeebe6]">
+          <thead className="text-[11px] text-[#6e6a63] uppercase border-b border-[#eeebe6]">
             <tr>
               <th className="py-2 text-start">{t('المحافظة', 'Governorate')}</th>
               <th className="py-2 text-start">{t('الرسوم (ج.م)', 'Fee (EGP)')}</th>

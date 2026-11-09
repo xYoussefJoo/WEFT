@@ -42,8 +42,8 @@ function Check([string]$name, [bool]$ok, [string]$info = '') {
 try {
     Write-Host ''
     Write-Host 'WEFT - admin smoke test' -ForegroundColor Cyan
-    $email = Read-Host 'Owner email [xyousefjoo@gmail.com]'
-    if (-not $email) { $email = 'xyousefjoo@gmail.com' }
+    $email = Read-Host 'Owner email'
+    if (-not $email) { throw 'The owner email is required.' }
     $secure = Read-Host 'Owner password (hidden)' -AsSecureString
     $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
     $password = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)

@@ -19,7 +19,7 @@ export default function ProductDetailsView() {
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 py-20 text-center space-y-4 animate-scale-in">
         <span className="text-5xl block animate-float select-none">🔍</span>
         <h2 className="text-2xl font-serif font-bold text-[#141414]">{t('لم يتم العثور على المنتج المطلوب', 'Product not found')}</h2>
-        <p className="text-xs sm:text-sm text-[#77736c] max-w-md mx-auto">
+        <p className="text-xs sm:text-sm text-[#6e6a63] max-w-md mx-auto">
           {t('قد يكون هذا المنتج غير متاح حالياً أو تم تغيير رابطه.', 'This product may be unavailable or the link may have changed.')}
         </p>
         <div className="pt-2">
@@ -144,7 +144,7 @@ function Details({ product }: { product: ProductDetail }) {
     <div className="max-w-[1240px] mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-12 animate-scale-in">
       {/* Breadcrumbs & Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-4 pb-4 border-b border-[#e6e3dd] text-xs">
-        <div className="flex items-center gap-2 text-[#77736c] flex-wrap">
+        <div className="flex items-center gap-2 text-[#6e6a63] flex-wrap">
           <button type="button" onClick={() => go('home')} className="hover:text-[#7a6b58] transition-colors cursor-pointer">
             {t('الرئيسية', 'Home')}
           </button>
@@ -250,7 +250,7 @@ function Details({ product }: { product: ProductDetail }) {
             </div>
           )}
 
-          <div className="flex items-center justify-between text-xs text-[#77736c] px-2">
+          <div className="flex items-center justify-between text-xs text-[#6e6a63] px-2">
             <span>✦ {t('صورة حقيقية للمنتج', 'Authentic product photo')}</span>
             <span>✦ {t('خامات مختارة بعناية', 'Handpicked fabrics')}</span>
           </div>
@@ -385,7 +385,7 @@ function Details({ product }: { product: ProductDetail }) {
                   justAdded
                     ? 'bg-[#7a6b58] text-white shadow-lg shadow-[#7a6b58]/30'
                     : !canBuy
-                    ? 'bg-[#e6e3dd] text-[#77736c] cursor-not-allowed'
+                    ? 'bg-[#e6e3dd] text-[#6e6a63] cursor-not-allowed'
                     : 'bg-[#141414] hover:bg-[#2b2926] text-white hover:shadow-lg'
                 }`}
               >

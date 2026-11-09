@@ -124,7 +124,7 @@ export default function CartView() {
         <div>
           <span className="text-xs text-[#7a6b58] font-bold tracking-[0.2em] uppercase">SHOPPING BAG</span>
           <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#141414] mt-1">{t('حقيبة التسوق وإتمام الطلب', 'Your bag & checkout')}</h2>
-          <p className="text-xs sm:text-sm text-[#77736c] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#6e6a63] mt-0.5">
             {t('راجع محتويات حقيبتك وبيانات التوصيل قبل إرسال الطلب للمتجر', 'Review your selected pieces and delivery information')}
           </p>
         </div>
@@ -160,7 +160,7 @@ export default function CartView() {
 
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <b className="block text-sm font-bold text-[#141414] truncate">{pick(lang, c.nameAr, c.nameEn)}</b>
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-[#77736c]">
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-[#6e6a63]">
                         <span className="bg-[#f5f3ef] px-2 py-0.5 rounded text-[#141414] font-semibold">{c.size}</span>
                         <span>·</span>
                         <span className="inline-flex items-center gap-1">
@@ -195,7 +195,7 @@ export default function CartView() {
 
                     <button
                       type="button"
-                      className="px-3 py-1.5 rounded-lg border border-[#e6e3dd] hover:border-red-400 hover:bg-red-50 hover:text-red-700 text-xs font-bold text-[#77736c] transition-colors cursor-pointer shrink-0"
+                      className="px-3 py-1.5 rounded-lg border border-[#e6e3dd] hover:border-red-400 hover:bg-red-50 hover:text-red-700 text-xs font-bold text-[#6e6a63] transition-colors cursor-pointer shrink-0"
                       onClick={() => removeFromCart(c.variantId)}
                     >
                       {t('حذف', 'Remove')}
@@ -235,7 +235,7 @@ export default function CartView() {
                     ))}
                   </select>
                   {zone && (
-                    <small className="text-[11px] font-semibold text-[#77736c]">
+                    <small className="text-[11px] font-semibold text-[#6e6a63]">
                       {t(`التوصيل خلال ${zone.etaDaysMin}–${zone.etaDaysMax} أيام`, `Delivery in ${zone.etaDaysMin}–${zone.etaDaysMax} days`)}
                     </small>
                   )}
@@ -264,7 +264,7 @@ export default function CartView() {
                   <span>{t('البريد الإلكتروني (اختياري)', 'Email (optional)')}</span>
                   <input name="email" type="email" maxLength={254} autoComplete="email" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)}
                     className={inputClasses} placeholder="name@example.com" />
-                  <small className="text-[11px] font-medium text-[#77736c]">
+                  <small className="text-[11px] font-medium text-[#6e6a63]">
                     {t('نرسل لك رابط تتبع الطلب عليه', "We'll email you the tracking link")}
                   </small>
                   {fieldMsg('customer.email')}
@@ -282,7 +282,7 @@ export default function CartView() {
                     <input type="radio" name="paymentMethod" value="cod" checked readOnly className="accent-[#141414] w-4 h-4" />
                     <div>
                       <b className="block text-sm font-bold text-[#141414]">{t('الدفع عند الاستلام', 'Cash on delivery')}</b>
-                      <small className="block text-xs text-[#77736c] mt-0.5">
+                      <small className="block text-xs text-[#6e6a63] mt-0.5">
                         {t('يتم الدفع نقداً عند استلام الطلب ومراجعته', 'Pay in cash upon inspection and delivery of your items')}
                       </small>
                     </div>
@@ -335,17 +335,17 @@ export default function CartView() {
                 <strong className="text-xl text-[#7a6b58]">{money(serverTotal ?? total)}</strong>
               </div>
             </div>
-            <div className="pt-2 text-xs text-[#77736c] leading-relaxed border-t border-[#e6e3dd]/60">
+            <div className="pt-2 text-xs text-[#6e6a63] leading-relaxed border-t border-[#e6e3dd]/60">
               <p>{t('• السعر النهائي يحسبه المتجر عند الإرسال.', '• The store confirms the final price when you submit.')}</p>
               <p className="mt-1">{t('• الدفع عند الاستلام، ولا يتم تحصيل أي مبلغ الآن.', '• Cash on delivery: nothing is charged now.')}</p>
             </div>
           </aside>
         </div>
       ) : (
-        <div className="bg-white rounded-3xl border border-[#e6e3dd] p-16 text-center text-[#77736c] space-y-4 shadow-xs">
+        <div className="bg-white rounded-3xl border border-[#e6e3dd] p-16 text-center text-[#6e6a63] space-y-4 shadow-xs">
           <span className="text-5xl block animate-float select-none">🛍</span>
           <h3 className="text-xl font-serif font-bold text-[#141414]">{t('حقيبة التسوق فارغة', 'Your shopping bag is empty')}</h3>
-          <p className="text-xs text-[#77736c] max-w-sm mx-auto">
+          <p className="text-xs text-[#6e6a63] max-w-sm mx-auto">
             {t('اكتشف تشكيلة WEFT واختر الهودي المناسب لك.', 'Explore the WEFT collection and find your hoodie.')}
           </p>
           <div className="pt-2">

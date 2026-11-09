@@ -17,9 +17,9 @@ export default function Footer() {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-white/75 hover:text-[#7a6b58] transition-colors duration-200"
+        className="inline-flex items-center gap-1.5 text-white/75 hover:text-[#a39b90] transition-colors duration-200"
       >
-        <span className="text-[#7a6b58] text-xs">↗</span>
+        <span className="text-[#a39b90] text-xs">↗</span>
         <span>{label}</span>
       </a>
     ) : null;
@@ -43,7 +43,7 @@ export default function Footer() {
               />
               <div>
                 <b className="text-xl font-bold tracking-tight block">WEFT</b>
-                <small className="text-[10px] tracking-widest text-[#7a6b58] font-semibold uppercase">
+                <small className="text-[10px] tracking-widest text-[#a39b90] font-semibold uppercase">
                   THE THREAD CO.
                 </small>
               </div>
@@ -58,20 +58,20 @@ export default function Footer() {
 
           {/* Contact Column */}
           <div className="space-y-3">
-            <b className="text-sm font-bold tracking-wider uppercase text-[#7a6b58] block">
+            <b className="text-sm font-bold tracking-wider uppercase text-[#a39b90] block">
               {t('تواصل معنا', 'Contact us')}
             </b>
             <div className="flex flex-col gap-2 text-sm text-white/80">
               {contact?.phone && (
                 <div>
-                  <a href={`tel:${contact.phone}`} className="hover:text-[#7a6b58] transition-colors">
+                  <a href={`tel:${contact.phone}`} className="hover:text-[#a39b90] transition-colors">
                     {contact.phone}
                   </a>
                 </div>
               )}
               {contact?.email && (
                 <div>
-                  <a href={`mailto:${contact.email}`} className="hover:text-[#7a6b58] transition-colors">
+                  <a href={`mailto:${contact.email}`} className="hover:text-[#a39b90] transition-colors">
                     {contact.email}
                   </a>
                 </div>
@@ -92,7 +92,7 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="space-y-3">
-            <b className="text-sm font-bold tracking-wider uppercase text-[#7a6b58] block">
+            <b className="text-sm font-bold tracking-wider uppercase text-[#a39b90] block">
               {t('تابعنا', 'Follow us')}
             </b>
             <div className="flex flex-col gap-2 text-sm">

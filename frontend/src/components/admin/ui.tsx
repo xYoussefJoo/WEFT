@@ -12,7 +12,7 @@ export const ui = {
   input: 'w-full border border-[#dedbd5] rounded-xl px-3 py-2.5 bg-white text-[#2b2926] text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58] focus:border-[#7a6b58] transition-colors',
   inputSm: 'border border-[#dedbd5] rounded-lg px-2 py-1.5 bg-white text-[#2b2926] text-xs focus:outline-none focus:ring-2 focus:ring-[#7a6b58]',
   label: 'flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]',
-  hint: 'text-[11px] font-medium text-[#77736c]',
+  hint: 'text-[11px] font-medium text-[#6e6a63]',
   error: 'text-[11px] font-semibold text-[#a72f3e]',
 };
 
@@ -77,7 +77,7 @@ export function PageHeader({ eyebrow, title, description, action }: { eyebrow: s
       <div className="space-y-1">
         <span className="text-[11px] font-bold tracking-[0.2em] text-[#6b5d4c] uppercase">{eyebrow}</span>
         <h3 className="text-lg sm:text-xl font-serif font-bold text-[#141414]">{title}</h3>
-        {description && <p className="text-xs text-[#77736c] max-w-2xl">{description}</p>}
+        {description && <p className="text-xs text-[#6e6a63] max-w-2xl">{description}</p>}
       </div>
       {action && <div className="shrink-0 self-start sm:self-auto">{action}</div>}
     </div>

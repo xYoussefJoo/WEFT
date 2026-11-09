@@ -34,7 +34,6 @@ export default function ProductCard({ product }: ProductCardProps) {
       }}
       role="link"
       tabIndex={0}
-      aria-label={title}
       className="group rounded-2xl bg-white border border-[#e6e3dd] overflow-hidden flex flex-col h-full shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#7a6b58]"
     >
       {/* Product Image Area */}
@@ -97,14 +96,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 />
               ))}
             </div>
-            <span className="text-xs text-[#77736c] truncate">{product.sizes.join(' · ')}</span>
+            <span className="text-xs text-[#6e6a63] truncate">{product.sizes.join(' · ')}</span>
           </div>
         </div>
 
         {/* Price & Action Link */}
         <div className="flex items-center justify-between pt-3 border-t border-[#e6e3dd] mt-2">
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-[#77736c] uppercase tracking-wider">
+            <span className="text-[10px] font-bold text-[#6e6a63] uppercase tracking-wider">
               {hasRange ? t('يبدأ من', 'FROM') : t('السعر', 'PRICE')}
             </span>
             <span className="font-extrabold text-[#7a6b58] text-lg tracking-tight">{money(product.minPrice)}</span>

@@ -46,7 +46,7 @@ export default function AdminOverview() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map(([ar, en, value, color]) => (
           <div key={en} className="p-5 rounded-2xl bg-white border border-[#e8e6e1] shadow-2xs space-y-1">
-            <span className="text-xs font-semibold text-[#77736c] uppercase block">{t(ar, en)}</span>
+            <span className="text-xs font-semibold text-[#6e6a63] uppercase block">{t(ar, en)}</span>
             <b className={`text-2xl sm:text-3xl font-serif font-bold ${color}`}>{value ?? '—'}</b>
           </div>
         ))}
@@ -73,13 +73,13 @@ export default function AdminOverview() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <section className="bg-white p-6 rounded-2xl border border-[#e8e6e1] shadow-2xs space-y-3">
           <h3 className="text-lg font-serif font-bold text-[#141414]">{t('أحدث الطلبات', 'Latest orders')}</h3>
-          {data && data.latestOrders.length === 0 && <p className="text-xs text-[#77736c]">{t('لا توجد طلبات بعد', 'No orders yet')}</p>}
+          {data && data.latestOrders.length === 0 && <p className="text-xs text-[#6e6a63]">{t('لا توجد طلبات بعد', 'No orders yet')}</p>}
           <div className="divide-y divide-[#eeebe6]">
             {data?.latestOrders.map((o) => (
               <button key={o.id} type="button" onClick={() => openOrder(o.id)} className="w-full py-2.5 flex items-center justify-between gap-3 text-start hover:bg-[#faf9f7] rounded-lg px-2 cursor-pointer">
                 <span className="min-w-0">
                   <b className="block text-sm text-[#141414] font-mono" dir="ltr">{o.number}</b>
-                  <span className="text-xs text-[#77736c] truncate block">{o.customerName} · {pick(lang, o.zoneNameAr, o.zoneNameEn)}</span>
+                  <span className="text-xs text-[#6e6a63] truncate block">{o.customerName} · {pick(lang, o.zoneNameAr, o.zoneNameEn)}</span>
                 </span>
                 <span className="text-end shrink-0">
                   <span className="block text-[11px] font-bold text-[#6b5d4c]">{t(...statusLabel[o.status])}</span>
@@ -92,7 +92,7 @@ export default function AdminOverview() {
 
         <section className="bg-white p-6 rounded-2xl border border-[#e8e6e1] shadow-2xs space-y-3">
           <h3 className="text-lg font-serif font-bold text-[#141414]">{t('مخزون منخفض', 'Low stock')}</h3>
-          {data && data.lowStock.length === 0 && <p className="text-xs text-[#77736c]">{t('كل المقاسات متوفرة بكمية جيدة', 'Every size is well stocked')}</p>}
+          {data && data.lowStock.length === 0 && <p className="text-xs text-[#6e6a63]">{t('كل المقاسات متوفرة بكمية جيدة', 'Every size is well stocked')}</p>}
           <div className="divide-y divide-[#eeebe6] max-h-80 overflow-y-auto">
             {data?.lowStock.map((s) => (
               <button
@@ -103,7 +103,7 @@ export default function AdminOverview() {
               >
                 <span className="min-w-0">
                   <b className="block text-sm text-[#141414] truncate">{pick(lang, s.productNameAr, s.productNameEn)}</b>
-                  <span className="text-xs text-[#77736c] font-mono" dir="ltr">{s.sku} · {s.size}</span>
+                  <span className="text-xs text-[#6e6a63] font-mono" dir="ltr">{s.sku} · {s.size}</span>
                 </span>
                 <span className={`shrink-0 px-2.5 py-1 rounded-full text-xs font-bold ${s.stock === 0 ? 'bg-red-50 text-red-700' : 'bg-[#fff7e7] text-[#6b5d4c]'}`}>
                   {s.stock === 0 ? t('نفد', 'Sold out') : t(`${s.stock} متبقي`, `${s.stock} left`)}

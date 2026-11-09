@@ -85,7 +85,7 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
 
       <section className={box}>
         <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('الواجهة الرئيسية', 'Home hero')}</h3>
-        <p className="text-xs text-[#77736c]">{t('اترك الحقل فارغًا لاستخدام النص الافتراضي.', 'Leave a field empty to keep the built-in text.')}</p>
+        <p className="text-xs text-[#6e6a63]">{t('اترك الحقل فارغًا لاستخدام النص الافتراضي.', 'Leave a field empty to keep the built-in text.')}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['العنوان بالعربي', 'Title (Arabic)'], s.hero.titleAr, (v) => set('hero', { ...s.hero, titleAr: v }))}
           {field(['العنوان بالإنجليزي', 'Title (English)'], s.hero.titleEn, (v) => set('hero', { ...s.hero, titleEn: v }), { ltr: true })}

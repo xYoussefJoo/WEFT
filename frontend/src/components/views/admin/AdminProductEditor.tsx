@@ -175,7 +175,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
 
         {!product && (
           <div className="sm:col-span-2 space-y-4 pt-4 border-t border-[#eeebe6]">
-            <p className="text-xs text-[#77736c]">
+            <p className="text-xs text-[#6e6a63]">
               {t('اختر المقاسات والألوان: سيتم إنشاء كل مقاس بكل لون بنفس الكمية المبدئية، وتقدر تعدّل كل واحد بعد الحفظ.',
                 'Tick sizes and colors: every size is created in every color with the starting stock; you can change each one after saving.')}
             </p>
@@ -195,7 +195,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
                   {pick(lang, c.nameAr, c.nameEn)}
                 </button>
               ))}
-              {colors.data?.length === 0 && <small className="text-xs text-[#77736c]">{t('أضف ألوانًا من شاشة الألوان أولاً', 'Add colors in the Colors screen first')}</small>}
+              {colors.data?.length === 0 && <small className="text-xs text-[#6e6a63]">{t('أضف ألوانًا من شاشة الألوان أولاً', 'Add colors in the Colors screen first')}</small>}
             </div>
             <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28] w-48">
               <span>{t('الكمية المبدئية لكل مقاس/لون', 'Starting stock per size/color')}</span>
@@ -254,7 +254,7 @@ function Variants({ product, onChanged }: { product: AdminProduct; onChanged: ()
       <h3 className="text-lg font-serif font-bold text-[#141414]">{t('المقاسات والألوان والمخزون', 'Sizes, colors & stock')}</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="text-[11px] text-[#77736c] uppercase border-b border-[#eeebe6]">
+          <thead className="text-[11px] text-[#6e6a63] uppercase border-b border-[#eeebe6]">
             <tr>
               <th className="py-2 text-start">{t('المقاس', 'Size')}</th>
               <th className="py-2 text-start">{t('اللون', 'Color')}</th>
@@ -268,7 +268,7 @@ function Variants({ product, onChanged }: { product: AdminProduct; onChanged: ()
             {product.variants.map((v) => <VariantRow key={`${v.id}-${v.version}`} variant={v} basePrice={product.basePrice} onChanged={onChanged} />)}
           </tbody>
         </table>
-        {product.variants.length === 0 && <p className="text-xs text-[#77736c] py-4">{t('لا توجد مقاسات بعد: المنتج لن يظهر للبيع قبل إضافتها.', 'No variants yet: the product can’t be bought until you add some.')}</p>}
+        {product.variants.length === 0 && <p className="text-xs text-[#6e6a63] py-4">{t('لا توجد مقاسات بعد: المنتج لن يظهر للبيع قبل إضافتها.', 'No variants yet: the product can’t be bought until you add some.')}</p>}
       </div>
 
       <form onSubmit={add} className="flex flex-wrap items-end gap-3 pt-3 border-t border-[#eeebe6]">
@@ -343,7 +343,7 @@ function VariantRow({ variant, basePrice, onChanged }: { variant: AdminVariant; 
           {pick(lang, variant.color.nameAr, variant.color.nameEn)}
         </span>
       </td>
-      <td className="py-2 font-mono text-[11px] text-[#77736c]" dir="ltr">{variant.sku}</td>
+      <td className="py-2 font-mono text-[11px] text-[#6e6a63]" dir="ltr">{variant.sku}</td>
       <td className="py-2"><input type="number" min={0} value={stock} onChange={(e) => setStock(e.target.value)} className={`${cell} ${Number(stock) <= 3 ? 'text-[#a72f3e] font-bold' : ''}`} aria-label={t('المخزون', 'Stock')} /></td>
       <td className="py-2"><input type="number" min={1} step="0.01" value={price} placeholder={money(basePrice)} onChange={(e) => setPrice(e.target.value)} className={`${cell} w-28`} aria-label={t('سعر خاص', 'Own price')} /></td>
       <td className="py-2 text-end whitespace-nowrap">
@@ -399,9 +399,9 @@ function Photos({ product, onChanged }: { product: AdminProduct; onChanged: () =
     <section className={`${ui.card} p-5 sm:p-6 space-y-4`}>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-serif font-bold text-[#141414]">{t('صور المنتج', 'Product photos')}</h3>
-        <span className="text-xs text-[#77736c]">{product.images.length} / {MAX_IMAGES}</span>
+        <span className="text-xs text-[#6e6a63]">{product.images.length} / {MAX_IMAGES}</span>
       </div>
-      <p className="text-xs text-[#77736c]">{t('أول صورة هي الصورة الرئيسية في المتجر. JPG أو PNG أو WebP حتى 5 ميجابايت.', 'The first photo is the main one in the shop. JPG, PNG or WebP up to 5 MB.')}</p>
+      <p className="text-xs text-[#6e6a63]">{t('أول صورة هي الصورة الرئيسية في المتجر. JPG أو PNG أو WebP حتى 5 ميجابايت.', 'The first photo is the main one in the shop. JPG, PNG or WebP up to 5 MB.')}</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
         {product.images.map((img, i) => (

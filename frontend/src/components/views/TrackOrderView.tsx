@@ -26,7 +26,7 @@ export default function TrackOrderView() {
       <div className="max-w-[760px] mx-auto px-4 sm:px-6 py-20 text-center space-y-4 animate-scale-in">
         <span className="text-5xl block animate-float select-none">🔍</span>
         <h2 className="text-2xl font-serif font-bold text-[#141414]">{t('لم يتم العثور على الطلب', 'Order not found')}</h2>
-        <p className="text-sm text-[#77736c]">
+        <p className="text-sm text-[#6e6a63]">
           {t('تأكد من استخدام الرابط كما وصلك في الرسالة بالكامل.', 'Check that you opened the full link from your message.')}
         </p>
         <button type="button" onClick={() => go('orders')} className="px-7 py-3 rounded-full bg-[#141414] hover:bg-[#7a6b58] text-white text-sm font-bold cursor-pointer">
@@ -74,7 +74,7 @@ function OrderDetails({ order }: { order: PublicOrder }) {
         <div>
           <span className="text-xs text-[#7a6b58] font-bold tracking-[0.2em] uppercase">{t('تتبع الطلب', 'ORDER TRACKING')}</span>
           <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#141414] mt-1" dir="ltr">{order.number}</h2>
-          <p className="text-xs text-[#77736c] mt-1">{date(order.createdAt)}</p>
+          <p className="text-xs text-[#6e6a63] mt-1">{date(order.createdAt)}</p>
         </div>
         <span className="self-start sm:self-auto px-4 py-2 rounded-full text-sm font-bold bg-[#141414] text-white">
           {t(...statusLabel[order.status])}
@@ -90,7 +90,7 @@ function OrderDetails({ order }: { order: PublicOrder }) {
               <span className={`mt-1 w-3 h-3 rounded-full shrink-0 ${i === order.timeline.length - 1 ? 'bg-[#7a6b58]' : 'bg-[#141414]/40'}`} />
               <div className="flex-1 flex flex-wrap justify-between gap-2 text-sm">
                 <b className="text-[#141414]">{t(...statusLabel[step.to])}</b>
-                <span className="text-xs text-[#77736c]">{date(step.at)}</span>
+                <span className="text-xs text-[#6e6a63]">{date(step.at)}</span>
               </div>
             </li>
           ))}
@@ -114,7 +114,7 @@ function OrderDetails({ order }: { order: PublicOrder }) {
                   </div>
                   <div className="flex-1 min-w-0 text-sm">
                     <b className="block text-[#141414] truncate">{pick(lang, l.productNameAr, l.productNameEn)}</b>
-                    <span className="text-xs text-[#77736c]">
+                    <span className="text-xs text-[#6e6a63]">
                       {l.size} · {pick(lang, l.colorNameAr, l.colorNameEn)} · {money(l.unitPrice)} × {l.qty}
                     </span>
                   </div>
@@ -131,10 +131,10 @@ function OrderDetails({ order }: { order: PublicOrder }) {
 
       {/* Delivery and payment */}
       <div className="bg-[#f5f3ef] rounded-3xl border border-[#e6e3dd] p-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-        <div><span className="block text-xs text-[#77736c]">{t('الاسم', 'Name')}</span><b className="text-[#141414]">{order.customer.name}</b></div>
-        <div><span className="block text-xs text-[#77736c]">{t('الموبايل', 'Phone')}</span><b className="text-[#141414]" dir="ltr">{order.customer.phone}</b></div>
-        <div><span className="block text-xs text-[#77736c]">{t('المحافظة', 'Governorate')}</span><b className="text-[#141414]">{pick(lang, order.customer.zone.nameAr, order.customer.zone.nameEn)}</b></div>
-        <div className="sm:col-span-3 text-xs text-[#77736c]">
+        <div><span className="block text-xs text-[#6e6a63]">{t('الاسم', 'Name')}</span><b className="text-[#141414]">{order.customer.name}</b></div>
+        <div><span className="block text-xs text-[#6e6a63]">{t('الموبايل', 'Phone')}</span><b className="text-[#141414]" dir="ltr">{order.customer.phone}</b></div>
+        <div><span className="block text-xs text-[#6e6a63]">{t('المحافظة', 'Governorate')}</span><b className="text-[#141414]">{pick(lang, order.customer.zone.nameAr, order.customer.zone.nameEn)}</b></div>
+        <div className="sm:col-span-3 text-xs text-[#6e6a63]">
           {t('الدفع عند الاستلام', 'Cash on delivery')} · {order.paymentStatus === 'Paid' ? t('تم الدفع', 'Paid') : t('لم يتم الدفع بعد', 'Not paid yet')}
         </div>
       </div>

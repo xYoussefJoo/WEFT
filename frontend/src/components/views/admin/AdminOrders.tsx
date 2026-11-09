@@ -45,7 +45,7 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
       <div className="p-6 sm:p-7 border-b border-[#e6e3dd] bg-[#f8f7f4]/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <h3 className="text-xl font-serif font-bold text-[#141414]">{t('سجل الطلبات', 'Order management')}</h3>
-          <p className="text-xs text-[#77736c] mt-0.5">{data && t(`عدد النتائج: ${data.totalCount}`, `${data.totalCount} orders`)}</p>
+          <p className="text-xs text-[#6e6a63] mt-0.5">{data && t(`عدد النتائج: ${data.totalCount}`, `${data.totalCount} orders`)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <select aria-label={t('الحالة', 'Status')} value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | '')} className={select}>
@@ -67,7 +67,7 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
       ) : data.items.length > 0 ? (
         <div className={`overflow-x-auto ${loading ? 'opacity-60' : ''}`}>
           <table className="w-full text-sm text-start">
-            <thead className="bg-[#f5f3ef] text-[#77736c] text-[11px] uppercase tracking-wider border-b border-[#e6e3dd]">
+            <thead className="bg-[#f5f3ef] text-[#6e6a63] text-[11px] uppercase tracking-wider border-b border-[#e6e3dd]">
               <tr>
                 <th className="px-5 py-3.5 text-start font-bold">#</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('العميل', 'Customer')}</th>
@@ -80,12 +80,12 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
                 <tr key={o.id} onClick={() => onOpen(o.id)} className="hover:bg-[#f8f7f4] transition-colors duration-150 cursor-pointer">
                   <td className="px-5 py-4 font-mono text-xs text-[#141414] font-bold" dir="ltr">
                     {o.number}
-                    <div className="text-[10px] text-[#77736c] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</div>
+                    <div className="text-[10px] text-[#6e6a63] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</div>
                   </td>
                   <td className="px-5 py-4">
                     <div className="font-bold text-[#141414]">{o.customerName}</div>
-                    <div className="text-xs text-[#77736c] mt-0.5" dir="ltr">{o.phone}</div>
-                    <div className="text-xs text-[#77736c]">{pick(lang, o.zoneNameAr, o.zoneNameEn)}</div>
+                    <div className="text-xs text-[#6e6a63] mt-0.5" dir="ltr">{o.phone}</div>
+                    <div className="text-xs text-[#6e6a63]">{pick(lang, o.zoneNameAr, o.zoneNameEn)}</div>
                   </td>
                   <td className="px-5 py-4 font-extrabold text-[#7a6b58]">
                     {money(o.total)}
@@ -103,7 +103,7 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
           {data.totalPages > 1 && (
             <nav className="flex items-center justify-center gap-3 p-4">
               <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('السابق', 'Previous')}</button>
-              <span className="text-xs text-[#77736c]">{data.page} / {data.totalPages}</span>
+              <span className="text-xs text-[#6e6a63]">{data.page} / {data.totalPages}</span>
               <button type="button" disabled={page >= data.totalPages} onClick={() => setPage((n) => n + 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('التالي', 'Next')}</button>
             </nav>
           )}
@@ -171,7 +171,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
       <div className={`${card} flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
         <div>
           <h3 className="text-2xl font-serif font-bold text-[#141414]" dir="ltr">{order.number}</h3>
-          <p className="text-xs text-[#77736c]">{date(order.createdAt)}</p>
+          <p className="text-xs text-[#6e6a63]">{date(order.createdAt)}</p>
         </div>
         <span className="self-start px-4 py-2 rounded-full text-sm font-bold bg-[#141414] text-white">{t(...statusLabel[order.status])}</span>
       </div>
@@ -186,7 +186,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
                     <div key={l.variantId} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                       <span className="min-w-0">
                         <b className="block text-[#141414] truncate">{pick(lang, l.productNameAr, l.productNameEn)}</b>
-                        <span className="text-xs text-[#77736c]">{l.size} · {pick(lang, l.colorNameAr, l.colorNameEn)} · {money(l.unitPrice)} × {l.qty}</span>
+                        <span className="text-xs text-[#6e6a63]">{l.size} · {pick(lang, l.colorNameAr, l.colorNameEn)} · {money(l.unitPrice)} × {l.qty}</span>
                       </span>
                       <b className="text-[#141414] shrink-0">{money(l.lineTotal)}</b>
                     </div>
@@ -206,7 +206,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
               {order.history.map((h, i) => (
                 <li key={i} className="text-sm flex flex-wrap justify-between gap-2 border-b border-[#f1efeb] pb-2 last:border-0">
                   <span><b className="text-[#141414]">{t(...statusLabel[h.to])}</b>{h.note ? <span className="text-[#5d5a55]"> — {h.note}</span> : null}</span>
-                  <span className="text-xs text-[#77736c]">{date(h.at)}{h.changedBy ? ` · ${h.changedBy}` : ''}</span>
+                  <span className="text-xs text-[#6e6a63]">{date(h.at)}{h.changedBy ? ` · ${h.changedBy}` : ''}</span>
                 </li>
               ))}
             </ol>
@@ -222,7 +222,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
             {order.customer.email && <p className="text-xs text-[#5d5a55] break-all" dir="ltr">{order.customer.email}</p>}
             <p className="text-xs text-[#5d5a55]">{pick(lang, order.zone.nameAr, order.zone.nameEn)} · {order.customer.city}</p>
             <p className="text-xs text-[#5d5a55] whitespace-pre-line">{order.customer.address}</p>
-            {order.customer.notes && <p className="text-xs italic text-[#77736c]">“{order.customer.notes}”</p>}
+            {order.customer.notes && <p className="text-xs italic text-[#6e6a63]">“{order.customer.notes}”</p>}
             <p className="text-xs pt-2 border-t border-[#f1efeb]">
               {t('الدفع عند الاستلام', 'Cash on delivery')} · <b className={order.paymentStatus === 'Paid' ? 'text-green-700' : 'text-amber-800'}>{order.paymentStatus === 'Paid' ? t('مدفوع', 'Paid') : t('غير مدفوع', 'Unpaid')}</b>
             </p>

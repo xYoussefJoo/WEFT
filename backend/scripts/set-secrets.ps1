@@ -30,17 +30,17 @@ Write-Host 'Typed secrets are hidden. Press Enter to keep a [default].'
 Write-Host ''
 
 # --- SQL Server database on MonsterASP.NET (Control panel -> Databases -> connection string)
-$dbHost = Read-Plain 'Database server' 'db78891.public.databaseasp.net'
-$dbName = Read-Plain 'Database name' 'db78891'
-$dbUser = Read-Plain 'Database user' 'db78891'
+$dbHost = Read-Plain 'Database server (from the MonsterASP panel)'
+$dbName = Read-Plain 'Database name'
+$dbUser = Read-Plain 'Database user'
 $dbPass = Read-Secret 'Database password (hidden)'
 if (-not $dbPass) { throw 'The database password is required.' }
 
 # --- First owner account (created on first start, then the owner must change the password)
 Write-Host ''
-$ownerEmail = Read-Plain 'Owner email' 'xyousefjoo@gmail.com'
+$ownerEmail = Read-Plain 'Owner email'
 if ($ownerEmail -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$') { throw 'Enter a valid owner email.' }
-$ownerName = Read-Plain 'Owner name' 'Youssef Gamal'
+$ownerName = Read-Plain 'Owner name'
 $ownerPass = Read-Secret 'Owner first password, 10+ characters (hidden)'
 if ($ownerPass.Length -lt 10) { throw 'The owner password must be at least 10 characters.' }
 $ownerPass2 = Read-Secret 'Repeat the owner password (hidden)'

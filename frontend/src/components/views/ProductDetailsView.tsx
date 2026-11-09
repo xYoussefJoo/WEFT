@@ -195,13 +195,14 @@ function Details({ product }: { product: ProductDetail }) {
                 src={image.url}
                 srcSet={image.srcSet}
                 sizes="(min-width: 1024px) 600px, 100vw"
+                fetchPriority="high"
                 alt={pick(lang, image.altAr, image.altEn) || title}
                 onError={() => setImgError(true)}
                 className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
               />
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={hoodiePhoto(variants.find((v) => v.color.id === selectedColorId)?.color.nameEn)} alt={title}
+              <img src={hoodiePhoto(variants.find((v) => v.color.id === selectedColorId)?.color.nameEn)} alt={title} fetchPriority="high"
                 className="w-full h-full object-contain p-8 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-105" />
             )}
 

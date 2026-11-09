@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={assetPath('assets/weft-mark-white-192.webp')}
+                src={assetPath('assets/weft-mark-white-128.webp')}
                 loading="lazy"
                 alt="WEFT"
                 className="w-16 h-16 object-contain"
@@ -113,7 +113,7 @@ export default function Footer() {
               <div className={`flex  ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'} items-center gap-1.5 font-bold bg-white px-4 py-1 rounded-full`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={assetPath('assets/kp-logo.png')}
+                src={assetPath('assets/kp-logo-96.webp')}
                 loading="lazy"
                 alt="Kernel Panic"
                 className="w-12 h-12 object-contain rounded-xs"

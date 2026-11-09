@@ -34,8 +34,6 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey(l => l.OrderId).OnDelete(DeleteBehavior.Cascade);
         builder.HasMany(o => o.History).WithOne()
             .HasForeignKey(h => h.OrderId).OnDelete(DeleteBehavior.Cascade);
-        builder.HasOne(o => o.Tailoring).WithOne()
-            .HasForeignKey<TailoringSpec>(t => t.OrderId).OnDelete(DeleteBehavior.Cascade);
     }
 }
 
@@ -68,24 +66,5 @@ internal sealed class OrderStatusHistoryConfiguration : IEntityTypeConfiguration
         builder.Property(h => h.ChangedByUserId).HasMaxLength(450);
         builder.HasOne<AppUser>().WithMany()
             .HasForeignKey(h => h.ChangedByUserId).OnDelete(DeleteBehavior.SetNull);
-    }
-}
-
-internal sealed class TailoringSpecConfiguration : IEntityTypeConfiguration<TailoringSpec>
-{
-    public void Configure(EntityTypeBuilder<TailoringSpec> builder)
-    {
-        builder.Property(t => t.StyleId).HasMaxLength(50);
-        builder.Property(t => t.Garment).HasMaxLength(50);
-        builder.Property(t => t.Fabric).HasMaxLength(50);
-        builder.Property(t => t.Color).HasMaxLength(50);
-        builder.Property(t => t.Fit).HasMaxLength(50);
-        builder.Property(t => t.StandardSize).HasMaxLength(10);
-        builder.Property(t => t.ReferenceImageKey).HasMaxLength(300);
-        builder.Property(t => t.QuoteNote).HasMaxLength(500);
-        builder.Property(t => t.Notes).HasMaxLength(1000);
-
-        builder.Property(t => t.Measurements).HasJsonConversion(); // { "waist": 72, "hips": 98 }
-        builder.Property(t => t.Extras).HasJsonConversion();       // [ "embroidery" ]
     }
 }

@@ -19,14 +19,6 @@ internal static class TestData
         Order.CreateReady("WF-10001", "token-hash", Customer(), deliveryZoneId: 1, deliveryFee: 65m,
             lines.Length > 0 ? lines : [Line(501)], Now);
 
-    public static TailoringSpec StandardSizeSpec(decimal estimate = 2200m) =>
-        new("abaya", "dress", "crepe", "Beige", "Relaxed", SizingMode.StandardSize, "XL",
-            measurements: null, hasLining: true, extras: ["embroidery"], referenceImageKey: null, estimate);
-
-    public static Order CustomOrder(decimal estimate = 2200m) =>
-        Order.CreateCustom("WF-10002", "token-hash", Customer(), deliveryZoneId: 1, deliveryFee: 65m,
-            StandardSizeSpec(estimate), Now);
-
     public static Product Product(decimal basePrice = 1250m) =>
         new(categoryId: 1, "عباية محتشمة", "Modest Abaya", slug: null, null, null, basePrice);
 }

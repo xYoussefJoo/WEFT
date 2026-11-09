@@ -17,8 +17,6 @@ public interface IAppDbContext
     DbSet<OrderLine> OrderLines { get; }
     DbSet<DeliveryZone> DeliveryZones { get; }
     DbSet<SiteSettings> SiteSettings { get; }
-    DbSet<TailoringCatalog> TailoringCatalog { get; }
-    DbSet<PriceRules> PriceRules { get; }
 
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 

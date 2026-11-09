@@ -11,7 +11,7 @@ public class ProductVariantTests
     [Fact]
     public void Reserve_takes_from_stock()
     {
-        var variant = Product().AddVariant("M", colorId: 3, sku: "zf-1-m-beige", stock: 3);
+        var variant = Product().AddVariant("M", colorId: 3, sku: "wf-1-m-beige", stock: 3);
 
         variant.Reserve(2);
 

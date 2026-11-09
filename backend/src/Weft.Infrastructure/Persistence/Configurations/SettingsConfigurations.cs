@@ -26,24 +26,6 @@ internal sealed class SiteSettingsConfiguration : IEntityTypeConfiguration<SiteS
     }
 }
 
-internal sealed class TailoringCatalogConfiguration : IEntityTypeConfiguration<TailoringCatalog>
-{
-    public void Configure(EntityTypeBuilder<TailoringCatalog> builder)
-    {
-        builder.ToTable("TailoringCatalog");
-        builder.Property(c => c.Content).HasJsonConversion();
-    }
-}
-
-internal sealed class PriceRulesConfiguration : IEntityTypeConfiguration<PriceRules>
-{
-    public void Configure(EntityTypeBuilder<PriceRules> builder)
-    {
-        builder.ToTable("PriceRules");
-        builder.Property(p => p.Content).HasJsonConversion();
-    }
-}
-
 internal sealed class IdempotencyRecordConfiguration : IEntityTypeConfiguration<IdempotencyRecord>
 {
     public void Configure(EntityTypeBuilder<IdempotencyRecord> builder)

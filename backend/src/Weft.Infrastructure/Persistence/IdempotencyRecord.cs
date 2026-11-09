@@ -1,6 +1,6 @@
 namespace Weft.Infrastructure.Persistence;
 
-// Remembers the response of POST /api/orders and /api/tailoring/requests for 24 h,
+// Remembers the response of POST /api/orders for 24 h,
 // so a double click or refresh returns the same order instead of creating a second one.
 public class IdempotencyRecord
 {

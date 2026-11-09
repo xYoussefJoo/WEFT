@@ -4,7 +4,7 @@ using Microsoft.OpenApi;
 namespace Weft.Api.Errors;
 
 // [Idempotent] is a filter, so OpenAPI can't see the header it needs. This adds it to openapi.json,
-// so a generated client knows POST /api/orders and POST /api/tailoring/requests must send it.
+// so a generated client knows POST /api/orders must send it.
 public sealed class IdempotencyHeaderTransformer : IOpenApiOperationTransformer
 {
     public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)

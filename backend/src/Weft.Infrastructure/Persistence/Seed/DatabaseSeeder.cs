@@ -31,8 +31,6 @@ public class DatabaseSeeder(
         if (!await db.DeliveryZones.AnyAsync(cancellationToken)) db.DeliveryZones.AddRange(Seed.SeedData.DeliveryZones());
         if (!await db.Colors.AnyAsync(cancellationToken)) db.Colors.AddRange(Seed.SeedData.Colors());
         if (!await db.SiteSettings.AnyAsync(cancellationToken)) db.SiteSettings.Add(new SiteSettings(SiteContent.Default));
-        if (!await db.TailoringCatalog.AnyAsync(cancellationToken)) db.TailoringCatalog.Add(new TailoringCatalog(Seed.SeedData.TailoringCatalog()));
-        if (!await db.PriceRules.AnyAsync(cancellationToken)) db.PriceRules.Add(new PriceRules(Seed.SeedData.PriceRules()));
 
         await db.SaveChangesAsync(cancellationToken);
 

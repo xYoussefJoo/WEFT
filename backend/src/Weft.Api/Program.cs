@@ -151,7 +151,7 @@ public partial class Program;
 internal static class PublicCatalog
 {
     private static readonly PathString[] Paths =
-        ["/api/categories", "/api/products", "/api/site-settings", "/api/delivery-zones", "/api/tailoring/catalog"];
+        ["/api/categories", "/api/products", "/api/site-settings", "/api/delivery-zones"];
 
     public static bool IsMatch(PathString path) => Paths.Any(p => path.StartsWithSegments(p));
 }

@@ -21,31 +21,22 @@ public sealed record PublicCustomerDto(string Name, string Phone, PublicZoneRef 
 
 public sealed record TimelineEvent(OrderStatus? From, OrderStatus To, DateTime At);
 
-public sealed record PublicTailoringDto(string Garment, string Fabric, string Color, string Fit,
-    decimal EstimatedPrice, decimal? QuotedPrice, string? QuoteNote, DateTime? QuoteValidUntil);
-
-public sealed record PublicOrderDto(string Number, OrderType Type, OrderStatus Status, DateTime CreatedAt,
+public sealed record PublicOrderDto(string Number, OrderStatus Status, DateTime CreatedAt,
     PublicCustomerDto Customer, IReadOnlyList<OrderLineDto> Lines, decimal Subtotal, decimal DeliveryFee, decimal Total,
-    PaymentMethod PaymentMethod, PaymentStatus PaymentStatus, IReadOnlyList<TimelineEvent> Timeline, PublicTailoringDto? Tailoring);
+    PaymentMethod PaymentMethod, PaymentStatus PaymentStatus, IReadOnlyList<TimelineEvent> Timeline);
 
 // ---------- admin
 
-public sealed record AdminOrderRow(int Id, string Number, OrderType Type, OrderStatus Status, string CustomerName,
+public sealed record AdminOrderRow(int Id, string Number, OrderStatus Status, string CustomerName,
     string Phone, string ZoneNameAr, string ZoneNameEn, decimal Total, PaymentStatus PaymentStatus, DateTime CreatedAt, int ItemsCount);
 
 public sealed record AdminCustomerDto(string Name, string Phone, string? Email, string City, string Address, string? Notes);
 
 public sealed record AdminHistoryEvent(OrderStatus? From, OrderStatus To, DateTime At, string? Note, string? ChangedBy);
 
-public sealed record AdminTailoringDto(string? StyleId, string Garment, string Fabric, string Color, string Fit,
-    SizingMode SizingMode, string? StandardSize, IReadOnlyDictionary<string, decimal> Measurements, bool HasLining,
-    IReadOnlyList<string> Extras, string? Notes, string? ReferenceImageUrl, decimal EstimatedPrice, decimal? QuotedPrice,
-    string? QuoteNote, DateTime? QuoteValidUntil, DateTime? QuoteApprovedAt);
-
-public sealed record AdminOrderDetail(int Id, string Number, OrderType Type, OrderStatus Status, DateTime CreatedAt,
+public sealed record AdminOrderDetail(int Id, string Number, OrderStatus Status, DateTime CreatedAt,
     AdminCustomerDto Customer, AdminZoneDto Zone, IReadOnlyList<OrderLineDto> Lines, decimal Subtotal, decimal DeliveryFee,
-    decimal Total, PaymentMethod PaymentMethod, PaymentStatus PaymentStatus, IReadOnlyList<AdminHistoryEvent> History,
-    AdminTailoringDto? Tailoring);
+    decimal Total, PaymentMethod PaymentMethod, PaymentStatus PaymentStatus, IReadOnlyList<AdminHistoryEvent> History);
 
 internal static class OrderMapping
 {

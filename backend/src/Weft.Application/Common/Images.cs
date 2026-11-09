@@ -7,10 +7,6 @@ public interface IImageStorage
     Task UploadPublicAsync(string objectKey, byte[] content, string contentType, CancellationToken cancellationToken);
     Task DeletePublicAsync(IReadOnlyCollection<string> objectKeys, CancellationToken cancellationToken);
 
-    // Private bucket: customers' tailoring photos. Never public; the owner sees them through a short-lived link.
-    Task UploadPrivateAsync(string objectKey, byte[] content, string contentType, CancellationToken cancellationToken);
-    Task DeletePrivateAsync(IReadOnlyCollection<string> objectKeys, CancellationToken cancellationToken);
-    Task<string> SignedPrivateUrlAsync(string objectKey, TimeSpan validFor, CancellationToken cancellationToken);
 }
 
 // Turns an uploaded photo into small WebP files without EXIF data. ImageSharp in the app.

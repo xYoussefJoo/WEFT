@@ -8,7 +8,7 @@ using Weft.Application.Common;
 namespace Weft.Infrastructure.Storage;
 
 // Supabase Storage over its REST API (no SDK needed).
-// Public bucket: product photos served straight to browsers. Private bucket: customers' tailoring photos.
+// Public bucket: product photos served straight to browsers.
 public sealed class SupabaseImageStorage(HttpClient http, IOptions<StorageOptions> options, ILogger<SupabaseImageStorage> logger)
     : IImageStorage
 {
@@ -17,38 +17,12 @@ public sealed class SupabaseImageStorage(HttpClient http, IOptions<StorageOption
     public string PublicUrl(string objectKey) =>
         $"{_options.BaseUrl}/storage/v1/object/public/{_options.PublicBucket}/{objectKey}";
 
-    // File names are unique, so public photos may be cached for a year. Private ones are never cached.
+    // File names are unique, so public photos may be cached for a year.
     public Task UploadPublicAsync(string objectKey, byte[] content, string contentType, CancellationToken cancellationToken) =>
         UploadAsync(_options.PublicBucket, objectKey, content, contentType, "max-age=31536000", cancellationToken);
 
     public Task DeletePublicAsync(IReadOnlyCollection<string> objectKeys, CancellationToken cancellationToken) =>
         DeleteAsync(_options.PublicBucket, objectKeys, cancellationToken);
-
-    public Task UploadPrivateAsync(string objectKey, byte[] content, string contentType, CancellationToken cancellationToken) =>
-        UploadAsync(_options.PrivateBucket, objectKey, content, contentType, "no-store", cancellationToken);
-
-    public Task DeletePrivateAsync(IReadOnlyCollection<string> objectKeys, CancellationToken cancellationToken) =>
-        DeleteAsync(_options.PrivateBucket, objectKeys, cancellationToken);
-
-    // A link that works for a short time only, e.g. 10 minutes for the owner to look at a customer's photo.
-    public async Task<string> SignedPrivateUrlAsync(string objectKey, TimeSpan validFor, CancellationToken cancellationToken)
-    {
-        EnsureConfigured();
-        using var request = new HttpRequestMessage(HttpMethod.Post,
-            $"{_options.BaseUrl}/storage/v1/object/sign/{_options.PrivateBucket}/{objectKey}")
-        {
-            Content = JsonContent.Create(new { expiresIn = (int)validFor.TotalSeconds }),
-        };
-        Authorize(request);
-
-        using var response = await http.SendAsync(request, cancellationToken);
-        await EnsureSuccessAsync(response, $"sign {objectKey}", cancellationToken);
-        var signed = await response.Content.ReadFromJsonAsync<SignedUrlResponse>(cancellationToken)
-            ?? throw new InvalidOperationException("Storage returned no signed URL.");
-        return $"{_options.BaseUrl}/storage/v1{signed.SignedURL}";
-    }
-
-    private sealed record SignedUrlResponse(string SignedURL);
 
     private async Task UploadAsync(string bucket, string objectKey, byte[] content, string contentType, string cacheControl, CancellationToken ct)
     {
@@ -90,7 +64,7 @@ public sealed class SupabaseImageStorage(HttpClient http, IOptions<StorageOption
         return response.IsSuccessStatusCode;
     }
 
-    // Creates the two buckets if they don't exist yet. Called once at startup.
+    // Creates the photo bucket if they don't exist yet. Called once at startup.
     public async Task EnsureBucketsAsync(CancellationToken cancellationToken)
     {
         if (!_options.IsConfigured)
@@ -100,8 +74,6 @@ public sealed class SupabaseImageStorage(HttpClient http, IOptions<StorageOption
         }
 
         await EnsureBucketAsync(_options.PublicBucket, isPublic: true, maxBytes: 2 * 1024 * 1024, ["image/webp"], cancellationToken);
-        await EnsureBucketAsync(_options.PrivateBucket, isPublic: false, maxBytes: 5 * 1024 * 1024,
-            ["image/jpeg", "image/png", "image/webp"], cancellationToken);
     }
 
     private async Task EnsureBucketAsync(string name, bool isPublic, long maxBytes, string[] mimeTypes, CancellationToken ct)

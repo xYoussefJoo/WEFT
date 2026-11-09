@@ -59,7 +59,6 @@ public sealed class GlobalExceptionHandler(IProblemDetailsService problemDetails
         ErrorCodes.Validation => StatusCodes.Status400BadRequest,
         ErrorCodes.OutOfStock or ErrorCodes.PriceChanged or ErrorCodes.InvalidStatusTransition
             or ErrorCodes.ConcurrencyConflict or ErrorCodes.Duplicate or ErrorCodes.InUse => StatusCodes.Status409Conflict,
-        ErrorCodes.QuoteExpired => StatusCodes.Status422UnprocessableEntity,
         _ => StatusCodes.Status400BadRequest,
     };
 
@@ -72,7 +71,6 @@ public sealed class GlobalExceptionHandler(IProblemDetailsService problemDetails
         ErrorCodes.ConcurrencyConflict => "Changed by someone else",
         ErrorCodes.Duplicate => "Already exists",
         ErrorCodes.InUse => "Still in use",
-        ErrorCodes.QuoteExpired => "Offer expired",
         _ => "Request refused",
     };
 }

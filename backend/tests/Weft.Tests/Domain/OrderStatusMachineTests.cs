@@ -38,8 +38,6 @@ public class OrderStatusMachineTests
     [Theory]
     [InlineData(OrderStatus.Shipped)]
     [InlineData(OrderStatus.Delivered)]
-    [InlineData(OrderStatus.InProduction)]
-    [InlineData(OrderStatus.QuoteApproved)]
     public void Skipping_steps_is_refused(OrderStatus target)
     {
         var order = ReadyOrder();
@@ -61,7 +59,7 @@ public class OrderStatusMachineTests
     }
 
     [Fact]
-    public void Cancelling_a_ready_order_returns_every_line_to_stock()
+    public void Cancelling_an_order_returns_every_line_to_stock()
     {
         var order = ReadyOrder(Line(501, quantity: 2), Line(502, quantity: 1));
 
@@ -69,14 +67,6 @@ public class OrderStatusMachineTests
 
         Assert.Equal([new StockReturn(501, 2), new StockReturn(502, 1)], returns);
         Assert.Equal("Customer called", order.History.Last().Note);
-    }
-
-    [Fact]
-    public void Cancelling_a_custom_order_returns_no_stock()
-    {
-        var order = CustomOrder();
-
-        Assert.Empty(order.ChangeStatus(OrderStatus.Cancelled, "owner-id", null, Now));
     }
 
     [Fact]

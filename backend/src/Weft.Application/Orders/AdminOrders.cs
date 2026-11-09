@@ -8,7 +8,6 @@ namespace Weft.Application.Orders;
 
 public sealed record AdminOrdersQuery(
     OrderStatus[]? Status = null,
-    OrderType? Type = null,
     string? Q = null,
     DateTime? From = null,
     DateTime? To = null,
@@ -34,7 +33,6 @@ public sealed class ListAdminOrdersHandler(IAppDbContext db)
         var orders = db.Orders.AsNoTracking();
 
         if (query.Status is { Length: > 0 } statuses) orders = orders.Where(o => statuses.Contains(o.Status));
-        if (query.Type is OrderType type) orders = orders.Where(o => o.Type == type);
         if (query.From is DateTime from) orders = orders.Where(o => o.CreatedAt >= from.ToUniversalTime());
         if (query.To is DateTime to) orders = orders.Where(o => o.CreatedAt <= to.ToUniversalTime());
         if (!string.IsNullOrWhiteSpace(query.Q))
@@ -50,7 +48,7 @@ public sealed class ListAdminOrdersHandler(IAppDbContext db)
         var rows = from o in orders
                    join z in db.DeliveryZones on o.DeliveryZoneId equals z.Id
                    orderby o.CreatedAt descending, o.Id descending
-                   select new AdminOrderRow(o.Id, o.Number, o.Type, o.Status, o.Customer.Name, o.Customer.Phone,
+                   select new AdminOrderRow(o.Id, o.Number, o.Status, o.Customer.Name, o.Customer.Phone,
                        z.NameAr, z.NameEn, o.Total, o.PaymentStatus, o.CreatedAt, o.Lines.Sum(l => (int?)l.Quantity) ?? 0);
 
         var total = await rows.CountAsync(ct);
@@ -60,38 +58,29 @@ public sealed class ListAdminOrdersHandler(IAppDbContext db)
 }
 
 // #36 GET /api/admin/orders/{id} — everything, unmasked, with who changed what.
-public sealed class GetAdminOrderHandler(IAppDbContext db, IUserDirectory users, IImageStorage storage)
+public sealed class GetAdminOrderHandler(IAppDbContext db, IUserDirectory users)
 {
-    public static readonly TimeSpan PhotoLinkLifetime = TimeSpan.FromMinutes(10);
-
     public async Task<AdminOrderDetail> HandleAsync(int id, CancellationToken ct)
     {
         var order = await db.Orders.AsNoTracking()
-            .Include(o => o.Lines).Include(o => o.History).Include(o => o.Tailoring)
+            .Include(o => o.Lines).Include(o => o.History)
             .FirstOrDefaultAsync(o => o.Id == id, ct) ?? throw new NotFoundException("Order");
-        return await ToDetailAsync(db, users, storage, order, ct);
+        return await ToDetailAsync(db, users, order, ct);
     }
 
-    internal static async Task<AdminOrderDetail> ToDetailAsync(IAppDbContext db, IUserDirectory users, IImageStorage storage,
-        Order o, CancellationToken ct)
+    internal static async Task<AdminOrderDetail> ToDetailAsync(IAppDbContext db, IUserDirectory users, Order o, CancellationToken ct)
     {
         var zone = await db.DeliveryZones.AsNoTracking().FirstAsync(z => z.Id == o.DeliveryZoneId, ct);
         var names = await users.NamesAsync(o.History.Where(h => h.ChangedByUserId is not null).Select(h => h.ChangedByUserId!).Distinct(), ct);
         var c = o.Customer;
-        var t = o.Tailoring;
-        // The customer's photo lives in the private bucket: the owner gets a link that works for 10 minutes.
-        var photoUrl = t?.ReferenceImageKey is { } key ? await storage.SignedPrivateUrlAsync(key, PhotoLinkLifetime, ct) : null;
 
-        return new AdminOrderDetail(o.Id, o.Number, o.Type, o.Status, o.CreatedAt,
+        return new AdminOrderDetail(o.Id, o.Number, o.Status, o.CreatedAt,
             new AdminCustomerDto(c.Name, c.Phone, c.Email, c.City, c.Address, c.Notes),
             zone.ToAdminDto(),
             o.Lines.OrderBy(l => l.Id).Select(l => l.ToDto()).ToList(),
             o.Subtotal, o.DeliveryFee, o.Total, o.PaymentMethod, o.PaymentStatus,
             o.History.OrderBy(h => h.ChangedAt).ThenBy(h => h.Id).Select(h => new AdminHistoryEvent(h.FromStatus, h.ToStatus, h.ChangedAt, h.Note,
-                h.ChangedByUserId is null ? null : names.GetValueOrDefault(h.ChangedByUserId, "Deleted account"))).ToList(),
-            t is null ? null : new AdminTailoringDto(t.StyleId, t.Garment, t.Fabric, t.Color, t.Fit, t.SizingMode, t.StandardSize,
-                t.Measurements, t.HasLining, t.Extras, t.Notes, photoUrl, t.EstimatedPrice, t.QuotedPrice,
-                t.QuoteNote, t.QuoteValidUntil, t.QuoteApprovedAt));
+                h.ChangedByUserId is null ? null : names.GetValueOrDefault(h.ChangedByUserId, "Deleted account"))).ToList());
     }
 }
 
@@ -107,7 +96,7 @@ public sealed class ChangeOrderStatusValidator : AbstractValidator<ChangeOrderSt
 }
 
 // #37 POST /api/admin/orders/{id}/status — only the moves in the status machine; cancelling puts stock back.
-public sealed class ChangeOrderStatusHandler(IAppDbContext db, IUserDirectory users, IImageStorage storage, IEmailQueue emails, TimeProvider clock)
+public sealed class ChangeOrderStatusHandler(IAppDbContext db, IUserDirectory users, IEmailQueue emails, TimeProvider clock)
 {
     private const int MaxAttempts = 3;
 
@@ -118,7 +107,7 @@ public sealed class ChangeOrderStatusHandler(IAppDbContext db, IUserDirectory us
             try
             {
                 // History must be loaded: the order records "from → to" by looking at its existing history.
-                var order = await db.Orders.Include(o => o.Lines).Include(o => o.History).Include(o => o.Tailoring)
+                var order = await db.Orders.Include(o => o.Lines).Include(o => o.History)
                     .FirstOrDefaultAsync(o => o.Id == id, ct) ?? throw new NotFoundException("Order");
 
                 var returns = order.ChangeStatus(command.To, userId, command.Note, clock.GetUtcNow().UtcDateTime);
@@ -132,7 +121,7 @@ public sealed class ChangeOrderStatusHandler(IAppDbContext db, IUserDirectory us
 
                 await db.SaveChangesAsync(ct); // order + stock in one save = one transaction
                 OrderEmails.StatusChanged(emails, order);
-                return await GetAdminOrderHandler.ToDetailAsync(db, users, storage, order, ct);
+                return await GetAdminOrderHandler.ToDetailAsync(db, users, order, ct);
             }
             catch (DbUpdateConcurrencyException) when (attempt < MaxAttempts)
             {

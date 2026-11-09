@@ -239,7 +239,7 @@ public class AdminOrderTests
 
         Assert.Equal(1, (await board.HandleAsync(new AdminOrdersQuery(Status: [OrderStatus.PendingConfirmation]), CancellationToken.None)).TotalCount);
         Assert.Equal(0, (await board.HandleAsync(new AdminOrdersQuery(Status: [OrderStatus.Shipped]), CancellationToken.None)).TotalCount);
-        Assert.Equal(1, (await board.HandleAsync(new AdminOrdersQuery(Q: "zf-10001"), CancellationToken.None)).TotalCount);
+        Assert.Equal(1, (await board.HandleAsync(new AdminOrdersQuery(Q: "wf-10001"), CancellationToken.None)).TotalCount);
         Assert.Equal(1, (await board.HandleAsync(new AdminOrdersQuery(Q: "01012345678"), CancellationToken.None)).TotalCount);
         var row = (await board.HandleAsync(new AdminOrdersQuery(), CancellationToken.None)).Items.Single();
         Assert.Equal(("Cairo", 2), (row.ZoneNameEn, row.ItemsCount));

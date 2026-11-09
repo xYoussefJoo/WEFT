@@ -9,11 +9,10 @@ public sealed record LowStockItem(int VariantId, string Sku, string ProductNameA
 
 public sealed record DashboardDto(
     int OrdersToday,
-    int PendingConfirmation,   // new ready-made orders: call the customer and confirm
-    int AwaitingQuote,         // new custom orders: confirm or change the price
-    int WaitingForCustomer,    // price sent, waiting for the customer's answer
-    int InProduction,          // sewing or quality check
+    int PendingConfirmation,   // new orders: call the customer and confirm
+    int ToPack,                // confirmed, not packed yet
     int ReadyToShip,           // packed
+    int OutForDelivery,        // shipped, not delivered yet
     decimal DeliveredRevenueLast30Days,
     IReadOnlyList<LowStockItem> LowStock,
     IReadOnlyList<AdminOrderRow> LatestOrders);
@@ -53,10 +52,9 @@ public sealed class GetDashboardHandler(IAppDbContext db, ListAdminOrdersHandler
         return new DashboardDto(
             await db.Orders.CountAsync(o => o.CreatedAt >= startOfToday, ct),
             Count(OrderStatus.PendingConfirmation),
-            Count(OrderStatus.AwaitingQuote),
-            Count(OrderStatus.QuoteSent),
-            Count(OrderStatus.InProduction, OrderStatus.QualityCheck),
+            Count(OrderStatus.Confirmed),
             Count(OrderStatus.Packing),
+            Count(OrderStatus.Shipped),
             revenue, lowStock, latest.Items);
     }
 

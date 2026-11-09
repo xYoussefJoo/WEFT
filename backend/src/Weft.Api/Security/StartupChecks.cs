@@ -19,7 +19,7 @@ public static class StartupChecks
         if (string.IsNullOrWhiteSpace(hosts) || hosts.Trim() == "*")
             problems.Add("AllowedHosts must list the API's own host name(s), separated by ';' (not \"*\").");
 
-        // Tracking and quote links in emails are built from it; the fallback is localhost.
+        // Tracking links in emails are built from it; the fallback is localhost.
         if (!Uri.TryCreate(configuration["Site:PublicUrl"], UriKind.Absolute, out var site) || site.Scheme != Uri.UriSchemeHttps)
             problems.Add("Site:PublicUrl must be the storefront's https address (e.g. https://staging.example.com).");
 

@@ -11,20 +11,18 @@ public sealed class TrackOrderHandler(IAppDbContext db)
     public async Task<PublicOrderDto> HandleAsync(string number, string? token, CancellationToken ct)
     {
         var order = await db.Orders.AsNoTracking()
-            .Include(o => o.Lines).Include(o => o.History).Include(o => o.Tailoring)
+            .Include(o => o.Lines).Include(o => o.History)
             .FirstOrDefaultAsync(o => o.Number == number, ct);
         if (order is null || !TrackingTokens.Matches(token, order.TrackingTokenHash))
             throw new NotFoundException("Order");
 
         var zone = await db.DeliveryZones.AsNoTracking().FirstAsync(z => z.Id == order.DeliveryZoneId, ct);
-        var t = order.Tailoring;
 
-        return new PublicOrderDto(order.Number, order.Type, order.Status, order.CreatedAt,
+        return new PublicOrderDto(order.Number, order.Status, order.CreatedAt,
             new PublicCustomerDto(MaskName(order.Customer.Name), MaskPhone(order.Customer.Phone), new PublicZoneRef(zone.NameAr, zone.NameEn)),
             order.Lines.OrderBy(l => l.Id).Select(l => l.ToDto()).ToList(),
             order.Subtotal, order.DeliveryFee, order.Total, order.PaymentMethod, order.PaymentStatus,
-            order.History.OrderBy(h => h.ChangedAt).ThenBy(h => h.Id).Select(h => new TimelineEvent(h.FromStatus, h.ToStatus, h.ChangedAt)).ToList(),
-            t is null ? null : new PublicTailoringDto(t.Garment, t.Fabric, t.Color, t.Fit, t.EstimatedPrice, t.QuotedPrice, t.QuoteNote, t.QuoteValidUntil));
+            order.History.OrderBy(h => h.ChangedAt).ThenBy(h => h.Id).Select(h => new TimelineEvent(h.FromStatus, h.ToStatus, h.ChangedAt)).ToList());
     }
 
     // "Mona Ahmed Ali" -> "Mona A."

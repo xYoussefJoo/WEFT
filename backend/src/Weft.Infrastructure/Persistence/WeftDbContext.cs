@@ -40,12 +40,9 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderLine> OrderLines => Set<OrderLine>();
     public DbSet<OrderStatusHistory> OrderStatusHistory => Set<OrderStatusHistory>();
-    public DbSet<TailoringSpec> TailoringSpecs => Set<TailoringSpec>();
     public DbSet<DeliveryZone> DeliveryZones => Set<DeliveryZone>();
 
     public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
-    public DbSet<TailoringCatalog> TailoringCatalog => Set<TailoringCatalog>();
-    public DbSet<PriceRules> PriceRules => Set<PriceRules>();
     public DbSet<IdempotencyRecord> IdempotencyKeys => Set<IdempotencyRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -65,10 +62,8 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
 
         // Enums are stored as readable text ("Shipped"), so reordering an enum never corrupts data.
         configurationBuilder.Properties<OrderStatus>().HaveConversion<string>().HaveMaxLength(30);
-        configurationBuilder.Properties<OrderType>().HaveConversion<string>().HaveMaxLength(20);
         configurationBuilder.Properties<PaymentMethod>().HaveConversion<string>().HaveMaxLength(30);
         configurationBuilder.Properties<PaymentStatus>().HaveConversion<string>().HaveMaxLength(20);
-        configurationBuilder.Properties<SizingMode>().HaveConversion<string>().HaveMaxLength(20);
     }
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)

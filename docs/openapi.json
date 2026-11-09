@@ -58,7 +58,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -112,7 +112,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -399,235 +399,6 @@
         }
       }
     },
-    "/api/tailoring/catalog": {
-      "get": {
-        "tags": [
-          "Tailoring"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicTailoringCatalog"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tailoring/estimate": {
-      "post": {
-        "tags": [
-          "Tailoring"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EstimateCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EstimateCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EstimateCommand"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EstimateResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tailoring/requests": {
-      "post": {
-        "tags": [
-          "Tailoring"
-        ],
-        "parameters": [
-          {
-            "name": "Idempotency-Key",
-            "in": "header",
-            "description": "A new UUID per checkout attempt. Repeating the same key returns the first response.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "referenceImage": {
-                        "$ref": "#/components/schemas/IFormFile"
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlacedTailoringRequestDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/orders/{number}/quote/approve": {
-      "post": {
-        "tags": [
-          "Tailoring"
-        ],
-        "parameters": [
-          {
-            "name": "number",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-Tracking-Token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicOrderDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/orders/{number}/quote/reject": {
-      "post": {
-        "tags": [
-          "Tailoring"
-        ],
-        "parameters": [
-          {
-            "name": "number",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "X-Tracking-Token",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "null"
-                  },
-                  {
-                    "$ref": "#/components/schemas/RejectQuoteCommand"
-                  }
-                ]
-              }
-            },
-            "text/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "null"
-                  },
-                  {
-                    "$ref": "#/components/schemas/RejectQuoteCommand"
-                  }
-                ]
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "type": "null"
-                  },
-                  {
-                    "$ref": "#/components/schemas/RejectQuoteCommand"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PublicOrderDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/admin/categories": {
       "get": {
         "tags": [
@@ -755,7 +526,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -967,7 +738,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -1157,7 +928,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -1183,7 +954,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -1316,7 +1087,7 @@
           "204": {
             "description": "No Content",
             "content": {
-              "application/json": {}
+              "application/json": { }
             }
           }
         }
@@ -1336,13 +1107,6 @@
               "items": {
                 "$ref": "#/components/schemas/OrderStatus"
               }
-            }
-          },
-          {
-            "name": "type",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/OrderType"
             }
           },
           {
@@ -1543,168 +1307,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AdminZoneDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/admin/orders/{id}/quote": {
-      "post": {
-        "tags": [
-          "AdminQuotes"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendQuoteCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendQuoteCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/SendQuoteCommand"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/QuoteResult"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/admin/tailoring/catalog": {
-      "get": {
-        "tags": [
-          "AdminTailoring"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TailoringCatalogContent"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "AdminTailoring"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TailoringCatalogContent"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TailoringCatalogContent"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/TailoringCatalogContent"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TailoringCatalogContent"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/admin/tailoring/pricing": {
-      "get": {
-        "tags": [
-          "AdminTailoring"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PriceRulesContent"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "AdminTailoring"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PriceRulesContent"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PriceRulesContent"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PriceRulesContent"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PriceRulesContent"
                 }
               }
             }
@@ -1961,7 +1563,6 @@
         "required": [
           "id",
           "number",
-          "type",
           "status",
           "createdAt",
           "customer",
@@ -1972,8 +1573,7 @@
           "total",
           "paymentMethod",
           "paymentStatus",
-          "history",
-          "tailoring"
+          "history"
         ],
         "type": "object",
         "properties": {
@@ -1983,9 +1583,6 @@
           },
           "number": {
             "type": "string"
-          },
-          "type": {
-            "$ref": "#/components/schemas/OrderType"
           },
           "status": {
             "$ref": "#/components/schemas/OrderStatus"
@@ -2029,16 +1626,6 @@
             "items": {
               "$ref": "#/components/schemas/AdminHistoryEvent"
             }
-          },
-          "tailoring": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/AdminTailoringDto"
-              }
-            ]
           }
         }
       },
@@ -2046,7 +1633,6 @@
         "required": [
           "id",
           "number",
-          "type",
           "status",
           "customerName",
           "phone",
@@ -2065,9 +1651,6 @@
           },
           "number": {
             "type": "string"
-          },
-          "type": {
-            "$ref": "#/components/schemas/OrderType"
           },
           "status": {
             "$ref": "#/components/schemas/OrderStatus"
@@ -2244,116 +1827,6 @@
           },
           "lowStock": {
             "type": "boolean"
-          }
-        }
-      },
-      "AdminTailoringDto": {
-        "required": [
-          "styleId",
-          "garment",
-          "fabric",
-          "color",
-          "fit",
-          "sizingMode",
-          "standardSize",
-          "measurements",
-          "hasLining",
-          "extras",
-          "notes",
-          "referenceImageUrl",
-          "estimatedPrice",
-          "quotedPrice",
-          "quoteNote",
-          "quoteValidUntil",
-          "quoteApprovedAt"
-        ],
-        "type": "object",
-        "properties": {
-          "styleId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "garment": {
-            "type": "string"
-          },
-          "fabric": {
-            "type": "string"
-          },
-          "color": {
-            "type": "string"
-          },
-          "fit": {
-            "type": "string"
-          },
-          "sizingMode": {
-            "$ref": "#/components/schemas/SizingMode"
-          },
-          "standardSize": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "measurements": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          "hasLining": {
-            "type": "boolean"
-          },
-          "extras": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "notes": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "referenceImageUrl": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "estimatedPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "quotedPrice": {
-            "type": [
-              "null",
-              "number"
-            ],
-            "format": "double"
-          },
-          "quoteNote": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "quoteValidUntil": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
-          },
-          "quoteApprovedAt": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
           }
         }
       },
@@ -2754,10 +2227,9 @@
         "required": [
           "ordersToday",
           "pendingConfirmation",
-          "awaitingQuote",
-          "waitingForCustomer",
-          "inProduction",
+          "toPack",
           "readyToShip",
+          "outForDelivery",
           "deliveredRevenueLast30Days",
           "lowStock",
           "latestOrders"
@@ -2772,19 +2244,15 @@
             "type": "integer",
             "format": "int32"
           },
-          "awaitingQuote": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "waitingForCustomer": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "inProduction": {
+          "toPack": {
             "type": "integer",
             "format": "int32"
           },
           "readyToShip": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "outForDelivery": {
             "type": "integer",
             "format": "int32"
           },
@@ -2803,225 +2271,6 @@
             "items": {
               "$ref": "#/components/schemas/AdminOrderRow"
             }
-          }
-        }
-      },
-      "EstimateCommand": {
-        "required": [
-          "styleId",
-          "garment",
-          "fabric",
-          "fit",
-          "lining",
-          "sizingMode",
-          "standardSize",
-          "extras"
-        ],
-        "type": "object",
-        "properties": {
-          "styleId": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "garment": {
-            "type": "string"
-          },
-          "fabric": {
-            "type": "string"
-          },
-          "fit": {
-            "type": "string"
-          },
-          "lining": {
-            "type": "boolean"
-          },
-          "sizingMode": {
-            "$ref": "#/components/schemas/SizingMode"
-          },
-          "standardSize": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "extras": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "EstimateResult": {
-        "required": [
-          "basePrice",
-          "items",
-          "estimatedPrice",
-          "currency",
-          "noteAr",
-          "noteEn"
-        ],
-        "type": "object",
-        "properties": {
-          "basePrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PriceLine"
-            }
-          },
-          "estimatedPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "currency": {
-            "type": "string"
-          },
-          "noteAr": {
-            "type": "string"
-          },
-          "noteEn": {
-            "type": "string"
-          }
-        }
-      },
-      "ExtraOption": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn",
-          "price"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "FabricOption": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "isActive": {
-            "type": "boolean",
-            "default": true
-          }
-        }
-      },
-      "FabricPrice": {
-        "required": [
-          "fabric",
-          "extra"
-        ],
-        "type": "object",
-        "properties": {
-          "fabric": {
-            "type": "string"
-          },
-          "extra": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "FitOption": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "isActive": {
-            "type": "boolean",
-            "default": true
-          }
-        }
-      },
-      "GarmentPrice": {
-        "required": [
-          "garment",
-          "basePrice"
-        ],
-        "type": "object",
-        "properties": {
-          "garment": {
-            "type": "string"
-          },
-          "basePrice": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "GarmentType": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn",
-          "measurementGroups"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "measurementGroups": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "isActive": {
-            "type": "boolean",
-            "default": true
           }
         }
       },
@@ -3150,29 +2399,6 @@
           }
         }
       },
-      "MeasurementField": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "required": {
-            "type": "boolean",
-            "default": false
-          }
-        }
-      },
       "NewVariant": {
         "required": [
           "size",
@@ -3265,21 +2491,10 @@
         "enum": [
           "PendingConfirmation",
           "Confirmed",
-          "AwaitingQuote",
-          "QuoteSent",
-          "QuoteApproved",
-          "InProduction",
-          "QualityCheck",
           "Packing",
           "Shipped",
           "Delivered",
           "Cancelled"
-        ]
-      },
-      "OrderType": {
-        "enum": [
-          "Ready",
-          "Custom"
         ]
       },
       "PagedOfAdminOrderRow": {
@@ -3440,44 +2655,6 @@
           }
         }
       },
-      "PlacedTailoringRequestDto": {
-        "required": [
-          "number",
-          "trackingToken",
-          "trackingUrl",
-          "status",
-          "estimatedPrice",
-          "deliveryFee",
-          "estimatedTotal"
-        ],
-        "type": "object",
-        "properties": {
-          "number": {
-            "type": "string"
-          },
-          "trackingToken": {
-            "type": "string"
-          },
-          "trackingUrl": {
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/OrderStatus"
-          },
-          "estimatedPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "deliveryFee": {
-            "type": "number",
-            "format": "double"
-          },
-          "estimatedTotal": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
       "PlaceOrderCommand": {
         "required": [
           "customer",
@@ -3506,77 +2683,6 @@
           },
           "acceptTerms": {
             "type": "boolean"
-          }
-        }
-      },
-      "PriceLine": {
-        "required": [
-          "key",
-          "labelAr",
-          "labelEn",
-          "amount"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "labelAr": {
-            "type": "string"
-          },
-          "labelEn": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "PriceRulesContent": {
-        "required": [
-          "garmentBasePrices",
-          "styleBasePrices",
-          "fabrics",
-          "liningPrice",
-          "sizeExtras",
-          "extras"
-        ],
-        "type": "object",
-        "properties": {
-          "garmentBasePrices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GarmentPrice"
-            }
-          },
-          "styleBasePrices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/StylePrice"
-            }
-          },
-          "fabrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FabricPrice"
-            }
-          },
-          "liningPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "sizeExtras": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SizeExtra"
-            }
-          },
-          "extras": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ExtraOption"
-            }
           }
         }
       },
@@ -3741,34 +2847,9 @@
           }
         }
       },
-      "PublicExtra": {
-        "required": [
-          "key",
-          "nameAr",
-          "nameEn",
-          "price"
-        ],
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
       "PublicOrderDto": {
         "required": [
           "number",
-          "type",
           "status",
           "createdAt",
           "customer",
@@ -3778,16 +2859,12 @@
           "total",
           "paymentMethod",
           "paymentStatus",
-          "timeline",
-          "tailoring"
+          "timeline"
         ],
         "type": "object",
         "properties": {
           "number": {
             "type": "string"
-          },
-          "type": {
-            "$ref": "#/components/schemas/OrderType"
           },
           "status": {
             "$ref": "#/components/schemas/OrderStatus"
@@ -3828,131 +2905,6 @@
             "items": {
               "$ref": "#/components/schemas/TimelineEvent"
             }
-          },
-          "tailoring": {
-            "oneOf": [
-              {
-                "type": "null"
-              },
-              {
-                "$ref": "#/components/schemas/PublicTailoringDto"
-              }
-            ]
-          }
-        }
-      },
-      "PublicTailoringCatalog": {
-        "required": [
-          "garments",
-          "styles",
-          "fabrics",
-          "fits",
-          "measurementGroups",
-          "standardSizes",
-          "extras",
-          "liningPrice"
-        ],
-        "type": "object",
-        "properties": {
-          "garments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GarmentType"
-            }
-          },
-          "styles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TailoringStyle"
-            }
-          },
-          "fabrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FabricOption"
-            }
-          },
-          "fits": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FitOption"
-            }
-          },
-          "measurementGroups": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/MeasurementField"
-              }
-            }
-          },
-          "standardSizes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "extras": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PublicExtra"
-            }
-          },
-          "liningPrice": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "PublicTailoringDto": {
-        "required": [
-          "garment",
-          "fabric",
-          "color",
-          "fit",
-          "estimatedPrice",
-          "quotedPrice",
-          "quoteNote",
-          "quoteValidUntil"
-        ],
-        "type": "object",
-        "properties": {
-          "garment": {
-            "type": "string"
-          },
-          "fabric": {
-            "type": "string"
-          },
-          "color": {
-            "type": "string"
-          },
-          "fit": {
-            "type": "string"
-          },
-          "estimatedPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "quotedPrice": {
-            "type": [
-              "null",
-              "number"
-            ],
-            "format": "double"
-          },
-          "quoteNote": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "quoteValidUntil": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "format": "date-time"
           }
         }
       },
@@ -3968,38 +2920,6 @@
           },
           "nameEn": {
             "type": "string"
-          }
-        }
-      },
-      "QuoteResult": {
-        "required": [
-          "order",
-          "customerLink"
-        ],
-        "type": "object",
-        "properties": {
-          "order": {
-            "$ref": "#/components/schemas/AdminOrderDetail"
-          },
-          "customerLink": {
-            "type": [
-              "null",
-              "string"
-            ]
-          }
-        }
-      },
-      "RejectQuoteCommand": {
-        "required": [
-          "reason"
-        ],
-        "type": "object",
-        "properties": {
-          "reason": {
-            "type": [
-              "null",
-              "string"
-            ]
           }
         }
       },
@@ -4066,30 +2986,6 @@
           }
         }
       },
-      "SendQuoteCommand": {
-        "required": [
-          "price",
-          "note"
-        ],
-        "type": "object",
-        "properties": {
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "note": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "validDays": {
-            "type": "integer",
-            "format": "int32",
-            "default": 7
-          }
-        }
-      },
       "SiteContent": {
         "required": [
           "announcementAr",
@@ -4121,28 +3017,6 @@
           }
         }
       },
-      "SizeExtra": {
-        "required": [
-          "fromSize",
-          "extra"
-        ],
-        "type": "object",
-        "properties": {
-          "fromSize": {
-            "type": "string"
-          },
-          "extra": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "SizingMode": {
-        "enum": [
-          "Measurements",
-          "StandardSize"
-        ]
-      },
       "SocialLinks": {
         "required": [
           "facebook",
@@ -4168,108 +3042,6 @@
               "null",
               "string"
             ]
-          }
-        }
-      },
-      "StylePrice": {
-        "required": [
-          "styleId",
-          "basePrice"
-        ],
-        "type": "object",
-        "properties": {
-          "styleId": {
-            "type": "string"
-          },
-          "basePrice": {
-            "type": "number",
-            "format": "double"
-          }
-        }
-      },
-      "TailoringCatalogContent": {
-        "required": [
-          "garments",
-          "styles",
-          "fabrics",
-          "fits",
-          "measurementGroups"
-        ],
-        "type": "object",
-        "properties": {
-          "garments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GarmentType"
-            }
-          },
-          "styles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/TailoringStyle"
-            }
-          },
-          "fabrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FabricOption"
-            }
-          },
-          "fits": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FitOption"
-            }
-          },
-          "measurementGroups": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/MeasurementField"
-              }
-            }
-          }
-        }
-      },
-      "TailoringStyle": {
-        "required": [
-          "id",
-          "garment",
-          "nameAr",
-          "nameEn",
-          "defaultFabric",
-          "defaultFit"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "garment": {
-            "type": "string"
-          },
-          "nameAr": {
-            "type": "string"
-          },
-          "nameEn": {
-            "type": "string"
-          },
-          "defaultFabric": {
-            "type": "string"
-          },
-          "defaultFit": {
-            "type": "string"
-          },
-          "imageUrl": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "isActive": {
-            "type": "boolean",
-            "default": true
           }
         }
       },
@@ -4535,9 +3307,6 @@
       "name": "Orders"
     },
     {
-      "name": "Tailoring"
-    },
-    {
       "name": "AdminCategories"
     },
     {
@@ -4557,12 +3326,6 @@
     },
     {
       "name": "AdminDeliveryZones"
-    },
-    {
-      "name": "AdminQuotes"
-    },
-    {
-      "name": "AdminTailoring"
     },
     {
       "name": "AdminSite"

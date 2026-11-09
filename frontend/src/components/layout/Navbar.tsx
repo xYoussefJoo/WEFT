@@ -27,7 +27,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const mainLinks: PageId[] = ['home', 'shop', 'custom', 'orders'];
+  const mainLinks: PageId[] = ['home', 'shop', 'orders'];
 
   const handleNavClick = (p: PageId) => {
     go(p);

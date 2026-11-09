@@ -35,10 +35,9 @@ export default function AdminOverview() {
   const stats: [string, string, number | string | undefined, string][] = [
     ['طلبات اليوم', 'Orders today', data?.ordersToday, 'text-[#142b4a]'],
     ['بانتظار التأكيد', 'To confirm', data?.pendingConfirmation, 'text-[#a27b4e]'],
-    ['تفصيل بانتظار السعر', 'Tailoring to price', data?.awaitingQuote, 'text-[#a27b4e]'],
-    ['بانتظار رد العميلة', 'Waiting for customer', data?.waitingForCustomer, 'text-[#77808a]'],
-    ['قيد التنفيذ', 'In production', data?.inProduction, 'text-[#142b4a]'],
+    ['للتغليف', 'To pack', data?.toPack, 'text-[#142b4a]'],
     ['جاهز للشحن', 'Ready to ship', data?.readyToShip, 'text-emerald-800'],
+    ['قيد التوصيل', 'Out for delivery', data?.outForDelivery, 'text-[#142b4a]'],
     ['مبيعات 30 يومًا (مسلّمة)', 'Delivered, last 30 days', data ? money(data.deliveredRevenueLast30Days) : undefined, 'text-emerald-800'],
   ];
 

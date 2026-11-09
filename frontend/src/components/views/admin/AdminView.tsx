@@ -14,8 +14,6 @@ import AdminOrders from './AdminOrders';
 import AdminSettings from './AdminSettings';
 import AdminColors from './AdminColors';
 import AdminZones from './AdminZones';
-import AdminTailoringCatalog from './AdminTailoringCatalog';
-import AdminPricing from './AdminPricing';
 import AdminPassword from './AdminPassword';
 import { ConfirmProvider, Modal } from '@/components/admin/ui';
 
@@ -58,7 +56,6 @@ export default function AdminView() {
 
   const groups: [string, string, AdminTab[]][] = [
     ['إدارة المتجر', 'STORE', ['overview', 'orders', 'products', 'categories', 'colors']],
-    ['التفصيل', 'TAILORING', ['tailoring', 'pricing']],
     ['الإعدادات', 'SETTINGS', ['zones', 'settings', 'password']],
   ];
 
@@ -143,8 +140,6 @@ export default function AdminView() {
         {tab === 'orders' && <AdminOrders />}
         {tab === 'colors' && <AdminColors />}
         {tab === 'zones' && <AdminZones />}
-        {tab === 'tailoring' && <AdminTailoringCatalog />}
-        {tab === 'pricing' && <AdminPricing />}
         {tab === 'settings' && <AdminSettings />}
         {tab === 'password' && <AdminPassword />}
       </main>

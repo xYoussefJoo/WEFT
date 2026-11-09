@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import AppShell from '@/components/AppShell';
 
-// Order and quote emails link here: /track/WF-10234?t=<tracking token>. No login needed; the token is the key.
+// Order emails link here: /track/WF-10234?t=<tracking token>. No login needed; the token is the key.
 export default function TrackPage({
   params,
   searchParams,

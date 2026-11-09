@@ -11,8 +11,6 @@ export type AdminOrderRow = Schemas['AdminOrderRow'];
 export type AdminOrder = Schemas['AdminOrderDetail'];
 export type AdminZone = Schemas['AdminZoneDto'];
 export type Dashboard = Schemas['DashboardDto'];
-export type TailoringCatalogContent = Schemas['TailoringCatalogContent'];
-export type PriceRules = Schemas['PriceRulesContent'];
 export type SiteContent = Schemas['SiteContent'];
 export type Image = Schemas['ImageDto'];
 export type OrderStatus = Schemas['OrderStatus'];
@@ -68,40 +66,25 @@ export const updateColor = (id: number, body: Schemas['SaveColorCommand']) =>
   call(api.PUT('/api/admin/colors/{id}', { params: { path: { id } }, body }));
 export const deleteColor = (id: number) => call(api.DELETE('/api/admin/colors/{id}', { params: { path: { id } } }));
 
-// ---------- orders (#35–#38)
-export type AdminOrderQuery = { status?: OrderStatus[]; type?: 'Ready' | 'Custom'; q?: string; from?: string; to?: string; page?: number; pageSize?: number };
+// ---------- orders (#35–#37)
+export type AdminOrderQuery = { status?: OrderStatus[]; q?: string; from?: string; to?: string; page?: number; pageSize?: number };
 export const getAdminOrders = (query: AdminOrderQuery) => call(api.GET('/api/admin/orders', { params: { query } }));
 export const getAdminOrder = (id: number) => call(api.GET('/api/admin/orders/{id}', { params: { path: { id } } }));
 export const changeOrderStatus = (id: number, to: OrderStatus, note: string | null) =>
   call(api.POST('/api/admin/orders/{id}/status', { params: { path: { id } }, body: { to, note } }));
-export const sendQuote = (id: number, price: number, note: string | null, validDays: number) =>
-  call(api.POST('/api/admin/orders/{id}/quote', { params: { path: { id } }, body: { price, note, validDays } }));
 
 // ---------- delivery zones (#41–#42)
 export const getAdminZones = () => call(api.GET('/api/admin/delivery-zones'));
 export const saveZones = (zones: Schemas['ZoneUpdate'][]) => call(api.PUT('/api/admin/delivery-zones', { body: zones }));
-
-// ---------- tailoring catalog + price rules (#39–#40, #45–#46)
-export const getAdminTailoringCatalog = () => call(api.GET('/api/admin/tailoring/catalog'));
-export const saveTailoringCatalog = (body: TailoringCatalogContent) => call(api.PUT('/api/admin/tailoring/catalog', { body }));
-export const getPriceRules = () => call(api.GET('/api/admin/tailoring/pricing'));
-export const savePriceRules = (body: PriceRules) => call(api.PUT('/api/admin/tailoring/pricing', { body }));
 
 // ---------- site settings (#43–#44)
 export const getAdminSiteSettings = () => call(api.GET('/api/admin/site-settings'));
 export const saveSiteSettings = (body: SiteContent) => call(api.PUT('/api/admin/site-settings', { body }));
 
 // Allowed next statuses (contract Appendix A); the server refuses anything else with 409.
-export function nextStatuses(type: 'Ready' | 'Custom', status: OrderStatus): OrderStatus[] {
-  const cancel: OrderStatus[] = ['PendingConfirmation', 'Confirmed', 'AwaitingQuote', 'QuoteSent', 'QuoteApproved'];
-  const ready: Partial<Record<OrderStatus, OrderStatus[]>> = {
-    PendingConfirmation: ['Confirmed'], Confirmed: ['Packing'], Packing: ['Shipped'], Shipped: ['Delivered'],
+export function nextStatuses(status: OrderStatus): OrderStatus[] {
+  const next: Partial<Record<OrderStatus, OrderStatus[]>> = {
+    PendingConfirmation: ['Confirmed', 'Cancelled'], Confirmed: ['Packing', 'Cancelled'], Packing: ['Shipped'], Shipped: ['Delivered'],
   };
-  const custom: Partial<Record<OrderStatus, OrderStatus[]>> = {
-    QuoteApproved: ['InProduction'], InProduction: ['QualityCheck'], QualityCheck: ['InProduction', 'Packing'],
-    Packing: ['Shipped'], Shipped: ['Delivered'],
-  };
-  const next = [...((type === 'Ready' ? ready : custom)[status] ?? [])];
-  if (cancel.includes(status)) next.push('Cancelled');
-  return next;
+  return next[status] ?? [];
 }

@@ -84,7 +84,7 @@ const loadCart = (): CartLine[] => {
 const applyLanguage = (lang: Language) => {
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-  document.title = lang === 'ar' ? 'WEFT | أزياء وتفصيل' : 'WEFT | Ready-to-wear & Tailoring';
+  document.title = lang === 'ar' ? 'WEFT | The Thread Co.' : 'WEFT | The Thread Co.';
 };
 
 // The address bar shows a real, shareable address for product and tracking pages, and #page for the rest.
@@ -141,7 +141,7 @@ export const useWeftStore = create<WeftState>((set, get) => ({
       adminOrderId = route.orderId ?? null;
     } else {
       const hash = window.location.hash.slice(1) as PageId;
-      if (['home', 'shop', 'custom', 'orders', 'cart', 'admin'].includes(hash)) page = hash;
+      if (['home', 'shop', 'orders', 'cart', 'admin'].includes(hash)) page = hash;
     }
 
     set({

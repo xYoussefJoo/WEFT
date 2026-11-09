@@ -54,8 +54,8 @@ export default function HomeView() {
 
           <p className="text-sm sm:text-base text-[#5e605b] leading-relaxed max-w-lg mb-8 reveal-init delay-200">
             {t(
-              hero?.subtitleAr || 'تصميمات أنيقة لكل يوم، وقطع تتفصل على مقاسك بالضبط بخامات راقية ولمسات تجمع بين الراحة والجمال.',
-              hero?.subtitleEn || 'Elevated everyday essentials and custom-tailored pieces, thoughtfully crafted with premium fabrics and timeless silhouettes.'
+              hero?.subtitleAr || 'هوديز بتصميم بسيط وخامات مريحة وتفاصيل مميزة.',
+              hero?.subtitleEn || 'Hoodies with a simple design, comfortable fabrics and standout details.'
             )}
           </p>
 
@@ -71,13 +71,6 @@ export default function HomeView() {
               <span>{t('اكتشفي المجموعة', 'Explore collection')}</span>
               <span className="text-base">↗</span>
             </button>
-            <button
-              type="button"
-              className="px-7 py-3.5 rounded-full border-2 border-[#142b4a] bg-transparent hover:bg-[#142b4a] hover:text-white text-[#142b4a] text-sm font-bold cursor-pointer transition-all duration-300 active:scale-[0.98]"
-              onClick={() => go('custom')}
-            >
-              {t('تفصيل خاص', 'Made to measure')}
-            </button>
           </div>
 
           {/* Trust Badges */}
@@ -85,7 +78,7 @@ export default function HomeView() {
             {[
               { ar: 'تصميم أصيل', en: 'Original design' },
               { ar: 'خامات فاخرة', en: 'Premium fabrics' },
-              { ar: 'تفصيل دقيق', en: 'Expert tailoring' },
+              { ar: 'راحة طول اليوم', en: 'All-day comfort' },
             ].map((badge) => (
               <div
                 key={badge.en}
@@ -273,50 +266,6 @@ export default function HomeView() {
               <ProductCard product={p} />
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════ TAILOR STUDIO BANNER ══════════════════════ */}
-      <section className="max-w-[1240px] mx-auto px-4 sm:px-6 pb-20">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#e7dac5] via-[#dfcdb1] to-[#cfb895] p-8 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-8 border border-[#d6c2a7] shadow-lg reveal-init">
-          {/* Subtle geometric circles */}
-          <div className="absolute -end-10 -top-10 w-56 h-56 rounded-full bg-[#142b4a]/6 pointer-events-none" />
-          <div className="absolute -start-6 -bottom-6 w-40 h-40 rounded-full bg-[#b99664]/15 pointer-events-none" />
-
-          <div className="relative z-10 text-start space-y-4 max-w-xl reveal-left delay-100">
-            <span className="text-xs text-[#7c5e30] font-bold tracking-[0.25em] uppercase">
-              DESIGNED BY YOU
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#142b4a] leading-tight">
-              {t('تفصيل على مقاسك، بذوقك.', 'Your vision. Our craftsmanship.')}
-            </h2>
-            <p className="text-sm text-[#524430] leading-relaxed">
-              {t(
-                'ارفعي صورة الموديل، اختاري القماش واللون، وحددي مقاساتك بدقة لنصنع لكِ قطعة استثنائية تناسبك تماماً.',
-                'Share your design inspiration, select your favored fabric and color, and provide your measurements for a bespoke creation.'
-              )}
-            </p>
-            <div className="pt-2">
-              <button
-                type="button"
-                className="px-7 py-3.5 rounded-full bg-[#142b4a] hover:bg-[#1e3a61] text-white text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
-                onClick={() => go('custom')}
-              >
-                <span>{t('ابدئي تصميمك', 'Create your piece')}</span>
-                <span>↗</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="relative z-10 hidden md:flex items-center justify-center animate-float reveal-right delay-200">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={assetPath('assets/logo-mark-448.webp')}
-              loading="lazy"
-              alt="WEFT"
-              className="w-48 h-48 lg:w-56 lg:h-56 object-contain drop-shadow-md"
-            />
-          </div>
         </div>
       </section>
     </main>

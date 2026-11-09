@@ -9,10 +9,6 @@ export type Zone = Schemas['ZoneDto'];
 export type PublicOrder = Schemas['PublicOrderDto'];
 export type PlacedOrder = Schemas['PlacedOrderDto'];
 export type CheckoutCustomer = Schemas['CheckoutCustomer'];
-export type TailoringCatalog = Schemas['PublicTailoringCatalog'];
-export type EstimateCommand = Schemas['EstimateCommand'];
-export type Estimate = Schemas['EstimateResult'];
-export type PlacedTailoringRequest = Schemas['PlacedTailoringRequestDto'];
 export type OrderStatus = Schemas['OrderStatus'];
 
 export type ProductQuery = {
@@ -35,7 +31,7 @@ export const searchProducts = (query: ProductQuery) =>
   call(api.GET('/api/products', { params: { query } }));
 export const getProduct = (slug: string) => call(api.GET('/api/products/{slug}', { params: { path: { slug } } }));
 
-// ---------- checkout + tracking (#9–#11, #15–#16)
+// ---------- checkout + tracking (#9–#11)
 export const getDeliveryZones = () => call(api.GET('/api/delivery-zones'));
 
 export const placeOrder = (body: Schemas['PlaceOrderCommand'], idempotencyKey: string) =>
@@ -44,26 +40,6 @@ export const placeOrder = (body: Schemas['PlaceOrderCommand'], idempotencyKey: s
 export const trackOrder = (number: string, token: string) =>
   call(api.GET('/api/orders/{number}', { params: { path: { number }, header: { 'X-Tracking-Token': token } } }));
 
-export const approveQuote = (number: string, token: string) =>
-  call(api.POST('/api/orders/{number}/quote/approve', { params: { path: { number }, header: { 'X-Tracking-Token': token } } }));
-
-export const rejectQuote = (number: string, token: string, reason: string | null) =>
-  call(api.POST('/api/orders/{number}/quote/reject', {
-    params: { path: { number }, header: { 'X-Tracking-Token': token } },
-    body: { reason },
-  }));
-
-// ---------- tailoring (#12–#14)
-export const getTailoringCatalog = () => call(api.GET('/api/tailoring/catalog'));
-export const getEstimate = (body: EstimateCommand) => call(api.POST('/api/tailoring/estimate', { body }));
-
-// multipart: "data" = the request as JSON, "referenceImage" = optional photo (max 5 MB).
-export async function placeTailoringRequest(data: unknown, photo: File | null, idempotencyKey: string) {
-  const form = new FormData();
-  form.append('data', JSON.stringify(data));
-  if (photo) form.append('referenceImage', photo);
-  return postForm<PlacedTailoringRequest>('/api/tailoring/requests', form, { 'Idempotency-Key': idempotencyKey });
-}
 
 // openapi-fetch can't send FormData nicely, so multipart goes through fetch with the same error shape.
 export async function postForm<T>(path: string, form: FormData, headers: Record<string, string> = {}): Promise<T> {
@@ -81,7 +57,7 @@ export async function postForm<T>(path: string, form: FormData, headers: Record<
 }
 
 // ---------- "my orders": number + tracking token kept on this device (the token is the only key to the order)
-export type SavedOrder = { number: string; token: string; createdAt: string; kind: 'Ready' | 'Custom' };
+export type SavedOrder = { number: string; token: string; createdAt: string };
 const MY_ORDERS_KEY = 'weft_my_orders';
 
 export function savedOrders(): SavedOrder[] {
@@ -113,11 +89,6 @@ export const pick = (lang: 'ar' | 'en', ar?: string | null, en?: string | null) 
 export const statusLabel: Record<OrderStatus, [string, string]> = {
   PendingConfirmation: ['بانتظار التأكيد', 'Awaiting confirmation'],
   Confirmed: ['تم التأكيد', 'Confirmed'],
-  AwaitingQuote: ['قيد مراجعة السعر', 'Price under review'],
-  QuoteSent: ['بانتظار موافقتك على السعر', 'Waiting for your approval'],
-  QuoteApproved: ['تمت الموافقة على السعر', 'Price approved'],
-  InProduction: ['قيد التنفيذ', 'In production'],
-  QualityCheck: ['مراجعة الجودة', 'Quality check'],
   Packing: ['قيد التغليف', 'Packing'],
   Shipped: ['تم الشحن', 'Shipped'],
   Delivered: ['تم التسليم', 'Delivered'],

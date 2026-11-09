@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useEffect, useState, FormEvent } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
 import { useApi, usePage } from '@/lib/useApi';
 import { ApiError, errorText } from '@/lib/api';
 import {
-  changeOrderStatus, getAdminOrder, getAdminOrders, nextStatuses, sendQuote,
-  type AdminOrder, type OrderStatus,
+  changeOrderStatus, getAdminOrder, getAdminOrders, nextStatuses,
+  type OrderStatus,
 } from '@/lib/admin';
 import { pick, statusLabel } from '@/lib/shop';
-import { Button, Modal, useConfirm, useModalDirty } from '@/components/admin/ui';
+import { useConfirm } from '@/components/admin/ui';
 
 const ALL_STATUSES = Object.keys(statusLabel) as OrderStatus[];
 
@@ -26,18 +26,17 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
   const money = useWeftStore((state) => state.money);
   const t = useWeftStore((state) => state.t);
   const [status, setStatus] = useState<OrderStatus | ''>('');
-  const [type, setType] = useState<'' | 'Ready' | 'Custom'>('');
   const [search, setSearch] = useState('');
   const [q, setQ] = useState('');
   useEffect(() => {
     const timer = setTimeout(() => setQ(search.trim()), 400);
     return () => clearTimeout(timer);
   }, [search]);
-  const [page, setPage] = usePage(`${status}|${type}|${q}`);
+  const [page, setPage] = usePage(`${status}|${q}`);
 
   const { data, error, loading, reload } = useApi(
-    () => getAdminOrders({ status: status ? [status] : undefined, type: type || undefined, q: q || undefined, page, pageSize: 20 }),
-    [status, type, q, page],
+    () => getAdminOrders({ status: status ? [status] : undefined, q: q || undefined, page, pageSize: 20 }),
+    [status, q, page],
   );
   const select = 'text-xs font-bold border border-[#e8e3d9] rounded-xl px-3 py-2 bg-white text-[#142b4a] cursor-pointer focus:ring-2 focus:ring-[#b99664] outline-none';
 
@@ -52,11 +51,6 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
           <select aria-label={t('الحالة', 'Status')} value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | '')} className={select}>
             <option value="">{t('كل الحالات', 'All statuses')}</option>
             {ALL_STATUSES.map((s) => <option key={s} value={s}>{t(...statusLabel[s])}</option>)}
-          </select>
-          <select aria-label={t('النوع', 'Type')} value={type} onChange={(e) => setType(e.target.value as '' | 'Ready' | 'Custom')} className={select}>
-            <option value="">{t('كل الأنواع', 'All types')}</option>
-            <option value="Ready">{t('جاهز', 'Ready')}</option>
-            <option value="Custom">{t('تفصيل خاص', 'Custom')}</option>
           </select>
           <input type="search" aria-label={t('بحث', 'Search')} placeholder={t('رقم الطلب أو الهاتف أو الاسم', 'Number, phone or name')}
             value={search} onChange={(e) => setSearch(e.target.value)} className={`${select} cursor-text w-56`} />
@@ -77,7 +71,6 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
               <tr>
                 <th className="px-5 py-3.5 text-start font-bold">#</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('العميل', 'Customer')}</th>
-                <th className="px-5 py-3.5 text-start font-bold">{t('النوع', 'Type')}</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('الإجمالي', 'Total')}</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('الحالة', 'Status')}</th>
               </tr>
@@ -93,11 +86,6 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
                     <div className="font-bold text-[#142b4a]">{o.customerName}</div>
                     <div className="text-xs text-[#77808b] mt-0.5" dir="ltr">{o.phone}</div>
                     <div className="text-xs text-[#77808b]">{pick(lang, o.zoneNameAr, o.zoneNameEn)}</div>
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${o.type === 'Custom' ? 'bg-[#e7dac5] text-[#7c5e30]' : 'bg-[#dce6f2] text-[#142b4a]'}`}>
-                      {o.type === 'Custom' ? t('تفصيل خاص', 'Custom') : t('جاهز', 'Ready')}
-                    </span>
                   </td>
                   <td className="px-5 py-4 font-extrabold text-[#b99664]">
                     {money(o.total)}
@@ -138,8 +126,6 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
   const { data: order, error, reload } = useApi(() => getAdminOrder(id), [id]);
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
-  const [quoteOpen, setQuoteOpen] = useState(false);
-  const [lastLink, setLastLink] = useState<string | null>(null);
   const confirm = useConfirm();
 
   if (error) {
@@ -157,7 +143,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
   const move = async (to: OrderStatus) => {
     if (to === 'Cancelled' && !(await confirm({
       title: t('إلغاء هذا الطلب؟', 'Cancel this order?'),
-      message: order.type === 'Ready' ? t('ستعود القطع للمخزون.', 'Its pieces go back to stock.') : undefined,
+      message: t('ستعود القطع للمخزون.', 'Its pieces go back to stock.'),
       confirmLabel: t('إلغاء الطلب', 'Cancel order'), danger: true,
     }))) return;
     setBusy(true);
@@ -175,8 +161,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
   };
 
   const date = (iso: string) => new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
-  const tailoring = order.tailoring;
-  const next = nextStatuses(order.type, order.status);
+  const next = nextStatuses(order.status);
   const card = 'bg-white rounded-2xl border border-[#e8e3d9] p-6 shadow-2xs';
 
   return (
@@ -186,7 +171,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
       <div className={`${card} flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
         <div>
           <h3 className="text-2xl font-serif font-bold text-[#142b4a]" dir="ltr">{order.number}</h3>
-          <p className="text-xs text-[#77808b]">{date(order.createdAt)} · {order.type === 'Custom' ? t('تفصيل خاص', 'Custom') : t('جاهز', 'Ready')}</p>
+          <p className="text-xs text-[#77808b]">{date(order.createdAt)}</p>
         </div>
         <span className="self-start px-4 py-2 rounded-full text-sm font-bold bg-[#142b4a] text-white">{t(...statusLabel[order.status])}</span>
       </div>
@@ -195,38 +180,6 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
         <div className="xl:col-span-2 space-y-5">
           {/* What was ordered */}
           <section className={`${card} space-y-3`}>
-            {tailoring ? (
-              <>
-                <h4 className="font-bold text-[#142b4a]">{t('مواصفات التفصيل', 'Tailoring spec')}</h4>
-                <dl className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
-                  {([['القطعة', 'Garment', tailoring.garment], ['الموديل', 'Style', tailoring.styleId ?? '—'], ['القماش', 'Fabric', tailoring.fabric],
-                    ['اللون', 'Color', tailoring.color], ['القصّة', 'Fit', tailoring.fit], ['بطانة', 'Lining', tailoring.hasLining ? t('نعم', 'Yes') : t('لا', 'No')],
-                    ['المقاس', 'Size', tailoring.sizingMode === 'StandardSize' ? tailoring.standardSize ?? '' : t('مقاسات', 'Measurements')],
-                    ['إضافات', 'Extras', tailoring.extras.join(', ') || '—']] as [string, string, string][]).map(([ar, en, v]) => (
-                    <div key={en}><dt className="text-xs text-[#77808b]">{t(ar, en)}</dt><dd className="font-bold text-[#142b4a] break-words">{v}</dd></div>
-                  ))}
-                </dl>
-                {Object.keys(tailoring.measurements).length > 0 && (
-                  <div className="text-xs text-[#2d3540] bg-[#faf7f2] rounded-xl p-3 leading-relaxed" dir="ltr">
-                    {Object.entries(tailoring.measurements).map(([k, v]) => `${k}: ${v} cm`).join(' • ')}
-                  </div>
-                )}
-                {tailoring.notes && <p className="text-sm italic text-[#5e605b] bg-[#f7f3eb] p-3 rounded-xl whitespace-pre-line">“{tailoring.notes}”</p>}
-                {tailoring.referenceImageUrl && (
-                  <a href={tailoring.referenceImageUrl} target="_blank" rel="noopener noreferrer" className="inline-block">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={tailoring.referenceImageUrl} alt={t('صورة التصميم', 'Reference photo')} className="w-40 h-52 object-cover rounded-xl border border-[#e8dfd1]" />
-                    <span className="block text-[11px] text-[#77808b] mt-1">{t('الرابط صالح 10 دقائق', 'Link valid for 10 minutes')}</span>
-                  </a>
-                )}
-                <div className="flex flex-wrap gap-6 pt-3 border-t border-[#e8dfd1] text-sm">
-                  <span>{t('التقدير', 'Estimate')}: <b className="text-[#142b4a]">{money(tailoring.estimatedPrice)}</b></span>
-                  {tailoring.quotedPrice != null && <span>{t('السعر المرسل', 'Quoted')}: <b className="text-[#b99664]">{money(tailoring.quotedPrice)}</b></span>}
-                  {tailoring.quoteValidUntil && <span className="text-xs text-[#77808b]">{t('صالح حتى', 'Valid until')} {date(tailoring.quoteValidUntil)}</span>}
-                </div>
-              </>
-            ) : (
-              <>
                 <h4 className="font-bold text-[#142b4a]">{t('القطع', 'Items')}</h4>
                 <div className="divide-y divide-[#efe9df]">
                   {order.lines.map((l) => (
@@ -244,8 +197,6 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
                   <div className="flex justify-between"><span>{t('التوصيل', 'Delivery')}</span><b>{money(order.deliveryFee)}</b></div>
                   <div className="flex justify-between text-base"><b>{t('الإجمالي', 'Total')}</b><b className="text-[#b99664]">{money(order.total)}</b></div>
                 </div>
-              </>
-            )}
           </section>
 
           {/* History */}
@@ -277,22 +228,6 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
             </p>
           </section>
 
-          {/* Quote (custom orders waiting for a price) */}
-          {tailoring && (order.status === 'AwaitingQuote' || order.status === 'QuoteSent') && (
-            <section className={`${card} space-y-3 border-2 border-[#b99664]`}>
-              <h4 className="font-bold text-[#142b4a]">{t('السعر النهائي', 'Final price')}</h4>
-              <p className="text-xs text-[#77808b]">{order.status === 'QuoteSent' ? t('أُرسل سعر وبانتظار رد العميلة. يمكنك تعديله.', 'A price was sent; waiting for the customer. You can change it.') : t('أكدي السعر أو عدليه وأرسليه للعميلة.', 'Confirm the price or change it and send it to the customer.')}</p>
-              <Button variant="gold" className="w-full" onClick={() => setQuoteOpen(true)}>{order.status === 'QuoteSent' ? t('تعديل السعر', 'Change price') : t('إرسال السعر', 'Send price')}</Button>
-            </section>
-          )}
-          {lastLink && (
-            <section className={`${card} space-y-2`}>
-              <h4 className="font-bold text-[#142b4a] text-sm">{t('رابط موافقة العميلة', 'Customer approval link')}</h4>
-              <p className="text-[11px] text-[#5e605b] break-all font-mono select-all" dir="ltr">{lastLink}</p>
-              <Button size="sm" variant="secondary" onClick={() => void navigator.clipboard?.writeText(lastLink).then(() => showToast(t('تم النسخ', 'Copied'), 'success'), () => {})}>{t('نسخ لإرساله واتساب', 'Copy to send on WhatsApp')}</Button>
-            </section>
-          )}
-
           {/* Next step */}
           {next.length > 0 && (
             <section className={`${card} space-y-3`}>
@@ -311,67 +246,7 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
           )}
         </div>
       </div>
-
-      <Modal open={quoteOpen} title={t('السعر النهائي للتفصيل', 'Final tailoring price')} subtitle={order.number} onClose={() => setQuoteOpen(false)}>
-        <QuoteForm order={order} onSent={(link) => { setQuoteOpen(false); setLastLink(link); reload(); }} />
-      </Modal>
     </div>
   );
 }
 
-function QuoteForm({ order, onSent }: { order: AdminOrder; onSent: (customerLink: string | null) => void }) {
-  const t = useWeftStore((state) => state.t);
-  const money = useWeftStore((state) => state.money);
-  const showToast = useWeftStore((state) => state.showToast);
-  const tailoring = order.tailoring!;
-  const [price, setPrice] = useState(String(tailoring.quotedPrice ?? tailoring.estimatedPrice));
-  const [note, setNote] = useState(tailoring.quoteNote ?? '');
-  const [days, setDays] = useState(7);
-  const [busy, setBusy] = useState(false);
-  const initialPrice = String(tailoring.quotedPrice ?? tailoring.estimatedPrice);
-  const modal = useModalDirty(price !== initialPrice || note !== (tailoring.quoteNote ?? '') || days !== 7);
-
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      const result = await sendQuote(order.id, Number(price), note.trim() || null, days);
-      showToast(
-        result.order.status === 'QuoteApproved'
-          ? t('نفس السعر التقديري: تم اعتماده مباشرة', 'Same as the estimate: approved right away')
-          : t('تم إرسال السعر للعميلة للموافقة', 'Price sent to the customer for approval'),
-        'success',
-      );
-      onSent(result.customerLink);
-    } catch (err) {
-      showToast(errorText(err, t), 'error');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  return (
-    <form onSubmit={submit} className="space-y-4">
-      <p className="text-xs text-[#77808b]">
-        {t(`التقدير ${money(tailoring.estimatedPrice)}. نفس السعر = اعتماد مباشر؛ سعر مختلف = يُرسل للعميلة للموافقة.`,
-          `Estimate ${money(tailoring.estimatedPrice)}. Same price = approved now; a different price is sent to the customer to approve.`)}
-      </p>
-      <label className="flex flex-col gap-1 text-xs font-bold text-[#2d3540]">
-        <span>{t('السعر النهائي (ج.م)', 'Final price (EGP)')}</span>
-        <input type="number" required min={1} step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} className="border border-[#e8e3d9] rounded-xl p-2.5 text-sm bg-white" />
-      </label>
-      <label className="flex flex-col gap-1 text-xs font-bold text-[#2d3540]">
-        <span>{t('ملاحظة للعميلة (اختياري)', 'Note to the customer (optional)')}</span>
-        <textarea value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} className="border border-[#e8e3d9] rounded-xl p-2.5 text-sm bg-white min-h-[60px]" />
-      </label>
-      <label className="flex flex-col gap-1 text-xs font-bold text-[#2d3540] w-32">
-        <span>{t('صالح لمدة (أيام)', 'Valid for (days)')}</span>
-        <input type="number" required min={1} max={30} value={days} onChange={(e) => setDays(Number(e.target.value) || 7)} className="border border-[#e8e3d9] rounded-xl p-2.5 text-sm bg-white" />
-      </label>
-      <div className="flex justify-end gap-2 pt-2 border-t border-[#efe9df]">
-        <Button variant="secondary" onClick={() => modal?.requestClose()}>{t('إلغاء', 'Cancel')}</Button>
-        <Button type="submit" variant="gold" busy={busy}>{t('إرسال السعر', 'Send price')}</Button>
-      </div>
-    </form>
-  );
-}

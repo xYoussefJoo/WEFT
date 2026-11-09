@@ -398,15 +398,6 @@ function Details({ product }: { product: ProductDetail }) {
               </button>
             </div>
 
-            <button
-              type="button"
-              onClick={() => go('custom')}
-              className="w-full py-3 px-4 rounded-xl border border-[#d6c2a7] bg-[#fbf8f3] hover:bg-[#e7dac5] text-[#142b4a] text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-2"
-            >
-              <span>
-                {t('تريدين تفصيل هذا الموديل بمقاسات خاصة بكِ بالضبط؟ اضغطي هنا ↗', 'Want this style tailored to your bespoke measurements? Click here ↗')}
-              </span>
-            </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[#e8dfd1] text-[11px] text-[#142b4a] font-bold">

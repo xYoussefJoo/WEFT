@@ -427,212 +427,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/tailoring/catalog": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PublicTailoringCatalog"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/tailoring/estimate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["EstimateCommand"];
-                    "text/json": components["schemas"]["EstimateCommand"];
-                    "application/*+json": components["schemas"]["EstimateCommand"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["EstimateResult"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/tailoring/requests": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header: {
-                    /** @description A new UUID per checkout attempt. Repeating the same key returns the first response. */
-                    "Idempotency-Key": string;
-                };
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "multipart/form-data": {
-                        data?: string;
-                    } & {
-                        referenceImage?: components["schemas"]["IFormFile"];
-                    };
-                };
-            };
-            responses: {
-                /** @description Created */
-                201: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PlacedTailoringRequestDto"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/orders/{number}/quote/approve": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: {
-                    "X-Tracking-Token"?: string;
-                };
-                path: {
-                    number: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PublicOrderDto"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/orders/{number}/quote/reject": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: {
-                    "X-Tracking-Token"?: string;
-                };
-                path: {
-                    number: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": null | components["schemas"]["RejectQuoteCommand"];
-                    "text/json": null | components["schemas"]["RejectQuoteCommand"];
-                    "application/*+json": null | components["schemas"]["RejectQuoteCommand"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PublicOrderDto"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/admin/categories": {
         parameters: {
             query?: never;
@@ -1236,7 +1030,6 @@ export interface paths {
             parameters: {
                 query?: {
                     status?: components["schemas"]["OrderStatus"][];
-                    type?: components["schemas"]["OrderType"];
                     q?: string;
                     from?: string;
                     to?: string;
@@ -1408,169 +1201,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/admin/orders/{id}/quote": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["SendQuoteCommand"];
-                    "text/json": components["schemas"]["SendQuoteCommand"];
-                    "application/*+json": components["schemas"]["SendQuoteCommand"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["QuoteResult"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/tailoring/catalog": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TailoringCatalogContent"];
-                    };
-                };
-            };
-        };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["TailoringCatalogContent"];
-                    "text/json": components["schemas"]["TailoringCatalogContent"];
-                    "application/*+json": components["schemas"]["TailoringCatalogContent"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["TailoringCatalogContent"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/tailoring/pricing": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PriceRulesContent"];
-                    };
-                };
-            };
-        };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": components["schemas"]["PriceRulesContent"];
-                    "text/json": components["schemas"]["PriceRulesContent"];
-                    "application/*+json": components["schemas"]["PriceRulesContent"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["PriceRulesContent"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/admin/site-settings": {
         parameters: {
             query?: never;
@@ -1715,7 +1345,6 @@ export interface components {
             /** Format: int32 */
             id: number;
             number: string;
-            type: components["schemas"]["OrderType"];
             status: components["schemas"]["OrderStatus"];
             /** Format: date-time */
             createdAt: string;
@@ -1731,13 +1360,11 @@ export interface components {
             paymentMethod: components["schemas"]["PaymentMethod"];
             paymentStatus: components["schemas"]["PaymentStatus"];
             history: components["schemas"]["AdminHistoryEvent"][];
-            tailoring: null | components["schemas"]["AdminTailoringDto"];
         };
         AdminOrderRow: {
             /** Format: int32 */
             id: number;
             number: string;
-            type: components["schemas"]["OrderType"];
             status: components["schemas"]["OrderStatus"];
             customerName: string;
             phone: string;
@@ -1790,31 +1417,6 @@ export interface components {
             isVisible: boolean;
             thumbnailUrl: null | string;
             lowStock: boolean;
-        };
-        AdminTailoringDto: {
-            styleId: null | string;
-            garment: string;
-            fabric: string;
-            color: string;
-            fit: string;
-            sizingMode: components["schemas"]["SizingMode"];
-            standardSize: null | string;
-            measurements: {
-                [key: string]: number;
-            };
-            hasLining: boolean;
-            extras: string[];
-            notes: null | string;
-            referenceImageUrl: null | string;
-            /** Format: double */
-            estimatedPrice: number;
-            /** Format: double */
-            quotedPrice: null | number;
-            quoteNote: null | string;
-            /** Format: date-time */
-            quoteValidUntil: null | string;
-            /** Format: date-time */
-            quoteApprovedAt: null | string;
         };
         AdminVariantDto: {
             /** Format: int32 */
@@ -1926,76 +1528,15 @@ export interface components {
             /** Format: int32 */
             pendingConfirmation: number;
             /** Format: int32 */
-            awaitingQuote: number;
-            /** Format: int32 */
-            waitingForCustomer: number;
-            /** Format: int32 */
-            inProduction: number;
+            toPack: number;
             /** Format: int32 */
             readyToShip: number;
+            /** Format: int32 */
+            outForDelivery: number;
             /** Format: double */
             deliveredRevenueLast30Days: number;
             lowStock: components["schemas"]["LowStockItem"][];
             latestOrders: components["schemas"]["AdminOrderRow"][];
-        };
-        EstimateCommand: {
-            styleId: null | string;
-            garment: string;
-            fabric: string;
-            fit: string;
-            lining: boolean;
-            sizingMode: components["schemas"]["SizingMode"];
-            standardSize: null | string;
-            extras: null | string[];
-        };
-        EstimateResult: {
-            /** Format: double */
-            basePrice: number;
-            items: components["schemas"]["PriceLine"][];
-            /** Format: double */
-            estimatedPrice: number;
-            currency: string;
-            noteAr: string;
-            noteEn: string;
-        };
-        ExtraOption: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            /** Format: double */
-            price: number;
-        };
-        FabricOption: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            /** @default true */
-            isActive: boolean;
-        };
-        FabricPrice: {
-            fabric: string;
-            /** Format: double */
-            extra: number;
-        };
-        FitOption: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            /** @default true */
-            isActive: boolean;
-        };
-        GarmentPrice: {
-            garment: string;
-            /** Format: double */
-            basePrice: number;
-        };
-        GarmentType: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            measurementGroups: string[];
-            /** @default true */
-            isActive: boolean;
         };
         HeroContent: {
             titleAr: string;
@@ -2032,13 +1573,6 @@ export interface components {
             /** Format: int32 */
             stock: number;
         };
-        MeasurementField: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            /** @default false */
-            required: boolean;
-        };
         NewVariant: {
             size: string;
             /** Format: int32 */
@@ -2066,9 +1600,7 @@ export interface components {
             imageUrl: null | string;
         };
         /** @enum {unknown} */
-        OrderStatus: "PendingConfirmation" | "Confirmed" | "AwaitingQuote" | "QuoteSent" | "QuoteApproved" | "InProduction" | "QualityCheck" | "Packing" | "Shipped" | "Delivered" | "Cancelled";
-        /** @enum {unknown} */
-        OrderType: "Ready" | "Custom";
+        OrderStatus: "PendingConfirmation" | "Confirmed" | "Packing" | "Shipped" | "Delivered" | "Cancelled";
         PagedOfAdminOrderRow: {
             items: components["schemas"]["AdminOrderRow"][];
             /** Format: int32 */
@@ -2119,18 +1651,6 @@ export interface components {
             total: number;
             lines: components["schemas"]["OrderLineDto"][];
         };
-        PlacedTailoringRequestDto: {
-            number: string;
-            trackingToken: string;
-            trackingUrl: string;
-            status: components["schemas"]["OrderStatus"];
-            /** Format: double */
-            estimatedPrice: number;
-            /** Format: double */
-            deliveryFee: number;
-            /** Format: double */
-            estimatedTotal: number;
-        };
         PlaceOrderCommand: {
             customer: components["schemas"]["CheckoutCustomer"];
             lines: components["schemas"]["CheckoutLine"][];
@@ -2138,22 +1658,6 @@ export interface components {
             /** Format: double */
             expectedTotal: number;
             acceptTerms: boolean;
-        };
-        PriceLine: {
-            key: string;
-            labelAr: string;
-            labelEn: string;
-            /** Format: double */
-            amount: number;
-        };
-        PriceRulesContent: {
-            garmentBasePrices: components["schemas"]["GarmentPrice"][];
-            styleBasePrices: components["schemas"]["StylePrice"][];
-            fabrics: components["schemas"]["FabricPrice"][];
-            /** Format: double */
-            liningPrice: number;
-            sizeExtras: components["schemas"]["SizeExtra"][];
-            extras: components["schemas"]["ExtraOption"][];
         };
         ProductCard: {
             /** Format: int32 */
@@ -2195,16 +1699,8 @@ export interface components {
             phone: string;
             zone: components["schemas"]["PublicZoneRef"];
         };
-        PublicExtra: {
-            key: string;
-            nameAr: string;
-            nameEn: string;
-            /** Format: double */
-            price: number;
-        };
         PublicOrderDto: {
             number: string;
-            type: components["schemas"]["OrderType"];
             status: components["schemas"]["OrderStatus"];
             /** Format: date-time */
             createdAt: string;
@@ -2219,44 +1715,10 @@ export interface components {
             paymentMethod: components["schemas"]["PaymentMethod"];
             paymentStatus: components["schemas"]["PaymentStatus"];
             timeline: components["schemas"]["TimelineEvent"][];
-            tailoring: null | components["schemas"]["PublicTailoringDto"];
-        };
-        PublicTailoringCatalog: {
-            garments: components["schemas"]["GarmentType"][];
-            styles: components["schemas"]["TailoringStyle"][];
-            fabrics: components["schemas"]["FabricOption"][];
-            fits: components["schemas"]["FitOption"][];
-            measurementGroups: {
-                [key: string]: components["schemas"]["MeasurementField"][];
-            };
-            standardSizes: string[];
-            extras: components["schemas"]["PublicExtra"][];
-            /** Format: double */
-            liningPrice: number;
-        };
-        PublicTailoringDto: {
-            garment: string;
-            fabric: string;
-            color: string;
-            fit: string;
-            /** Format: double */
-            estimatedPrice: number;
-            /** Format: double */
-            quotedPrice: null | number;
-            quoteNote: null | string;
-            /** Format: date-time */
-            quoteValidUntil: null | string;
         };
         PublicZoneRef: {
             nameAr: string;
             nameEn: string;
-        };
-        QuoteResult: {
-            order: components["schemas"]["AdminOrderDetail"];
-            customerLink: null | string;
-        };
-        RejectQuoteCommand: {
-            reason: null | string;
         };
         SaveCategoryCommand: {
             /** Format: int32 */
@@ -2278,16 +1740,6 @@ export interface components {
             nameEn: string;
             hex: string;
         };
-        SendQuoteCommand: {
-            /** Format: double */
-            price: number;
-            note: null | string;
-            /**
-             * Format: int32
-             * @default 7
-             */
-            validDays: number;
-        };
         SiteContent: {
             announcementAr: string;
             announcementEn: string;
@@ -2296,42 +1748,10 @@ export interface components {
             contact: components["schemas"]["ContactInfo"];
             social: components["schemas"]["SocialLinks"];
         };
-        SizeExtra: {
-            fromSize: string;
-            /** Format: double */
-            extra: number;
-        };
-        /** @enum {unknown} */
-        SizingMode: "Measurements" | "StandardSize";
         SocialLinks: {
             facebook: null | string;
             instagram: null | string;
             tikTok: null | string;
-        };
-        StylePrice: {
-            styleId: string;
-            /** Format: double */
-            basePrice: number;
-        };
-        TailoringCatalogContent: {
-            garments: components["schemas"]["GarmentType"][];
-            styles: components["schemas"]["TailoringStyle"][];
-            fabrics: components["schemas"]["FabricOption"][];
-            fits: components["schemas"]["FitOption"][];
-            measurementGroups: {
-                [key: string]: components["schemas"]["MeasurementField"][];
-            };
-        };
-        TailoringStyle: {
-            id: string;
-            garment: string;
-            nameAr: string;
-            nameEn: string;
-            defaultFabric: string;
-            defaultFit: string;
-            imageUrl?: null | string;
-            /** @default true */
-            isActive: boolean;
         };
         TimelineEvent: {
             from: null | components["schemas"]["OrderStatus"];

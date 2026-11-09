@@ -26,7 +26,7 @@ const dmSans = DM_Sans({
 // The live domain, set in Vercel (NEXT_PUBLIC_SITE_URL); share links and the sitemap are built from it.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const title = "WEFT | WEFT";
-const description = "أزياء نسائية راقية وتفصيل خاص على مقاسك | Curated women's fashion and custom tailoring in Egypt";
+const description = "WEFT — The Thread Co. هوديز بتصميم بسيط وخامات مريحة | Hoodies with a simple design and comfortable fabrics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

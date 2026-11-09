@@ -3,7 +3,6 @@
 export const navigationLabels: Record<string, [string, string]> = {
   home: ['الرئيسية', 'Home'],
   shop: ['تسوقي', 'Shop'],
-  custom: ['تفصيل خاص', 'Custom tailoring'],
   orders: ['طلباتي', 'My orders'],
   cart: ['السلة', 'Cart'],
   admin: ['الإدارة', 'Admin'],
@@ -15,11 +14,9 @@ export const adminTabsLabels: Record<string, [string, string]> = {
   overview: ['نظرة عامة', 'Overview'],
   categories: ['الأقسام', 'Categories'],
   products: ['المنتجات', 'Products'],
-  orders: ['الطلبات والتصنيع', 'Orders & production'],
+  orders: ['الطلبات', 'Orders'],
   colors: ['الألوان', 'Colors'],
   zones: ['مناطق التوصيل', 'Delivery zones'],
-  tailoring: ['كتالوج التفصيل', 'Tailoring catalog'],
-  pricing: ['أسعار التفصيل', 'Tailoring prices'],
   settings: ['محتوى الموقع', 'Site content'],
   password: ['كلمة المرور', 'Password'],
 };

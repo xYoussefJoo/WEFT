@@ -10,7 +10,7 @@ export default function TopBanner() {
   // The owner edits this line in Admin → Site content; until it loads (or if it's empty) the built-in text shows.
   const text = t(
     site?.announcementAr || 'توصيل لجميع المحافظات • تصميمات راقية تتفصل على مقاسك',
-    site?.announcementEn || 'Delivery across Egypt • Refined everyday essentials & custom tailoring',
+    site?.announcementEn || 'Delivery across Egypt • WEFT — The Thread Co.',
   );
 
   return (

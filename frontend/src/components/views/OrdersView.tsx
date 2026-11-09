@@ -77,8 +77,8 @@ export default function OrdersView() {
           <h3 className="text-xl font-serif font-bold text-[#142b4a]">{t('لا توجد طلبات سابقة', 'No previous orders')}</h3>
           <p className="text-xs text-[#77808b] max-w-sm mx-auto">
             {t(
-              'عند إتمام أي طلب لقطع جاهزة أو تفصيل خاص ستتمكنين من متابعة حالته وتفاصيله هنا.',
-              'When you submit an order for ready-to-wear pieces or custom tailoring, you will see it here.',
+              'عند إتمام أي طلب ستتمكنين من متابعة حالته وتفاصيله هنا.',
+              'When you place an order, you will see it here.',
             )}
           </p>
           <div className="pt-2">
@@ -101,7 +101,6 @@ function OrderRow({ order, onOpen }: { order: SavedOrder; onOpen: () => void }) 
   const money = useWeftStore((state) => state.money);
   const lang = useWeftStore((state) => state.lang);
   const { data, error, loading } = useApi(() => trackOrder(order.number, order.token), [order.number, order.token]);
-  const isCustom = (data?.type ?? order.kind) === 'Custom';
   const gone = error instanceof ApiError && error.status === 404;
 
   return (
@@ -113,9 +112,6 @@ function OrderRow({ order, onOpen }: { order: SavedOrder; onOpen: () => void }) 
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <b className="font-mono text-base sm:text-lg font-bold text-[#142b4a]" dir="ltr">{order.number}</b>
-          <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${isCustom ? 'bg-[#e7dac5] text-[#7c5e30]' : 'bg-[#dce6f2] text-[#142b4a]'}`}>
-            {isCustom ? t('تفصيل خاص', 'Custom') : t('جاهز', 'Ready')}
-          </span>
         </div>
         <span className="inline-block px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#f7f3eb] text-[#142b4a] border border-[#e8dfd1]">
           {data ? t(...statusLabel[data.status]) : loading ? '…' : gone ? t('غير متاح', 'Unavailable') : t('تعذر التحديث', "Couldn't refresh")}
@@ -125,7 +121,7 @@ function OrderRow({ order, onOpen }: { order: SavedOrder; onOpen: () => void }) 
       <div className="flex items-center justify-between pt-2 border-t border-[#e8dfd1] text-xs text-[#77808b]">
         <span>{new Date(data?.createdAt ?? order.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</span>
         <span className="text-base font-extrabold text-[#b99664]">
-          {data && (isCustom ? money(data.tailoring?.quotedPrice ?? data.tailoring?.estimatedPrice) : money(data.total))}
+          {data && money(data.total)}
         </span>
       </div>
     </button>

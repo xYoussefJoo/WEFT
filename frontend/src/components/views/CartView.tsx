@@ -71,7 +71,7 @@ export default function CartView() {
         keyRef.current,
       );
       keyRef.current = null;
-      rememberOrder({ number: placed.number, token: placed.trackingToken, createdAt: new Date().toISOString(), kind: 'Ready' });
+      rememberOrder({ number: placed.number, token: placed.trackingToken, createdAt: new Date().toISOString() });
       clearCart();
       setServerTotal(null);
       showToast(t(`تم استلام طلبك رقم ${placed.number}، ولم يتم تحصيل أي مبلغ`, `Order ${placed.number} received. No payment collected`), 'success');
@@ -344,7 +344,7 @@ export default function CartView() {
           <span className="text-5xl block animate-float select-none">🛍</span>
           <h3 className="text-xl font-serif font-bold text-[#142b4a]">{t('حقيبة التسوق فارغة', 'Your shopping bag is empty')}</h3>
           <p className="text-xs text-[#77808b] max-w-sm mx-auto">
-            {t('اكتشفي تشكيلتنا المتنوعة واختاري ما يناسبك من الإطلالات اليومية والتفصيل الخاص.', 'Explore our curated collection and discover elevated essentials tailored for your wardrobe.')}
+            {t('اكتشفي تشكيلة WEFT واختاري الهودي المناسب لكِ.', 'Explore the WEFT collection and find your hoodie.')}
           </p>
           <div className="pt-2">
             <button

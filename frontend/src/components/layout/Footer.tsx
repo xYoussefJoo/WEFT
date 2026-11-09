@@ -50,8 +50,8 @@ export default function Footer() {
             </div>
             <p className="text-sm text-white/70 leading-relaxed max-w-sm">
               {t(
-                'أناقة تُصنع على مقاسك — تصميمات يومية مريحة وتفصيل خاص بعناية فائقة.',
-                'Elevated everyday fashion and made-to-measure tailoring, crafted with care for you.'
+                'WEFT — The Thread Co. هوديز بتصميم بسيط وخامات مريحة وتفاصيل مميزة.',
+                'WEFT — The Thread Co. Hoodies with a simple design, comfortable fabrics and standout details.'
               )}
             </p>
           </div>

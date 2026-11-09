@@ -2,7 +2,7 @@
 
 export type Language = 'ar' | 'en';
 
-export type PageId = 'home' | 'shop' | 'custom' | 'orders' | 'cart' | 'admin' | 'product' | 'track';
+export type PageId = 'home' | 'shop' | 'orders' | 'cart' | 'admin' | 'product' | 'track';
 
 export type AdminTab =
   | 'overview'
@@ -11,8 +11,6 @@ export type AdminTab =
   | 'orders'
   | 'colors'
   | 'zones'
-  | 'tailoring'
-  | 'pricing'
   | 'settings'
   | 'password';
 

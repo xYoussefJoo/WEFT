@@ -165,22 +165,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PriceRules",
-                schema: "weft",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "jsonb", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PriceRules", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SiteSettings",
                 schema: "weft",
                 columns: table => new
@@ -194,22 +178,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SiteSettings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TailoringCatalog",
-                schema: "weft",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "jsonb", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TailoringCatalog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,7 +337,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     TrackingTokenHash = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Type = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Status = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     CustomerName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Phone = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
@@ -490,45 +457,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_OrderStatusHistory_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalSchema: "weft",
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TailoringSpecs",
-                schema: "weft",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderId = table.Column<int>(type: "integer", nullable: false),
-                    StyleId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    Garment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Fabric = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Color = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Fit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    SizingMode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    StandardSize = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: true),
-                    Measurements = table.Column<string>(type: "jsonb", nullable: false),
-                    HasLining = table.Column<bool>(type: "boolean", nullable: false),
-                    Extras = table.Column<string>(type: "jsonb", nullable: false),
-                    ReferenceImageKey = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: true),
-                    EstimatedPrice = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: false),
-                    QuotedPrice = table.Column<decimal>(type: "numeric(18,2)", precision: 18, scale: 2, nullable: true),
-                    QuoteNote = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    QuoteValidUntil = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    QuoteApprovedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TailoringSpecs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TailoringSpecs_Orders_OrderId",
                         column: x => x.OrderId,
                         principalSchema: "weft",
                         principalTable: "Orders",
@@ -734,13 +662,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                 table: "ProductVariants",
                 column: "Sku",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TailoringSpecs_OrderId",
-                schema: "weft",
-                table: "TailoringSpecs",
-                column: "OrderId",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -783,23 +704,11 @@ namespace Weft.Infrastructure.Persistence.Migrations
                 schema: "weft");
 
             migrationBuilder.DropTable(
-                name: "PriceRules",
-                schema: "weft");
-
-            migrationBuilder.DropTable(
                 name: "ProductImages",
                 schema: "weft");
 
             migrationBuilder.DropTable(
                 name: "SiteSettings",
-                schema: "weft");
-
-            migrationBuilder.DropTable(
-                name: "TailoringCatalog",
-                schema: "weft");
-
-            migrationBuilder.DropTable(
-                name: "TailoringSpecs",
                 schema: "weft");
 
             migrationBuilder.DropTable(

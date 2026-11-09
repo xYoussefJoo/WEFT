@@ -12,7 +12,7 @@ using Weft.Infrastructure.Persistence;
 namespace Weft.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(WeftDbContext))]
-    [Migration("20261106134912_Initial")]
+    [Migration("20261109191422_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -368,11 +368,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -501,29 +496,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.HasIndex("OrderId", "ChangedAt");
 
                     b.ToTable("OrderStatusHistory", "weft");
-                });
-
-            modelBuilder.Entity("Weft.Domain.Entities.PriceRules", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PriceRules", "weft");
                 });
 
             modelBuilder.Entity("Weft.Domain.Entities.Product", b =>
@@ -707,120 +679,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SiteSettings", "weft");
-                });
-
-            modelBuilder.Entity("Weft.Domain.Entities.TailoringCatalog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TailoringCatalog", "weft");
-                });
-
-            modelBuilder.Entity("Weft.Domain.Entities.TailoringSpec", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("EstimatedPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<string>("Extras")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<string>("Fabric")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Fit")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("Garment")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<bool>("HasLining")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Measurements")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("QuoteApprovedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("QuoteNote")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime?>("QuoteValidUntil")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal?>("QuotedPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<string>("ReferenceImageKey")
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
-                    b.Property<string>("SizingMode")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("StandardSize")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
-
-                    b.Property<string>("StyleId")
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("TailoringSpecs", "weft");
                 });
 
             modelBuilder.Entity("Weft.Infrastructure.Identity.AppUser", b =>
@@ -1116,15 +974,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.Navigation("Color");
                 });
 
-            modelBuilder.Entity("Weft.Domain.Entities.TailoringSpec", b =>
-                {
-                    b.HasOne("Weft.Domain.Entities.Order", null)
-                        .WithOne("Tailoring")
-                        .HasForeignKey("Weft.Domain.Entities.TailoringSpec", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Weft.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Children");
@@ -1135,8 +984,6 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.Navigation("History");
 
                     b.Navigation("Lines");
-
-                    b.Navigation("Tailoring");
                 });
 
             modelBuilder.Entity("Weft.Domain.Entities.Product", b =>

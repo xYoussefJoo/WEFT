@@ -40,11 +40,11 @@ Requirements: .NET SDK 10, Node.js 24. Docker Desktop only for a local database 
 # 2. Backend  → http://localhost:5055  (health: /health, OpenAPI: /openapi/v1.json)
 cd backend
 # one-time: secrets stay on your machine, never in git. The script asks for the database password,
-# the owner account and (optional) the photo storage key, and stores them with dotnet user-secrets.
+# and the owner account, and stores them with dotnet user-secrets.
 powershell -ExecutionPolicy Bypass -File .\scripts\set-secrets.ps1
 # on start (Development) the API applies migrations (schema "weft"), seeds the 27 governorates, the WEFT
-# colours and hoodies (only into an empty catalog; Seed:Catalog=false turns it off), the owner,
-# and creates the product-images storage bucket
+# colours and hoodies (only into an empty catalog; Seed:Catalog=false turns it off) and the owner.
+# Product photos are stored in the same database (table ImageFiles), served at /api/media/...
 dotnet run --project src/Weft.Api
 dotnet test   # 110 unit tests (+4 SQL Server integration tests that run in GitHub Actions; skipped without Docker)
 

@@ -1,5 +1,5 @@
 ﻿# Logs in as the owner and tests the admin catalog APIs end to end, including a real photo upload
-# to Supabase Storage. Everything it creates is deleted again at the end.
+# to the database (ImageFiles). Everything it creates is deleted again at the end.
 # Start the API first (dotnet run --project src/Weft.Api), then run from the backend folder:
 #   powershell -ExecutionPolicy Bypass -File .\scripts\smoke-test-admin.ps1
 
@@ -87,7 +87,7 @@ try {
     $r = Call PUT "/api/admin/variants/$($variant.id)" @{ size = 'M'; colorId = $colorId; stock = 7; priceOverride = 1050; version = $variant.version }
     Check '#27 current version accepted' ($r.Status -eq 200 -and $r.Json.stock -eq 7 -and $r.Json.price -eq 1050) "(stock $($r.Json.stock), price $($r.Json.price))"
 
-    # ---------- real photo upload to Supabase Storage (#29)
+    # ---------- real photo upload, stored in the database (#29)
     Add-Type -AssemblyName System.Drawing
     $png = Join-Path $tmp 'photo.png'
     $bitmap = New-Object System.Drawing.Bitmap 1200, 1600
@@ -97,10 +97,11 @@ try {
 
     $r = Call POST "/api/admin/products/$productId/images" -file $png
     Check '#29 upload photo' ($r.Status -eq 201) "($($r.Status)) $($r.Json.detail)"
-    $imageUrl = $r.Json.url
+    # Photos are served by the API at /api/media/... (a relative address).
+    $imageUrl = if ($r.Json.url -like '/*') { "$api$($r.Json.url)" } else { $r.Json.url }
     if ($imageUrl) {
         $public = & curl.exe -s -o NUL -w '%{http_code} %{content_type}' $imageUrl
-        Check 'photo is public on Supabase as WebP' ($public -match '^200 image/webp') "($public)"
+        Check 'photo is public as WebP' ($public -match '^200 image/webp') "($public)"
         $large = ($r.Json.srcSet -split ', ' | Where-Object { $_ -match '1600w' }) -replace ' 1600w', ''
         $largeInfo = & curl.exe -s -o NUL -w '%{http_code} %{size_download}' $large
         Check '1600px version exists' ($largeInfo -match '^200') "($largeInfo bytes)"
@@ -123,7 +124,7 @@ try {
         # so ask past the cache with a unique query string.
         Start-Sleep -Seconds 2
         $gone = & curl.exe -s -o NUL -w '%{http_code}' "$($imageUrl)?check=$([guid]::NewGuid().ToString('N'))"
-        Check 'photo files removed from Supabase' ($gone -ne '200') "($gone)"
+        Check 'photo files removed' ($gone -ne '200') "($gone)"
     }
     $r = Call DELETE "/api/admin/categories/$categoryId"
     Check '#20 delete empty category' ($r.Status -eq 204) "($($r.Status))"

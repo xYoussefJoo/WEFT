@@ -53,7 +53,7 @@ erDiagram
     ProductImages {
         int Id PK
         int ProductId FK
-        string StorageKey "photo storage key"
+        string StorageKey "key in ImageFiles"
         string AltAr
         string AltEn
         int SortOrder "0 = main photo"
@@ -140,6 +140,12 @@ erDiagram
         int Id PK "single row"
         json Content "hero, contacts, social"
         datetime UpdatedAt
+    }
+    ImageFiles {
+        string Key PK "products/12/3f9a-800.webp"
+        string ContentType "image/webp"
+        varbinary Content "the photo bytes"
+        datetime CreatedAt
     }
     AspNetUsers {
         string Id PK

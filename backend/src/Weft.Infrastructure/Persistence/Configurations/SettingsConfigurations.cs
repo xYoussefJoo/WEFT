@@ -39,3 +39,15 @@ internal sealed class IdempotencyRecordConfiguration : IEntityTypeConfiguration<
         builder.HasIndex(r => r.CreatedAt); // daily clean-up of keys older than 24 h
     }
 }
+
+internal sealed class StoredImageConfiguration : IEntityTypeConfiguration<StoredImage>
+{
+    public void Configure(EntityTypeBuilder<StoredImage> builder)
+    {
+        builder.ToTable("ImageFiles");
+        builder.HasKey(i => i.Key);
+        builder.Property(i => i.Key).HasMaxLength(300);
+        builder.Property(i => i.ContentType).HasMaxLength(50);
+        builder.Property(i => i.Content).HasColumnType("varbinary(max)");
+    }
+}

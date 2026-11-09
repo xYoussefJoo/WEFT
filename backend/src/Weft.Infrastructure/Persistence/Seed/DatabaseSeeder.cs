@@ -9,7 +9,6 @@ using Weft.Domain.Constants;
 using Weft.Domain.Entities;
 using Weft.Domain.Settings;
 using Weft.Infrastructure.Identity;
-using Weft.Infrastructure.Storage;
 
 namespace Weft.Infrastructure.Persistence;
 
@@ -18,7 +17,6 @@ public class DatabaseSeeder(
     WeftDbContext db,
     UserManager<AppUser> users,
     RoleManager<IdentityRole> roles,
-    SupabaseImageStorage storage,
     IConfiguration configuration,
     IHostEnvironment environment,
     ILogger<DatabaseSeeder> logger)
@@ -35,10 +33,6 @@ public class DatabaseSeeder(
         await db.SaveChangesAsync(cancellationToken);
 
         if (configuration.GetValue("Seed:Catalog", true)) await SeedCatalogAsync(cancellationToken);
-
-        // A storage hiccup must not stop the API from starting; uploads will report the problem.
-        try { await storage.EnsureBucketsAsync(cancellationToken); }
-        catch (Exception ex) { logger.LogWarning(ex, "Could not check the storage buckets."); }
     }
 
     // The WEFT catalog from the prototype, only into an empty catalog (turn off with Seed:Catalog = false).

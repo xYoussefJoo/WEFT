@@ -36,9 +36,7 @@ public static class DependencyInjection
 
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<WeftDbContext>());
 
-        services.AddOptions<StorageOptions>().Bind(configuration.GetSection(StorageOptions.Section));
-        services.AddHttpClient<SupabaseImageStorage>(client => client.Timeout = TimeSpan.FromSeconds(60));
-        services.AddScoped<IImageStorage>(provider => provider.GetRequiredService<SupabaseImageStorage>());
+        services.AddSingleton<IImageStorage, DbImageStorage>();
         services.AddSingleton<IImageProcessor, SkiaImageProcessor>();
 
         services.AddScoped<IOrderNumberGenerator, OrderNumberGenerator>();

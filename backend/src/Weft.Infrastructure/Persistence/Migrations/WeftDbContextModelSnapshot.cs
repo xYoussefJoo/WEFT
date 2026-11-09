@@ -785,6 +785,29 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.ToTable("IdempotencyKeys", "weft");
                 });
 
+            modelBuilder.Entity("Weft.Infrastructure.Persistence.StoredImage", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("ImageFiles", "weft");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)

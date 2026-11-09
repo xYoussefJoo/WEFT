@@ -1,6 +1,6 @@
 namespace Weft.Application.Common;
 
-// Where photo files live. Supabase Storage in the app, a fake in tests.
+// Where photo files live. The API server's disk in the app (LocalImageStorage), a fake in tests.
 public interface IImageStorage
 {
     string PublicUrl(string objectKey);

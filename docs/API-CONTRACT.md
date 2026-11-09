@@ -708,7 +708,7 @@ Removes a variant (a soft delete if it was ever ordered).
 
 ## 8. Admin · Product Image APIs (`/api/admin/images`)
 
-_Images are stored in Supabase Storage (public bucket product-images) as WebP 400/800/1600._
+_Images are stored in the database (table ImageFiles) as WebP 400/800/1600 and served by the API at `GET /api/media/{key}` (public, cached for a year; every key is unique)._
 
 ### #29 `POST /api/admin/products/{id}/images`
 

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Weft.Infrastructure.Persistence;
-using Weft.Infrastructure.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace Weft.Infrastructure.Health;
 
@@ -28,16 +28,15 @@ internal sealed class DatabaseHealthCheck(WeftDbContext db) : IHealthCheck
     }
 }
 
-// Is Supabase Storage answering? Without it only photo uploads fail, so the site is Degraded, not down.
-internal sealed class StorageHealthCheck(SupabaseImageStorage storage) : IHealthCheck
+// Can we read the photo table? Without it only photos fail, so the site is Degraded, not down.
+internal sealed class StorageHealthCheck(WeftDbContext db) : IHealthCheck
 {
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
         try
         {
-            return await storage.IsReachableAsync(cancellationToken)
-                ? HealthCheckResult.Healthy()
-                : HealthCheckResult.Degraded("Storage is not configured or not reachable.");
+            await db.ImageFiles.Select(i => i.Key).FirstOrDefaultAsync(cancellationToken);
+            return HealthCheckResult.Healthy();
         }
         catch (Exception ex)
         {

@@ -23,10 +23,6 @@ public static class StartupChecks
         if (!Uri.TryCreate(configuration["Site:PublicUrl"], UriKind.Absolute, out var site) || site.Scheme != Uri.UriSchemeHttps)
             problems.Add("Site:PublicUrl must be the storefront's https address (e.g. https://staging.example.com).");
 
-        // Photos can't be uploaded or shown without them.
-        if (string.IsNullOrWhiteSpace(configuration["Storage:SupabaseUrl"]) || string.IsNullOrWhiteSpace(configuration["Storage:ServiceKey"]))
-            problems.Add("Storage:SupabaseUrl and Storage:ServiceKey must be set.");
-
         if (problems.Count > 0)
             throw new InvalidOperationException(
                 $"The API can't start in {environment.EnvironmentName}:{Environment.NewLine}- " + string.Join(Environment.NewLine + "- ", problems));

@@ -36,9 +36,6 @@ $dbUser = Read-Plain 'Database user' 'db78891'
 $dbPass = Read-Secret 'Database password (hidden)'
 if (-not $dbPass) { throw 'The database password is required.' }
 
-# --- Photo storage key (optional for now: press Enter to skip; photo uploads stay off until it is set)
-$storageKey = Read-Secret 'Photo storage secret key (hidden, Enter to skip)'
-
 # --- First owner account (created on first start, then the owner must change the password)
 Write-Host ''
 $ownerEmail = Read-Plain 'Owner email' 'xyousefjoo@gmail.com'
@@ -58,8 +55,6 @@ $secrets = [ordered]@{
     'Seed:OwnerName'           = $ownerName
     'Seed:OwnerPassword'       = $ownerPass
 }
-if ($storageKey) { $secrets['Storage:ServiceKey'] = $storageKey }
-
 $secrets | ConvertTo-Json -Compress | dotnet user-secrets set --project $project | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'dotnet user-secrets failed.' }
 

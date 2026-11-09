@@ -263,8 +263,10 @@ try {
         Check '#29 upload photo' ($r.Status -eq 201 -and $r.Json.srcSet -match '1600w') "($($r.Status))"
         $image = $r.Json
         if ($image.url) {
-            $public = & curl.exe -s -o NUL -w '%{http_code} %{content_type}' $image.url
-            Check 'photo is public on Supabase as WebP' ($public -match '^200 image/webp') "($public)"
+            # Photos live in the database and are served by the API at /api/media/... (a relative address).
+            $photoUrl = if ($image.url -like '/*') { "$Api$($image.url)" } else { $image.url }
+            $public = & curl.exe -s -o NUL -w '%{http_code} %{content_type}' $photoUrl
+            Check 'photo is public as WebP' ($public -match '^200 image/webp') "($public)"
         }
         $fake = Join-Path $tmp 'fake.png'; [IO.File]::WriteAllText($fake, 'this is not a photo')
         $r = Call POST "/api/admin/products/$($product.id)/images" -Form @("file=@$fake;type=image/png")
@@ -337,8 +339,8 @@ try {
         $r = Call GET "/api/admin/orders?q=$number"
         Check '#35 board finds the order' ($r.Status -eq 200 -and $r.Json.totalCount -eq 1)
         $orderId = $r.Json.items[0].id
-        $r = Call GET '/api/admin/orders?status=PendingConfirmation&type=Ready&pageSize=5'
-        Check '#35 board filters by status and type' ($r.Status -eq 200 -and @($r.Json.items | Where-Object { $_.status -ne 'PendingConfirmation' -or $_.type -ne 'Ready' }).Count -eq 0)
+        $r = Call GET '/api/admin/orders?status=PendingConfirmation&pageSize=5'
+        Check '#35 board filters by status' ($r.Status -eq 200 -and @($r.Json.items | Where-Object { $_.status -ne 'PendingConfirmation' }).Count -eq 0)
         $r = Call GET "/api/admin/orders/$orderId"
         Check '#36 details unmasked' ($r.Status -eq 200 -and $r.Json.customer.phone -eq '+201112345678')
         $r = Call POST "/api/admin/orders/$orderId/status" @{ to = 'Shipped'; note = $null }

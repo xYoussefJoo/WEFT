@@ -44,6 +44,7 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
 
     public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
     public DbSet<IdempotencyRecord> IdempotencyKeys => Set<IdempotencyRecord>();
+    public DbSet<StoredImage> ImageFiles => Set<StoredImage>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

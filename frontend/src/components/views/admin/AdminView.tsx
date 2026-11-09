@@ -39,7 +39,7 @@ export default function AdminView() {
   }, [authChecked, checkSession, setUser]);
 
   if (!authChecked) {
-    return <div className="max-w-md mx-auto my-24 h-40 rounded-2xl bg-[#f7f3eb] animate-pulse" aria-busy="true" />;
+    return <div className="max-w-md mx-auto my-24 h-40 rounded-2xl bg-[#f5f3ef] animate-pulse" aria-busy="true" />;
   }
   if (!user) return <LoginForm />;
 
@@ -61,21 +61,21 @@ export default function AdminView() {
 
   return (
     <ConfirmProvider>
-    <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-[calc(100vh-120px)] bg-[#f8f6f2]">
-      <aside className="bg-[#1e3046] text-white p-6 flex flex-col justify-between border-b md:border-b-0 md:border-e border-white/10">
+    <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-[calc(100vh-120px)] bg-[#f8f7f4]">
+      <aside className="bg-[#2b2926] text-white p-6 flex flex-col justify-between border-b md:border-b-0 md:border-e border-white/10">
         <div className="space-y-6">
           <div className="flex items-center gap-3 pb-4 border-b border-white/15">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={assetPath('assets/weft-mark-white-192.webp')} alt="WEFT" className="w-12 h-12 object-contain" />
             <div>
               <strong className="block text-sm font-serif font-bold text-white">WEFT</strong>
-              <small className="text-[9px] tracking-wider text-[#d9c5a4] uppercase font-semibold">STORE MANAGEMENT</small>
+              <small className="text-[9px] tracking-wider text-[#dcd8d1] uppercase font-semibold">STORE MANAGEMENT</small>
             </div>
           </div>
 
           {groups.map(([ar, en, keys]) => (
             <div key={en} className="space-y-1">
-              <div className="text-[10px] tracking-widest uppercase font-bold text-[#c1c9d1] px-3 pb-1">{t(ar, en)}</div>
+              <div className="text-[10px] tracking-widest uppercase font-bold text-[#c9c5be] px-3 pb-1">{t(ar, en)}</div>
               {keys.map((key) => {
                 const isActive = tab === key;
                 return (
@@ -84,7 +84,7 @@ export default function AdminView() {
                     type="button"
                     disabled={user.mustChangePassword && key !== 'password'}
                     className={`w-full text-start flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
-                      isActive ? 'bg-[#c4a274] text-[#17283e]' : 'text-[#d7dfe7] hover:bg-white/10'
+                      isActive ? 'bg-[#a39b90] text-[#17283e]' : 'text-[#dedbd5] hover:bg-white/10'
                     }`}
                     onClick={() => setAdminTab(key)}
                   >
@@ -98,8 +98,8 @@ export default function AdminView() {
         </div>
 
         <div className="pt-6 border-t border-white/15 space-y-2 mt-8 md:mt-0">
-          <p className="px-2 text-[11px] text-[#c1c9d1] truncate" title={user.email}>{user.fullName || user.email}</p>
-          <button type="button" className="w-full text-start text-xs text-[#d7dfe7] hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer" onClick={() => go('home')}>
+          <p className="px-2 text-[11px] text-[#c9c5be] truncate" title={user.email}>{user.fullName || user.email}</p>
+          <button type="button" className="w-full text-start text-xs text-[#dedbd5] hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer" onClick={() => go('home')}>
             ↗ {t('عرض المتجر', 'View storefront')}
           </button>
           <button type="button" className="w-full text-start text-xs text-rose-300 hover:text-rose-200 p-2 rounded-lg hover:bg-rose-950/40 transition-colors cursor-pointer" onClick={() => void logout()}>
@@ -109,28 +109,28 @@ export default function AdminView() {
       </aside>
 
       <main className="p-6 sm:p-10 min-w-0 max-w-[1450px] w-full mx-auto space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e9e4dc]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e8e6e1]">
           <div>
-            <span className="text-xs font-bold tracking-widest text-[#9c7c54] uppercase">WEFT FASHION / ADMIN</span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#142b4a] mt-0.5">
+            <span className="text-xs font-bold tracking-widest text-[#6b5d4c] uppercase">WEFT FASHION / ADMIN</span>
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#141414] mt-0.5">
               {t(...(adminTabsLabels[tab] || adminTabsLabels.overview))}
             </h2>
           </div>
           <div className="flex items-center gap-2">
             {!user.mustChangePassword && (
-              <button type="button" className="px-4 py-2 rounded-lg border border-[#cdbb9e] bg-white hover:bg-[#f7f3eb] text-xs font-bold text-[#142b4a] transition-colors cursor-pointer" onClick={adminBack}>
+              <button type="button" className="px-4 py-2 rounded-lg border border-[#cfcac2] bg-white hover:bg-[#f5f3ef] text-xs font-bold text-[#141414] transition-colors cursor-pointer" onClick={adminBack}>
                 {t('رجوع', 'Back')}
               </button>
             )}
-            <button type="button" className="px-4 py-2 rounded-lg bg-[#142b4a] hover:bg-[#1e3a61] text-xs font-bold text-white transition-colors cursor-pointer" onClick={() => go('home')}>
+            <button type="button" className="px-4 py-2 rounded-lg bg-[#141414] hover:bg-[#2b2926] text-xs font-bold text-white transition-colors cursor-pointer" onClick={() => go('home')}>
               ↗ {t('عرض المتجر', 'View store')}
             </button>
           </div>
         </div>
 
         {user.mustChangePassword && (
-          <div className="bg-[#fff8e9] border border-[#ead8b6] text-[#79613f] p-3.5 rounded-xl text-xs">
-            {t('هذه كلمة المرور الأولى. غيّريها الآن لحماية المتجر، ثم تفتح باقي الشاشات.', 'This is your first password. Change it now to protect the store; then the other screens open.')}
+          <div className="bg-[#fff8e9] border border-[#e8e5e0] text-[#5c5042] p-3.5 rounded-xl text-xs">
+            {t('هذه كلمة المرور الأولى. غيّرها الآن لحماية المتجر، ثم تفتح باقي الشاشات.', 'This is your first password. Change it now to protect the store; then the other screens open.')}
           </div>
         )}
 
@@ -187,34 +187,34 @@ function LoginForm() {
     if (error.code === 'INVALID_CREDENTIALS') return t('البريد أو كلمة المرور غير صحيحة', 'Wrong email or password');
     if (error.code === 'LOCKED_OUT') {
       const minutes = Math.ceil(Number(error.problem.retryAfterSeconds ?? 900) / 60);
-      return t(`تم إيقاف الدخول مؤقتًا بعد محاولات خاطئة. حاولي بعد ${minutes} دقيقة.`, `Too many wrong passwords. Try again in ${minutes} minutes.`);
+      return t(`تم إيقاف الدخول مؤقتًا بعد محاولات خاطئة. حاول بعد ${minutes} دقيقة.`, `Too many wrong passwords. Try again in ${minutes} minutes.`);
     }
     return errorText(error, t);
   };
 
-  const input = 'border border-[#cdbb9e] rounded-lg p-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#b99664]';
+  const input = 'border border-[#cfcac2] rounded-lg p-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58]';
   return (
     <div className="max-w-md mx-auto my-16 px-4">
-      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#d6c2a7] shadow-md space-y-5">
+      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#dcd8d1] shadow-md space-y-5">
         <div className="text-center space-y-1">
-          <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#142b4a]">{t('دخول الإدارة', 'Admin sign in')}</h2>
-          <p className="text-xs text-[#77808b]">WEFT • Management Studio</p>
+          <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#141414]">{t('دخول الإدارة', 'Admin sign in')}</h2>
+          <p className="text-xs text-[#77736c]">WEFT • Management Studio</p>
         </div>
         <form onSubmit={handleLogin} className="space-y-4">
-          <label className="flex flex-col gap-1.5 text-xs sm:text-sm font-bold text-[#2d3540]">
+          <label className="flex flex-col gap-1.5 text-xs sm:text-sm font-bold text-[#2a2a28]">
             <span>{t('البريد الإلكتروني', 'Email')}</span>
             <input type="email" required autoComplete="username" dir="ltr" value={email} onChange={(e) => setEmail(e.target.value)} className={input} />
           </label>
-          <label className="flex flex-col gap-1.5 text-xs sm:text-sm font-bold text-[#2d3540]">
+          <label className="flex flex-col gap-1.5 text-xs sm:text-sm font-bold text-[#2a2a28]">
             <span>{t('كلمة المرور', 'Password')}</span>
             <input type="password" required autoComplete="current-password" dir="ltr" value={password} onChange={(e) => setPassword(e.target.value)} className={input} />
           </label>
-          <label className="flex items-center gap-2 text-xs font-semibold text-[#2d3540] cursor-pointer">
-            <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-[#142b4a] w-4 h-4" />
+          <label className="flex items-center gap-2 text-xs font-semibold text-[#2a2a28] cursor-pointer">
+            <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-[#141414] w-4 h-4" />
             <span>{t('تذكرني على هذا الجهاز', 'Keep me signed in on this device')}</span>
           </label>
           {error ? <p role="alert" className="text-xs font-bold text-[#a72f3e] bg-red-50 border border-red-200 rounded-lg p-2.5">{message()}</p> : null}
-          <button type="submit" disabled={busy} className="w-full py-3 rounded-lg bg-[#142b4a] hover:bg-[#1e3a61] disabled:opacity-60 text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer">
+          <button type="submit" disabled={busy} className="w-full py-3 rounded-lg bg-[#141414] hover:bg-[#2b2926] disabled:opacity-60 text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer">
             {busy ? '…' : t('دخول', 'Sign in')}
           </button>
         </form>

@@ -1,28 +1,28 @@
 'use client';
 
-// The dashboard's visual identity in one place: navy #142b4a, gold #b99664, cream #f7f3eb.
+// The dashboard's visual identity in one place: navy #141414, gold #7a6b58, cream #f5f3ef.
 // Every admin screen builds from these pieces, so they all look and behave the same.
 import React, { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
 
 // ---------- class tokens
 export const ui = {
-  card: 'bg-white rounded-2xl border border-[#e9e4dc] shadow-2xs',
+  card: 'bg-white rounded-2xl border border-[#e8e6e1] shadow-2xs',
   cardPad: 'p-6 sm:p-7',
-  input: 'w-full border border-[#dedbd5] rounded-xl px-3 py-2.5 bg-white text-[#263548] text-sm focus:outline-none focus:ring-2 focus:ring-[#b99664] focus:border-[#b99664] transition-colors',
-  inputSm: 'border border-[#dedbd5] rounded-lg px-2 py-1.5 bg-white text-[#263548] text-xs focus:outline-none focus:ring-2 focus:ring-[#b99664]',
-  label: 'flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]',
-  hint: 'text-[11px] font-medium text-[#77808b]',
+  input: 'w-full border border-[#dedbd5] rounded-xl px-3 py-2.5 bg-white text-[#2b2926] text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58] focus:border-[#7a6b58] transition-colors',
+  inputSm: 'border border-[#dedbd5] rounded-lg px-2 py-1.5 bg-white text-[#2b2926] text-xs focus:outline-none focus:ring-2 focus:ring-[#7a6b58]',
+  label: 'flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]',
+  hint: 'text-[11px] font-medium text-[#77736c]',
   error: 'text-[11px] font-semibold text-[#a72f3e]',
 };
 
 const buttonStyles = {
-  primary: 'bg-[#142b4a] hover:bg-[#1e3a61] text-white shadow-sm',
-  gold: 'bg-[#b99664] hover:bg-[#a6844f] text-white shadow-sm',
-  secondary: 'bg-white hover:bg-[#f7f3eb] text-[#142b4a] border border-[#cdbb9e]',
+  primary: 'bg-[#141414] hover:bg-[#2b2926] text-white shadow-sm',
+  gold: 'bg-[#7a6b58] hover:bg-[#6b5d4c] text-white shadow-sm',
+  secondary: 'bg-white hover:bg-[#f5f3ef] text-[#141414] border border-[#cfcac2]',
   danger: 'bg-[#fff7f7] hover:bg-rose-100 text-[#a34c4c] border border-[#efc9c9]',
   dangerSolid: 'bg-[#a72f3e] hover:bg-[#8e2533] text-white',
-  ghost: 'text-[#142b4a] hover:bg-[#f7f3eb]',
+  ghost: 'text-[#141414] hover:bg-[#f5f3ef]',
 } as const;
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -37,7 +37,7 @@ export function Button({ variant = 'primary', size = 'md', busy, disabled, class
     <button
       type={type}
       disabled={disabled || busy}
-      className={`${sizes} ${buttonStyles[variant]} font-bold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b99664] ${className}`}
+      className={`${sizes} ${buttonStyles[variant]} font-bold inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer disabled:opacity-45 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7a6b58] ${className}`}
       {...rest}
     >
       {busy ? '…' : children}
@@ -61,7 +61,7 @@ export function Card({ title, actions, className = '', children }: { title?: Rea
     <section className={`${ui.card} ${ui.cardPad} space-y-4 ${className}`}>
       {(title || actions) && (
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {title && <h3 className="text-base sm:text-lg font-serif font-bold text-[#142b4a]">{title}</h3>}
+          {title && <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{title}</h3>}
           {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
         </div>
       )}
@@ -75,9 +75,9 @@ export function PageHeader({ eyebrow, title, description, action }: { eyebrow: s
   return (
     <div className={`${ui.card} ${ui.cardPad} flex flex-col sm:flex-row sm:items-center justify-between gap-4`}>
       <div className="space-y-1">
-        <span className="text-[11px] font-bold tracking-[0.2em] text-[#9c7c54] uppercase">{eyebrow}</span>
-        <h3 className="text-lg sm:text-xl font-serif font-bold text-[#142b4a]">{title}</h3>
-        {description && <p className="text-xs text-[#79808b] max-w-2xl">{description}</p>}
+        <span className="text-[11px] font-bold tracking-[0.2em] text-[#6b5d4c] uppercase">{eyebrow}</span>
+        <h3 className="text-lg sm:text-xl font-serif font-bold text-[#141414]">{title}</h3>
+        {description && <p className="text-xs text-[#77736c] max-w-2xl">{description}</p>}
       </div>
       {action && <div className="shrink-0 self-start sm:self-auto">{action}</div>}
     </div>
@@ -87,8 +87,8 @@ export function PageHeader({ eyebrow, title, description, action }: { eyebrow: s
 export function EmptyState({ icon = '✦', title, children }: { icon?: string; title: React.ReactNode; children?: React.ReactNode }) {
   return (
     <div className="text-center py-14 space-y-3">
-      <span className="text-4xl block text-[#b99664] select-none" aria-hidden="true">{icon}</span>
-      <p className="text-sm font-bold text-[#142b4a]">{title}</p>
+      <span className="text-4xl block text-[#7a6b58] select-none" aria-hidden="true">{icon}</span>
+      <p className="text-sm font-bold text-[#141414]">{title}</p>
       {children}
     </div>
   );
@@ -106,7 +106,7 @@ export function LoadError({ error, onRetry, text }: { error: unknown; onRetry: (
 }
 
 export const Skeleton = ({ className = 'h-40' }: { className?: string }) => (
-  <div className={`rounded-2xl bg-[#f1ebe0] animate-pulse ${className}`} aria-busy="true" />
+  <div className={`rounded-2xl bg-[#f1efeb] animate-pulse ${className}`} aria-busy="true" />
 );
 
 // ---------- pop-up window (native <dialog>): the page behind darkens and blurs so the owner focuses on the form.
@@ -154,18 +154,18 @@ export function Modal({ open, title, subtitle, onClose, size = 'md', children }:
     <dialog
       ref={ref}
       aria-labelledby={titleId}
-      className={`zz-modal w-[calc(100%-2rem)] ${width} max-h-[calc(100dvh-2rem)] p-0 m-auto rounded-3xl bg-[#fbf8f3] shadow-2xl border border-[#e8dfd1] text-start overflow-hidden`}
+      className={`zz-modal w-[calc(100%-2rem)] ${width} max-h-[calc(100dvh-2rem)] p-0 m-auto rounded-3xl bg-[#faf9f7] shadow-2xl border border-[#e6e3dd] text-start overflow-hidden`}
       onCancel={(e) => { e.preventDefault(); api.requestClose(); }}
       onClick={(e) => { if (e.target === e.currentTarget) api.requestClose(); }}
     >
       <div className="flex flex-col max-h-[calc(100dvh-2rem)]">
-        <header className="flex items-start justify-between gap-4 px-6 py-4 bg-[#142b4a] text-white border-b-2 border-[#b99664]">
+        <header className="flex items-start justify-between gap-4 px-6 py-4 bg-[#141414] text-white border-b-2 border-[#7a6b58]">
           <div className="min-w-0">
             <h2 id={titleId} className="text-lg font-serif font-bold truncate">{title}</h2>
-            {subtitle && <p className="text-[11px] text-[#d9c5a4] mt-0.5">{subtitle}</p>}
+            {subtitle && <p className="text-[11px] text-[#dcd8d1] mt-0.5">{subtitle}</p>}
           </div>
           <button type="button" onClick={api.requestClose} aria-label={t('إغلاق', 'Close')}
-            className="w-8 h-8 shrink-0 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b99664]">✕</button>
+            className="w-8 h-8 shrink-0 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7a6b58]">✕</button>
         </header>
         <div className="overflow-y-auto p-5 sm:p-6">
           <ModalContext.Provider value={api}>{open && children}</ModalContext.Provider>
@@ -201,10 +201,10 @@ export function ConfirmDialog({ open, title, message, confirmLabel, danger, onCo
 
   return (
     <dialog ref={ref} aria-labelledby={titleId} onClose={onClose}
-      className="zz-modal w-[calc(100%-2rem)] max-w-[420px] p-0 m-auto rounded-2xl bg-white shadow-2xl border border-[#e8dfd1] text-start">
+      className="zz-modal w-[calc(100%-2rem)] max-w-[420px] p-0 m-auto rounded-2xl bg-white shadow-2xl border border-[#e6e3dd] text-start">
       <div className="p-6 space-y-3">
-        <h2 id={titleId} className="text-base font-serif font-bold text-[#142b4a]">{title}</h2>
-        {message && <p className="text-sm text-[#5e605b] leading-relaxed">{message}</p>}
+        <h2 id={titleId} className="text-base font-serif font-bold text-[#141414]">{title}</h2>
+        {message && <p className="text-sm text-[#5d5a55] leading-relaxed">{message}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <Button variant="secondary" onClick={onClose} autoFocus>{t('إلغاء', 'Cancel')}</Button>
           <Button variant={danger ? 'dangerSolid' : 'primary'} onClick={onConfirm}>{confirmLabel}</Button>

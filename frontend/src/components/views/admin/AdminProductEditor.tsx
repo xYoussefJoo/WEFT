@@ -24,13 +24,13 @@ export default function AdminProductEditor() {
 
   if (editingProductId && product.error) {
     return (
-      <section className="bg-white p-6 rounded-2xl border border-[#e9e4dc] space-y-2">
+      <section className="bg-white p-6 rounded-2xl border border-[#e8e6e1] space-y-2">
         <p className="text-sm font-bold text-[#a72f3e]">{errorText(product.error, t)}</p>
-        <button type="button" onClick={product.reload} className="px-4 py-2 rounded-lg bg-[#142b4a] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
+        <button type="button" onClick={product.reload} className="px-4 py-2 rounded-lg bg-[#141414] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
       </section>
     );
   }
-  if (editingProductId && !product.data) return <div className="h-96 rounded-2xl bg-[#f7f3eb] animate-pulse" />;
+  if (editingProductId && !product.data) return <div className="h-96 rounded-2xl bg-[#f5f3ef] animate-pulse" />;
 
   return (
     <div className="space-y-6">
@@ -77,7 +77,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!categoryId) {
-      showToast(t('اختاري القسم', 'Choose a category'), 'error');
+      showToast(t('اختر القسم', 'Choose a category'), 'error');
       return;
     }
     const body = {
@@ -103,7 +103,7 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
           ...body,
           variants: sizes.flatMap((size) => colorIds.map((colorId) => ({ size, colorId, stock, priceOverride: null, sku: null }))),
         });
-        showToast(t('تم إنشاء المنتج. أضيفي الصور الآن', 'Product created. Add its photos now'), 'success');
+        showToast(t('تم إنشاء المنتج. أضف الصور الآن', 'Product created. Add its photos now'), 'success');
         setProductModalId(created.id); // the pop-up continues on the saved product: variants and photos
       }
     } catch (err) {
@@ -123,66 +123,66 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
     <section className={`${ui.card} p-5 sm:p-6 space-y-6`}>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <span className="text-[11px] font-bold tracking-widest text-[#9c7c54] uppercase">PRODUCT</span>
-          <h3 className="text-lg sm:text-xl font-serif font-bold text-[#142b4a] mt-0.5">
+          <span className="text-[11px] font-bold tracking-widest text-[#6b5d4c] uppercase">PRODUCT</span>
+          <h3 className="text-lg sm:text-xl font-serif font-bold text-[#141414] mt-0.5">
             {product ? t('تعديل بيانات المنتج', 'Edit product details') : t('منتج جديد', 'New product')}
           </h3>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('القسم', 'Category')} *</span>
           <select required value={categoryId} onChange={(e) => setCategoryId(e.target.value ? Number(e.target.value) : '')} className={input}>
-            <option value="">{t('اختاري القسم', 'Choose a category')}</option>
+            <option value="">{t('اختر القسم', 'Choose a category')}</option>
             {allCategories.map((c) => (
               <option key={c.id} value={c.id}>{c.parentId ? '↳ ' : ''}{pick(lang, c.nameAr, c.nameEn)}</option>
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('السعر الأساسي (ج.م)', 'Base price (EGP)')} *</span>
           <input required type="number" min={1} step="0.01" value={basePrice} onChange={(e) => setBasePrice(e.target.value)} className={input} />
           {msg('basePrice')}
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('الاسم بالعربي', 'Arabic name')} *</span>
           <input required maxLength={150} value={nameAr} onChange={(e) => setNameAr(e.target.value)} className={input} />
           {msg('nameAr')}
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('الاسم بالإنجليزي', 'English name')} *</span>
           <input required maxLength={150} dir="ltr" value={nameEn} onChange={(e) => setNameEn(e.target.value)} className={input} />
           {msg('nameEn')}
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('الوصف بالعربي', 'Arabic description')}</span>
           <textarea maxLength={4000} value={descriptionAr} onChange={(e) => setDescriptionAr(e.target.value)} className={`${input} min-h-[90px]`} />
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('الوصف بالإنجليزي', 'English description')}</span>
           <textarea maxLength={4000} dir="ltr" value={descriptionEn} onChange={(e) => setDescriptionEn(e.target.value)} className={`${input} min-h-[90px]`} />
         </label>
-        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
           <span>{t('الرابط المختصر (اختياري)', 'Link name (slug, optional)')}</span>
           <input dir="ltr" maxLength={150} placeholder="weft-essential-hoodie" value={slug} onChange={(e) => setSlug(e.target.value)} className={input} />
           {msg('slug')}
         </label>
-        <label className="flex items-center gap-2 text-sm font-bold text-[#2d3540] cursor-pointer pt-6">
-          <input type="checkbox" checked={isVisible} onChange={(e) => setIsVisible(e.target.checked)} className="accent-[#142b4a] w-4 h-4" />
+        <label className="flex items-center gap-2 text-sm font-bold text-[#2a2a28] cursor-pointer pt-6">
+          <input type="checkbox" checked={isVisible} onChange={(e) => setIsVisible(e.target.checked)} className="accent-[#141414] w-4 h-4" />
           <span>{t('ظاهر في المتجر', 'Shown in the shop')}</span>
         </label>
 
         {!product && (
-          <div className="sm:col-span-2 space-y-4 pt-4 border-t border-[#efe9df]">
-            <p className="text-xs text-[#79808b]">
-              {t('اختاري المقاسات والألوان: سيتم إنشاء كل مقاس بكل لون بنفس الكمية المبدئية، وتقدري تعدلي كل واحد بعد الحفظ.',
+          <div className="sm:col-span-2 space-y-4 pt-4 border-t border-[#eeebe6]">
+            <p className="text-xs text-[#77736c]">
+              {t('اختر المقاسات والألوان: سيتم إنشاء كل مقاس بكل لون بنفس الكمية المبدئية، وتقدر تعدّل كل واحد بعد الحفظ.',
                 'Tick sizes and colors: every size is created in every color with the starting stock; you can change each one after saving.')}
             </p>
             <div className="flex flex-wrap gap-2" role="group" aria-label={t('المقاسات', 'Sizes')}>
               {adminSizes.map((s) => (
                 <button key={s} type="button" aria-pressed={sizes.includes(s)} onClick={() => setSizes(toggle(sizes, s))}
-                  className={`min-w-[44px] h-[38px] px-3 rounded-lg text-xs font-bold cursor-pointer ${sizes.includes(s) ? 'bg-[#142b4a] text-white' : 'bg-[#f7f3eb] text-[#142b4a] border border-[#e8dfd1]'}`}>
+                  className={`min-w-[44px] h-[38px] px-3 rounded-lg text-xs font-bold cursor-pointer ${sizes.includes(s) ? 'bg-[#141414] text-white' : 'bg-[#f5f3ef] text-[#141414] border border-[#e6e3dd]'}`}>
                   {s}
                 </button>
               ))}
@@ -190,18 +190,18 @@ function DetailsForm({ product, onSaved }: { product?: AdminProduct; onSaved: ()
             <div className="flex flex-wrap gap-2" role="group" aria-label={t('الألوان', 'Colors')}>
               {(colors.data ?? []).map((c) => (
                 <button key={c.id} type="button" aria-pressed={colorIds.includes(c.id)} onClick={() => setColorIds(toggle(colorIds, c.id))}
-                  className={`px-3 h-[38px] rounded-lg text-xs font-bold cursor-pointer inline-flex items-center gap-2 ${colorIds.includes(c.id) ? 'bg-[#142b4a] text-white' : 'bg-[#f7f3eb] text-[#142b4a] border border-[#e8dfd1]'}`}>
+                  className={`px-3 h-[38px] rounded-lg text-xs font-bold cursor-pointer inline-flex items-center gap-2 ${colorIds.includes(c.id) ? 'bg-[#141414] text-white' : 'bg-[#f5f3ef] text-[#141414] border border-[#e6e3dd]'}`}>
                   <span className="w-3.5 h-3.5 rounded-full border border-black/10" style={{ backgroundColor: c.hex }} />
                   {pick(lang, c.nameAr, c.nameEn)}
                 </button>
               ))}
-              {colors.data?.length === 0 && <small className="text-xs text-[#77808b]">{t('أضيفي ألوانًا من شاشة الألوان أولاً', 'Add colors in the Colors screen first')}</small>}
+              {colors.data?.length === 0 && <small className="text-xs text-[#77736c]">{t('أضف ألوانًا من شاشة الألوان أولاً', 'Add colors in the Colors screen first')}</small>}
             </div>
-            <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540] w-48">
+            <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28] w-48">
               <span>{t('الكمية المبدئية لكل مقاس/لون', 'Starting stock per size/color')}</span>
               <input type="number" min={0} value={startStock} onChange={(e) => setStartStock(e.target.value)} className={input} />
             </label>
-            <p className="text-xs font-bold text-[#142b4a]">{t(`سيتم إنشاء ${sizes.length * colorIds.length} مقاس/لون`, `${sizes.length * colorIds.length} variants will be created`)}</p>
+            <p className="text-xs font-bold text-[#141414]">{t(`سيتم إنشاء ${sizes.length * colorIds.length} مقاس/لون`, `${sizes.length * colorIds.length} variants will be created`)}</p>
           </div>
         )}
 
@@ -251,10 +251,10 @@ function Variants({ product, onChanged }: { product: AdminProduct; onChanged: ()
   const select = 'border border-[#dedbd5] rounded-lg p-2 bg-white text-xs';
   return (
     <section className={`${ui.card} p-5 sm:p-6 space-y-4`}>
-      <h3 className="text-lg font-serif font-bold text-[#142b4a]">{t('المقاسات والألوان والمخزون', 'Sizes, colors & stock')}</h3>
+      <h3 className="text-lg font-serif font-bold text-[#141414]">{t('المقاسات والألوان والمخزون', 'Sizes, colors & stock')}</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="text-[11px] text-[#77808b] uppercase border-b border-[#efe9df]">
+          <thead className="text-[11px] text-[#77736c] uppercase border-b border-[#eeebe6]">
             <tr>
               <th className="py-2 text-start">{t('المقاس', 'Size')}</th>
               <th className="py-2 text-start">{t('اللون', 'Color')}</th>
@@ -264,34 +264,34 @@ function Variants({ product, onChanged }: { product: AdminProduct; onChanged: ()
               <th />
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#f1ece4]">
+          <tbody className="divide-y divide-[#f1efeb]">
             {product.variants.map((v) => <VariantRow key={`${v.id}-${v.version}`} variant={v} basePrice={product.basePrice} onChanged={onChanged} />)}
           </tbody>
         </table>
-        {product.variants.length === 0 && <p className="text-xs text-[#77808b] py-4">{t('لا توجد مقاسات بعد: المنتج لن يظهر للبيع قبل إضافتها.', 'No variants yet: the product can’t be bought until you add some.')}</p>}
+        {product.variants.length === 0 && <p className="text-xs text-[#77736c] py-4">{t('لا توجد مقاسات بعد: المنتج لن يظهر للبيع قبل إضافتها.', 'No variants yet: the product can’t be bought until you add some.')}</p>}
       </div>
 
-      <form onSubmit={add} className="flex flex-wrap items-end gap-3 pt-3 border-t border-[#efe9df]">
-        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540]">
+      <form onSubmit={add} className="flex flex-wrap items-end gap-3 pt-3 border-t border-[#eeebe6]">
+        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28]">
           <span>{t('المقاس', 'Size')}</span>
           <select value={newSize} onChange={(e) => setNewSize(e.target.value)} className={select}>{adminSizes.map((s) => <option key={s}>{s}</option>)}</select>
         </label>
-        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540]">
+        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28]">
           <span>{t('اللون', 'Color')}</span>
           <select required value={newColor} onChange={(e) => setNewColor(e.target.value ? Number(e.target.value) : '')} className={select}>
             <option value="">—</option>
             {(colors.data ?? []).map((c) => <option key={c.id} value={c.id}>{pick(lang, c.nameAr, c.nameEn)}</option>)}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540] w-20">
+        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28] w-20">
           <span>{t('المخزون', 'Stock')}</span>
           <input type="number" min={0} value={newStock} onChange={(e) => setNewStock(e.target.value)} className={select} />
         </label>
-        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540] w-28">
+        <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28] w-28">
           <span>{t('سعر خاص (اختياري)', 'Own price (optional)')}</span>
           <input type="number" min={1} step="0.01" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className={select} />
         </label>
-        <button type="submit" disabled={busy || !newColor} className="px-4 py-2 rounded-lg bg-[#142b4a] text-white text-xs font-bold disabled:opacity-50 cursor-pointer">＋ {t('إضافة', 'Add')}</button>
+        <button type="submit" disabled={busy || !newColor} className="px-4 py-2 rounded-lg bg-[#141414] text-white text-xs font-bold disabled:opacity-50 cursor-pointer">＋ {t('إضافة', 'Add')}</button>
       </form>
     </section>
   );
@@ -336,18 +336,18 @@ function VariantRow({ variant, basePrice, onChanged }: { variant: AdminVariant; 
   const cell = 'border border-[#dedbd5] rounded-lg p-1.5 bg-white text-xs w-20';
   return (
     <tr>
-      <td className="py-2 font-bold text-[#142b4a]">{variant.size}</td>
+      <td className="py-2 font-bold text-[#141414]">{variant.size}</td>
       <td className="py-2">
         <span className="inline-flex items-center gap-1.5 text-xs">
           <span className="w-3 h-3 rounded-full border border-black/10" style={{ backgroundColor: variant.color.hex }} />
           {pick(lang, variant.color.nameAr, variant.color.nameEn)}
         </span>
       </td>
-      <td className="py-2 font-mono text-[11px] text-[#77808a]" dir="ltr">{variant.sku}</td>
+      <td className="py-2 font-mono text-[11px] text-[#77736c]" dir="ltr">{variant.sku}</td>
       <td className="py-2"><input type="number" min={0} value={stock} onChange={(e) => setStock(e.target.value)} className={`${cell} ${Number(stock) <= 3 ? 'text-[#a72f3e] font-bold' : ''}`} aria-label={t('المخزون', 'Stock')} /></td>
       <td className="py-2"><input type="number" min={1} step="0.01" value={price} placeholder={money(basePrice)} onChange={(e) => setPrice(e.target.value)} className={`${cell} w-28`} aria-label={t('سعر خاص', 'Own price')} /></td>
       <td className="py-2 text-end whitespace-nowrap">
-        <button type="button" disabled={!dirty || busy} onClick={() => void save()} className="px-3 py-1 rounded-lg bg-[#142b4a] text-white text-[11px] font-bold disabled:opacity-30 cursor-pointer">{t('حفظ', 'Save')}</button>
+        <button type="button" disabled={!dirty || busy} onClick={() => void save()} className="px-3 py-1 rounded-lg bg-[#141414] text-white text-[11px] font-bold disabled:opacity-30 cursor-pointer">{t('حفظ', 'Save')}</button>
         <button type="button" onClick={() => void remove()} className="ms-1.5 px-3 py-1 rounded-lg border border-[#efc9c9] bg-[#fff7f7] text-[#a34c4c] text-[11px] font-bold cursor-pointer">{t('حذف', 'Delete')}</button>
       </td>
     </tr>
@@ -398,36 +398,36 @@ function Photos({ product, onChanged }: { product: AdminProduct; onChanged: () =
   return (
     <section className={`${ui.card} p-5 sm:p-6 space-y-4`}>
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-serif font-bold text-[#142b4a]">{t('صور المنتج', 'Product photos')}</h3>
-        <span className="text-xs text-[#77808b]">{product.images.length} / {MAX_IMAGES}</span>
+        <h3 className="text-lg font-serif font-bold text-[#141414]">{t('صور المنتج', 'Product photos')}</h3>
+        <span className="text-xs text-[#77736c]">{product.images.length} / {MAX_IMAGES}</span>
       </div>
-      <p className="text-xs text-[#79808b]">{t('أول صورة هي الصورة الرئيسية في المتجر. JPG أو PNG أو WebP حتى 5 ميجابايت.', 'The first photo is the main one in the shop. JPG, PNG or WebP up to 5 MB.')}</p>
+      <p className="text-xs text-[#77736c]">{t('أول صورة هي الصورة الرئيسية في المتجر. JPG أو PNG أو WebP حتى 5 ميجابايت.', 'The first photo is the main one in the shop. JPG, PNG or WebP up to 5 MB.')}</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
         {product.images.map((img, i) => (
-          <figure key={img.id} className="relative rounded-xl overflow-hidden border border-[#e8dfd1] bg-[#f7f3eb] aspect-[3/4]">
+          <figure key={img.id} className="relative rounded-xl overflow-hidden border border-[#e6e3dd] bg-[#f5f3ef] aspect-[3/4]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={img.srcSet.split(', ')[0]?.split(' ')[0] || img.url} alt={pick(lang, img.altAr, img.altEn)} className="w-full h-full object-cover" />
-            {i === 0 && <span className="absolute top-1.5 start-1.5 px-2 py-0.5 rounded-full bg-[#b99664] text-white text-[10px] font-bold">{t('رئيسية', 'Main')}</span>}
+            {i === 0 && <span className="absolute top-1.5 start-1.5 px-2 py-0.5 rounded-full bg-[#7a6b58] text-white text-[10px] font-bold">{t('رئيسية', 'Main')}</span>}
             <button type="button" onClick={() => void remove(img.id)} aria-label={t('حذف الصورة', 'Delete photo')}
-              className="absolute top-1.5 end-1.5 w-7 h-7 rounded-full bg-[#142b4a]/85 text-white text-xs hover:bg-red-700 cursor-pointer">✕</button>
+              className="absolute top-1.5 end-1.5 w-7 h-7 rounded-full bg-[#141414]/85 text-white text-xs hover:bg-red-700 cursor-pointer">✕</button>
           </figure>
         ))}
-        {uploading > 0 && Array.from({ length: uploading }).map((_, i) => <div key={i} className="rounded-xl bg-[#f1ebe0] aspect-[3/4] animate-pulse" />)}
+        {uploading > 0 && Array.from({ length: uploading }).map((_, i) => <div key={i} className="rounded-xl bg-[#f1efeb] aspect-[3/4] animate-pulse" />)}
       </div>
 
       {!full && (
-        <div className="flex flex-wrap items-end gap-3 pt-3 border-t border-[#efe9df]">
-          <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540]">
+        <div className="flex flex-wrap items-end gap-3 pt-3 border-t border-[#eeebe6]">
+          <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28]">
             <span>{t('وصف الصورة بالعربي (اختياري)', 'Arabic alt text (optional)')}</span>
             <input value={altAr} maxLength={150} onChange={(e) => setAltAr(e.target.value)} className="border border-[#dedbd5] rounded-lg p-2 text-xs" />
           </label>
-          <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2d3540]">
+          <label className="flex flex-col gap-1 text-[11px] font-bold text-[#2a2a28]">
             <span>{t('وصف الصورة بالإنجليزي (اختياري)', 'English alt text (optional)')}</span>
             <input value={altEn} maxLength={150} dir="ltr" onChange={(e) => setAltEn(e.target.value)} className="border border-[#dedbd5] rounded-lg p-2 text-xs" />
           </label>
           <input ref={fileRef} type="file" multiple accept="image/jpeg,image/png,image/webp" onChange={(e) => void upload(e)} className="hidden" />
-          <button type="button" disabled={uploading > 0} onClick={() => fileRef.current?.click()} className="px-5 py-2.5 rounded-lg bg-[#142b4a] text-white text-xs font-bold disabled:opacity-60 cursor-pointer">
+          <button type="button" disabled={uploading > 0} onClick={() => fileRef.current?.click()} className="px-5 py-2.5 rounded-lg bg-[#141414] text-white text-xs font-bold disabled:opacity-60 cursor-pointer">
             {uploading > 0 ? t('جارٍ الرفع…', 'Uploading…') : `＋ ${t('رفع صور', 'Upload photos')}`}
           </button>
         </div>

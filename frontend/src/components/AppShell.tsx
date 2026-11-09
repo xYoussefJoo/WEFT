@@ -15,7 +15,7 @@ import ProductDetailsView from '@/components/views/ProductDetailsView';
 
 // Home, shop and product pages ship with the first load; the rest (and the whole dashboard)
 // download only when opened, so shoppers never pay for admin code.
-const ViewLoading = () => <div className="max-w-6xl mx-auto my-10 px-4 h-96 rounded-2xl bg-[#f7f3eb] animate-pulse" aria-busy="true" />;
+const ViewLoading = () => <div className="max-w-6xl mx-auto my-10 px-4 h-96 rounded-2xl bg-[#f5f3ef] animate-pulse" aria-busy="true" />;
 const CartView = dynamic(() => import('@/components/views/CartView'), { loading: ViewLoading });
 const OrdersView = dynamic(() => import('@/components/views/OrdersView'), { loading: ViewLoading });
 const TrackOrderView = dynamic(() => import('@/components/views/TrackOrderView'), { loading: ViewLoading });

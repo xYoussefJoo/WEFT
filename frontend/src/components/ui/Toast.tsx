@@ -59,14 +59,14 @@ export default function Toast() {
       aria-atomic="true"
     >
       <div
-        className={`pointer-events-auto flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-[#f2e4d0] border border-[#c9ad84] border-s-4 shadow-xl text-[#142b4a] ${
-          isError ? 'border-s-[#a34c3c]' : 'border-s-[#a98552]'
+        className={`pointer-events-auto flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-[#f1efeb] border border-[#a39b90] border-s-4 shadow-xl text-[#141414] ${
+          isError ? 'border-s-[#a34c3c]' : 'border-s-[#6b5d4c]'
         }`}
         role="status"
       >
         <span
           className={`w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-sm text-white flex-shrink-0 ${
-            isError ? 'bg-[#a34c3c]' : 'bg-[#142b4a]'
+            isError ? 'bg-[#a34c3c]' : 'bg-[#141414]'
           }`}
           aria-hidden="true"
         >
@@ -74,7 +74,7 @@ export default function Toast() {
         </span>
 
         <div className="flex-1 min-w-0">
-          <strong className="block text-xs font-bold text-[#142b4a]">
+          <strong className="block text-xs font-bold text-[#141414]">
             {isError ? t('تنبيه', 'Notice') : t('تم بنجاح', 'Success')}
           </strong>
           <span className="block text-[11px] text-[#5d5b57] leading-relaxed break-words">
@@ -86,7 +86,7 @@ export default function Toast() {
           {toast.showCartLink && (
             <button
               type="button"
-              className="bg-[#142b4a] hover:bg-[#1f3d65] text-white text-[11px] font-bold px-2.5 py-1.5 rounded-md transition-colors cursor-pointer whitespace-nowrap"
+              className="bg-[#141414] hover:bg-[#2b2926] text-white text-[11px] font-bold px-2.5 py-1.5 rounded-md transition-colors cursor-pointer whitespace-nowrap"
               onClick={handleViewCart}
             >
               {t('عرض السلة', 'View cart')}
@@ -95,7 +95,7 @@ export default function Toast() {
 
           <button
             type="button"
-            className="text-[#142b4a] hover:opacity-75 p-1 text-xl leading-none cursor-pointer"
+            className="text-[#141414] hover:opacity-75 p-1 text-xl leading-none cursor-pointer"
             aria-label={t('إغلاق الإشعار', 'Dismiss notification')}
             onClick={handleDismiss}
           >

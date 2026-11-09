@@ -58,7 +58,7 @@ export default function AdminCategories() {
       <PageHeader
         eyebrow="CATEGORIES"
         title={t('الأقسام', 'Categories')}
-        description={t('قسم رئيسي ثم أقسام فرعية. أضيفي القسم أولاً ثم أضيفي إليه المنتجات.', 'A main category, then sub-categories. Create the category first, then add products to it.')}
+        description={t('قسم رئيسي ثم أقسام فرعية. أضف القسم أولاً ثم أضف إليه المنتجات.', 'A main category, then sub-categories. Create the category first, then add products to it.')}
         action={<Button onClick={() => setEditing('new')}>＋ {t('قسم جديد', 'New category')}</Button>}
       />
 
@@ -71,20 +71,20 @@ export default function AdminCategories() {
       ) : (
         <section className={`${ui.card} p-4 sm:p-5 grid gap-2.5`}>
           {all.map((c) => (
-            <div key={c.id} className={`border border-[#eae6df] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#fcfaf7] transition-colors ${c.parentId ? 'sm:ms-8' : ''}`}>
+            <div key={c.id} className={`border border-[#eae6df] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-[#faf9f7] transition-colors ${c.parentId ? 'sm:ms-8' : ''}`}>
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-11 h-11 rounded-xl bg-[#f1ece4] overflow-hidden shrink-0 flex items-center justify-center">
+                <div className="w-11 h-11 rounded-xl bg-[#f1efeb] overflow-hidden shrink-0 flex items-center justify-center">
                   {c.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={c.imageUrl} alt="" className="w-full h-full object-cover" />
-                  ) : <span className="text-[#b99664]" aria-hidden="true">✦</span>}
+                  ) : <span className="text-[#7a6b58]" aria-hidden="true">✦</span>}
                 </div>
                 <div className="min-w-0">
-                  <b className="block text-sm font-bold text-[#142b4a] truncate">
+                  <b className="block text-sm font-bold text-[#141414] truncate">
                     {c.parentId ? '↳ ' : ''}{pick(lang, c.nameAr, c.nameEn)}
-                    {!c.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1ece4] text-[#77808a] align-middle">{t('مخفي', 'Hidden')}</span>}
+                    {!c.isVisible && <span className="ms-2 text-[10px] px-2 py-0.5 rounded-full bg-[#f1efeb] text-[#77736c] align-middle">{t('مخفي', 'Hidden')}</span>}
                   </b>
-                  <small className="block text-xs text-[#858b91] mt-0.5">
+                  <small className="block text-xs text-[#8a867f] mt-0.5">
                     {c.parentId ? t('قسم فرعي', 'Subcategory') : t('قسم رئيسي', 'Main category')} · {c.productCount} {t('منتج', 'products')} · <span dir="ltr">{c.slug}</span>
                   </small>
                 </div>
@@ -140,7 +140,7 @@ function CategoryForm({ category, parents, onSaved }: { category: AdminCategory 
     try {
       if (category) await updateCategory(category.id, body);
       else await createCategory(body);
-      onSaved(category ? t('تم تحديث القسم', 'Category updated') : t('تم إنشاء القسم. أضيفي إليه منتجات الآن', 'Category created. Add products to it now'));
+      onSaved(category ? t('تم تحديث القسم', 'Category updated') : t('تم إنشاء القسم. أضف إليه منتجات الآن', 'Category created. Add products to it now'));
     } catch (err) {
       setError(err);
     } finally {
@@ -171,8 +171,8 @@ function CategoryForm({ category, parents, onSaved }: { category: AdminCategory 
       <Field label={t('الترتيب في القائمة', 'Order in the menu')}>
         <input type="number" min={0} max={999} value={f.sortOrder} onChange={(e) => setF({ ...f, sortOrder: Number(e.target.value) || 0 })} className={ui.input} />
       </Field>
-      <label className="flex items-center gap-2 text-sm font-bold text-[#2d3540] cursor-pointer sm:pt-6">
-        <input type="checkbox" checked={f.isVisible} onChange={(e) => setF({ ...f, isVisible: e.target.checked })} className="accent-[#142b4a] w-4 h-4" />
+      <label className="flex items-center gap-2 text-sm font-bold text-[#2a2a28] cursor-pointer sm:pt-6">
+        <input type="checkbox" checked={f.isVisible} onChange={(e) => setF({ ...f, isVisible: e.target.checked })} className="accent-[#141414] w-4 h-4" />
         <span>{t('ظاهر في المتجر', 'Shown in the shop')}</span>
       </label>
 
@@ -182,7 +182,7 @@ function CategoryForm({ category, parents, onSaved }: { category: AdminCategory 
         </p>
       ) : null}
 
-      <div className="sm:col-span-2 flex justify-end gap-2 pt-2 border-t border-[#efe9df]">
+      <div className="sm:col-span-2 flex justify-end gap-2 pt-2 border-t border-[#eeebe6]">
         <Button variant="secondary" onClick={() => modal?.requestClose()}>{t('إلغاء', 'Cancel')}</Button>
         <Button type="submit" busy={busy}>{category ? t('حفظ التعديل', 'Save changes') : t('حفظ القسم', 'Save category')}</Button>
       </div>

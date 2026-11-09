@@ -33,20 +33,20 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
     }
   };
 
-  if (!data) return <div className="h-96 rounded-2xl bg-[#f7f3eb] animate-pulse" />;
+  if (!data) return <div className="h-96 rounded-2xl bg-[#f5f3ef] animate-pulse" />;
 
   const cell = 'border border-[#dedbd5] rounded-lg p-1.5 bg-white text-xs w-20';
   return (
-    <section className="bg-white p-6 rounded-2xl border border-[#e9e4dc] shadow-2xs space-y-4">
+    <section className="bg-white p-6 rounded-2xl border border-[#e8e6e1] shadow-2xs space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-[#79808b]">{t('رسوم التوصيل تُضاف لكل طلب حسب المحافظة. المحافظات غير المفعلة لا تظهر للعملاء.', 'The fee is added to each order by governorate. Inactive ones are hidden from customers.')}</p>
-        <button type="button" disabled={busy || changed.length === 0 || invalid} onClick={() => void save()} className="px-6 py-2.5 rounded-xl bg-[#142b4a] text-white text-xs font-bold disabled:opacity-40 cursor-pointer">
+        <p className="text-xs text-[#77736c]">{t('رسوم التوصيل تُضاف لكل طلب حسب المحافظة. المحافظات غير المفعلة لا تظهر للعملاء.', 'The fee is added to each order by governorate. Inactive ones are hidden from customers.')}</p>
+        <button type="button" disabled={busy || changed.length === 0 || invalid} onClick={() => void save()} className="px-6 py-2.5 rounded-xl bg-[#141414] text-white text-xs font-bold disabled:opacity-40 cursor-pointer">
           {busy ? '…' : t(`حفظ (${changed.length})`, `Save (${changed.length})`)}
         </button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="text-[11px] text-[#77808b] uppercase border-b border-[#efe9df]">
+          <thead className="text-[11px] text-[#77736c] uppercase border-b border-[#eeebe6]">
             <tr>
               <th className="py-2 text-start">{t('المحافظة', 'Governorate')}</th>
               <th className="py-2 text-start">{t('الرسوم (ج.م)', 'Fee (EGP)')}</th>
@@ -55,17 +55,17 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
               <th className="py-2 text-start">{t('مفعلة', 'Active')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#f1ece4]">
+          <tbody className="divide-y divide-[#f1efeb]">
             {rows.map((z) => (
               <tr key={z.id} className={z.isActive ? '' : 'opacity-60'}>
-                <td className="py-2 font-bold text-[#142b4a]">{pick(lang, z.nameAr, z.nameEn)}</td>
+                <td className="py-2 font-bold text-[#141414]">{pick(lang, z.nameAr, z.nameEn)}</td>
                 <td className="py-2"><input type="number" min={0} step="0.5" value={z.fee} onChange={(e) => set(z.id, { fee: Number(e.target.value) })} className={cell} aria-label={t('الرسوم', 'Fee')} /></td>
                 <td className="py-2"><input type="number" min={0} max={60} value={z.etaDaysMin} onChange={(e) => set(z.id, { etaDaysMin: Number(e.target.value) })} className={cell} aria-label={t('أقل أيام', 'Min days')} /></td>
                 <td className="py-2">
                   <input type="number" min={0} max={60} value={z.etaDaysMax} onChange={(e) => set(z.id, { etaDaysMax: Number(e.target.value) })}
                     className={`${cell} ${z.etaDaysMax < z.etaDaysMin ? 'border-red-400' : ''}`} aria-label={t('أكثر أيام', 'Max days')} />
                 </td>
-                <td className="py-2"><input type="checkbox" checked={z.isActive} onChange={(e) => set(z.id, { isActive: e.target.checked })} className="accent-[#142b4a] w-4 h-4" aria-label={t('مفعلة', 'Active')} /></td>
+                <td className="py-2"><input type="checkbox" checked={z.isActive} onChange={(e) => set(z.id, { isActive: e.target.checked })} className="accent-[#141414] w-4 h-4" aria-label={t('مفعلة', 'Active')} /></td>
               </tr>
             ))}
           </tbody>
@@ -80,13 +80,13 @@ export default function AdminZones() {
   const { data, error, reload, version } = useApi(getAdminZones, []);
   if (error) {
     return (
-      <div className="bg-white p-6 rounded-2xl border border-[#e9e4dc] space-y-2">
+      <div className="bg-white p-6 rounded-2xl border border-[#e8e6e1] space-y-2">
         <p className="text-sm font-bold text-[#a72f3e]">{errorText(error, t)}</p>
-        <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#142b4a] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
+        <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#141414] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
       </div>
     );
   }
-  if (!data) return <div className="h-96 rounded-2xl bg-[#f7f3eb] animate-pulse" />;
+  if (!data) return <div className="h-96 rounded-2xl bg-[#f5f3ef] animate-pulse" />;
   // A fresh editor for every saved/loaded copy, so it never keeps stale edits.
   return <AdminZonesEditor key={version} data={data} reload={reload} />;
 }

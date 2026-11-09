@@ -2,7 +2,7 @@
 
 export const navigationLabels: Record<string, [string, string]> = {
   home: ['الرئيسية', 'Home'],
-  shop: ['تسوقي', 'Shop'],
+  shop: ['تسوق', 'Shop'],
   orders: ['طلباتي', 'My orders'],
   cart: ['السلة', 'Cart'],
   admin: ['الإدارة', 'Admin'],

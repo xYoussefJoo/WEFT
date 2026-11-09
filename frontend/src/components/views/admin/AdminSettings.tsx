@@ -12,13 +12,13 @@ export default function AdminSettings() {
   const { data, error, reload } = useApi(getAdminSiteSettings, []);
   if (error) {
     return (
-      <div className="bg-white p-6 rounded-2xl border border-[#e9e4dc] space-y-2">
+      <div className="bg-white p-6 rounded-2xl border border-[#e8e6e1] space-y-2">
         <p className="text-sm font-bold text-[#a72f3e]">{errorText(error, t)}</p>
-        <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#142b4a] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
+        <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#141414] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
       </div>
     );
   }
-  if (!data) return <div className="h-96 rounded-2xl bg-[#f7f3eb] animate-pulse" />;
+  if (!data) return <div className="h-96 rounded-2xl bg-[#f5f3ef] animate-pulse" />;
   return <SettingsForm initial={data} />;
 }
 
@@ -60,10 +60,10 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
     }
   };
 
-  const input = 'w-full border border-[#dedbd5] rounded-xl p-3 bg-white text-[#263548] text-sm focus:outline-none focus:ring-2 focus:ring-[#b99664]';
-  const box = 'bg-white p-6 sm:p-8 rounded-2xl border border-[#e9e4dc] shadow-2xs space-y-4';
+  const input = 'w-full border border-[#dedbd5] rounded-xl p-3 bg-white text-[#2b2926] text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58]';
+  const box = 'bg-white p-6 sm:p-8 rounded-2xl border border-[#e8e6e1] shadow-2xs space-y-4';
   const field = (label: [string, string], value: string | null | undefined, onChange: (v: string) => void, opts: { ltr?: boolean; type?: string; max?: number; area?: boolean } = {}) => (
-    <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+    <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
       <span>{t(...label)}</span>
       {opts.area ? (
         <textarea value={value ?? ''} maxLength={opts.max ?? 500} onChange={(e) => onChange(e.target.value)} className={`${input} min-h-[70px]`} dir={opts.ltr ? 'ltr' : undefined} />
@@ -76,7 +76,7 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <section className={box}>
-        <h3 className="text-base sm:text-lg font-serif font-bold text-[#142b4a]">{t('شريط الإعلان', 'Announcement bar')}</h3>
+        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('شريط الإعلان', 'Announcement bar')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['النص بالعربي', 'Arabic text'], s.announcementAr, (v) => set('announcementAr', v))}
           {field(['النص بالإنجليزي', 'English text'], s.announcementEn, (v) => set('announcementEn', v), { ltr: true })}
@@ -84,8 +84,8 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
       </section>
 
       <section className={box}>
-        <h3 className="text-base sm:text-lg font-serif font-bold text-[#142b4a]">{t('الواجهة الرئيسية', 'Home hero')}</h3>
-        <p className="text-xs text-[#79808b]">{t('اتركي الحقل فارغًا لاستخدام النص الافتراضي.', 'Leave a field empty to keep the built-in text.')}</p>
+        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('الواجهة الرئيسية', 'Home hero')}</h3>
+        <p className="text-xs text-[#77736c]">{t('اترك الحقل فارغًا لاستخدام النص الافتراضي.', 'Leave a field empty to keep the built-in text.')}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['العنوان بالعربي', 'Title (Arabic)'], s.hero.titleAr, (v) => set('hero', { ...s.hero, titleAr: v }))}
           {field(['العنوان بالإنجليزي', 'Title (English)'], s.hero.titleEn, (v) => set('hero', { ...s.hero, titleEn: v }), { ltr: true })}
@@ -98,19 +98,19 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
       </section>
 
       <section className={box}>
-        <h3 className="text-base sm:text-lg font-serif font-bold text-[#142b4a]">{t('الكولكشن الجديد', 'New collection banner')}</h3>
+        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('الكولكشن الجديد', 'New collection banner')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['العنوان بالعربي', 'Title (Arabic)'], s.collection.titleAr, (v) => set('collection', { ...s.collection, titleAr: v }))}
           {field(['العنوان بالإنجليزي', 'Title (English)'], s.collection.titleEn, (v) => set('collection', { ...s.collection, titleEn: v }), { ltr: true })}
         </div>
-        <label className="flex items-center gap-3 cursor-pointer text-sm font-bold text-[#2d3540]">
-          <input type="checkbox" checked={s.collection.enabled} onChange={(e) => set('collection', { ...s.collection, enabled: e.target.checked })} className="accent-[#142b4a] w-4 h-4" />
+        <label className="flex items-center gap-3 cursor-pointer text-sm font-bold text-[#2a2a28]">
+          <input type="checkbox" checked={s.collection.enabled} onChange={(e) => set('collection', { ...s.collection, enabled: e.target.checked })} className="accent-[#141414] w-4 h-4" />
           <span>{t('إظهار القسم في الرئيسية', 'Show it on the home page')}</span>
         </label>
       </section>
 
       <section className={box}>
-        <h3 className="text-base sm:text-lg font-serif font-bold text-[#142b4a]">{t('بيانات التواصل والروابط', 'Contacts & social links')}</h3>
+        <h3 className="text-base sm:text-lg font-serif font-bold text-[#141414]">{t('بيانات التواصل والروابط', 'Contacts & social links')}</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {field(['رقم الهاتف', 'Phone number'], s.contact.phone, (v) => set('contact', { ...s.contact, phone: v }), { ltr: true, type: 'tel', max: 30 })}
           {field(['واتساب بكود الدولة (أرقام فقط، مثل 201012345678)', 'WhatsApp with country code (digits, e.g. 201012345678)'], s.contact.whatsApp, (v) => set('contact', { ...s.contact, whatsApp: v }), { ltr: true, max: 20 })}
@@ -130,7 +130,7 @@ function SettingsForm({ initial }: { initial: SiteContent }) {
         </p>
       ) : null}
 
-      <button type="submit" disabled={busy} className="px-8 py-3 rounded-xl bg-[#142b4a] hover:bg-[#1e3a61] disabled:opacity-60 text-white text-sm font-bold transition-colors cursor-pointer">
+      <button type="submit" disabled={busy} className="px-8 py-3 rounded-xl bg-[#141414] hover:bg-[#2b2926] disabled:opacity-60 text-white text-sm font-bold transition-colors cursor-pointer">
         {busy ? '…' : t('حفظ الإعدادات', 'Save settings')}
       </button>
     </form>

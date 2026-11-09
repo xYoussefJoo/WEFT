@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --cream: #f7f3eb;
-  --beige: #e7dac5;
-  --navy: #142b4a;
-  --gold: #b99664;
-  --ink: #2d3540;
-  --muted: #77808b;
-  --line: #e8e3d9;
-  --white: #ffffff;
+  /* WEFT — The Thread Co.: monochrome ink on warm white, stone accent (from the prototype). */
+  --ink: #2a2a28;
+  --ink-strong: #141414;
+  --stone: #7a6b58;
+  --muted: #77736c;
+  --line: #e6e3dd;
+  --paper: #faf9f7;
 }
 
 * {
@@ -16,7 +15,7 @@
 }
 
 ::selection {
-  background-color: #b99664;
+  background-color: #7a6b58;
   color: #ffffff;
 }
 
@@ -34,7 +33,7 @@ body {
 
 body {
   margin: 0;
-  background-color: #fcfaf7;
+  background-color: #faf9f7;
   color: var(--ink);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -55,20 +54,20 @@ html[lang="en"] * {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f7f3eb;
+  background: #f5f3ef;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cdbb9e;
+  background: #cfcac2;
   border-radius: 9999px;
-  border: 2px solid #f7f3eb;
+  border: 2px solid #f5f3ef;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b99664;
+  background: #7a6b58;
 }
 
 /* Global Focus Ring */
 *:focus-visible {
-  outline: 2px solid #b99664;
+  outline: 2px solid #7a6b58;
   outline-offset: 2px;
 }
 

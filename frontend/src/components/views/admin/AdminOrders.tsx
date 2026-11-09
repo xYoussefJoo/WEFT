@@ -38,14 +38,14 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
     () => getAdminOrders({ status: status ? [status] : undefined, q: q || undefined, page, pageSize: 20 }),
     [status, q, page],
   );
-  const select = 'text-xs font-bold border border-[#e8e3d9] rounded-xl px-3 py-2 bg-white text-[#142b4a] cursor-pointer focus:ring-2 focus:ring-[#b99664] outline-none';
+  const select = 'text-xs font-bold border border-[#e6e3dd] rounded-xl px-3 py-2 bg-white text-[#141414] cursor-pointer focus:ring-2 focus:ring-[#7a6b58] outline-none';
 
   return (
-    <section className="bg-white rounded-3xl border border-[#e8e3d9] shadow-xs overflow-hidden">
-      <div className="p-6 sm:p-7 border-b border-[#e8e3d9] bg-[#faf7f2]/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <section className="bg-white rounded-3xl border border-[#e6e3dd] shadow-xs overflow-hidden">
+      <div className="p-6 sm:p-7 border-b border-[#e6e3dd] bg-[#f8f7f4]/50 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h3 className="text-xl font-serif font-bold text-[#142b4a]">{t('سجل الطلبات', 'Order management')}</h3>
-          <p className="text-xs text-[#77808b] mt-0.5">{data && t(`عدد النتائج: ${data.totalCount}`, `${data.totalCount} orders`)}</p>
+          <h3 className="text-xl font-serif font-bold text-[#141414]">{t('سجل الطلبات', 'Order management')}</h3>
+          <p className="text-xs text-[#77736c] mt-0.5">{data && t(`عدد النتائج: ${data.totalCount}`, `${data.totalCount} orders`)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <select aria-label={t('الحالة', 'Status')} value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | '')} className={select}>
@@ -60,14 +60,14 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
       {error ? (
         <div className="p-6 space-y-2">
           <p className="text-sm font-bold text-[#a72f3e]">{errorText(error, t)}</p>
-          <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#142b4a] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
+          <button type="button" onClick={reload} className="px-4 py-2 rounded-lg bg-[#141414] text-white text-xs font-bold cursor-pointer">{t('إعادة المحاولة', 'Try again')}</button>
         </div>
       ) : !data ? (
-        <div className="m-6 h-40 rounded-xl bg-[#f7f3eb] animate-pulse" />
+        <div className="m-6 h-40 rounded-xl bg-[#f5f3ef] animate-pulse" />
       ) : data.items.length > 0 ? (
         <div className={`overflow-x-auto ${loading ? 'opacity-60' : ''}`}>
           <table className="w-full text-sm text-start">
-            <thead className="bg-[#f7f3eb] text-[#77808b] text-[11px] uppercase tracking-wider border-b border-[#e8dfd1]">
+            <thead className="bg-[#f5f3ef] text-[#77736c] text-[11px] uppercase tracking-wider border-b border-[#e6e3dd]">
               <tr>
                 <th className="px-5 py-3.5 text-start font-bold">#</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('العميل', 'Customer')}</th>
@@ -75,26 +75,26 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
                 <th className="px-5 py-3.5 text-start font-bold">{t('الحالة', 'Status')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#e8e3d9]">
+            <tbody className="divide-y divide-[#e6e3dd]">
               {data.items.map((o) => (
-                <tr key={o.id} onClick={() => onOpen(o.id)} className="hover:bg-[#faf7f2] transition-colors duration-150 cursor-pointer">
-                  <td className="px-5 py-4 font-mono text-xs text-[#142b4a] font-bold" dir="ltr">
+                <tr key={o.id} onClick={() => onOpen(o.id)} className="hover:bg-[#f8f7f4] transition-colors duration-150 cursor-pointer">
+                  <td className="px-5 py-4 font-mono text-xs text-[#141414] font-bold" dir="ltr">
                     {o.number}
-                    <div className="text-[10px] text-[#77808b] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</div>
+                    <div className="text-[10px] text-[#77736c] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-GB')}</div>
                   </td>
                   <td className="px-5 py-4">
-                    <div className="font-bold text-[#142b4a]">{o.customerName}</div>
-                    <div className="text-xs text-[#77808b] mt-0.5" dir="ltr">{o.phone}</div>
-                    <div className="text-xs text-[#77808b]">{pick(lang, o.zoneNameAr, o.zoneNameEn)}</div>
+                    <div className="font-bold text-[#141414]">{o.customerName}</div>
+                    <div className="text-xs text-[#77736c] mt-0.5" dir="ltr">{o.phone}</div>
+                    <div className="text-xs text-[#77736c]">{pick(lang, o.zoneNameAr, o.zoneNameEn)}</div>
                   </td>
-                  <td className="px-5 py-4 font-extrabold text-[#b99664]">
+                  <td className="px-5 py-4 font-extrabold text-[#7a6b58]">
                     {money(o.total)}
                     <div className={`text-[11px] font-bold ${o.paymentStatus === 'Paid' ? 'text-green-700' : 'text-amber-800'}`}>
                       {o.paymentStatus === 'Paid' ? t('مدفوع', 'Paid') : t('غير مدفوع', 'Unpaid')}
                     </div>
                   </td>
                   <td className="px-5 py-4">
-                    <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold bg-[#f7f3eb] text-[#142b4a] border border-[#e8dfd1]">{t(...statusLabel[o.status])}</span>
+                    <span className="inline-block px-3 py-1.5 rounded-full text-xs font-bold bg-[#f5f3ef] text-[#141414] border border-[#e6e3dd]">{t(...statusLabel[o.status])}</span>
                   </td>
                 </tr>
               ))}
@@ -102,16 +102,16 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
           </table>
           {data.totalPages > 1 && (
             <nav className="flex items-center justify-center gap-3 p-4">
-              <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="px-4 py-1.5 rounded-lg border border-[#cdbb9e] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('السابق', 'Previous')}</button>
-              <span className="text-xs text-[#77808b]">{data.page} / {data.totalPages}</span>
-              <button type="button" disabled={page >= data.totalPages} onClick={() => setPage((n) => n + 1)} className="px-4 py-1.5 rounded-lg border border-[#cdbb9e] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('التالي', 'Next')}</button>
+              <button type="button" disabled={page <= 1} onClick={() => setPage((n) => n - 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('السابق', 'Previous')}</button>
+              <span className="text-xs text-[#77736c]">{data.page} / {data.totalPages}</span>
+              <button type="button" disabled={page >= data.totalPages} onClick={() => setPage((n) => n + 1)} className="px-4 py-1.5 rounded-lg border border-[#cfcac2] text-xs font-bold disabled:opacity-40 cursor-pointer">{t('التالي', 'Next')}</button>
             </nav>
           )}
         </div>
       ) : (
         <div className="py-20 text-center space-y-3">
           <span className="text-5xl block select-none">📋</span>
-          <p className="text-base font-bold text-[#142b4a]">{t('لا توجد طلبات هنا', 'No orders here')}</p>
+          <p className="text-base font-bold text-[#141414]">{t('لا توجد طلبات هنا', 'No orders here')}</p>
         </div>
       )}
     </section>
@@ -130,15 +130,15 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
 
   if (error) {
     return (
-      <section className="bg-white rounded-2xl border border-[#e8e3d9] p-6 space-y-3">
+      <section className="bg-white rounded-2xl border border-[#e6e3dd] p-6 space-y-3">
         <p className="text-sm font-bold text-[#a72f3e]">
           {error instanceof ApiError && error.status === 404 ? t('الطلب غير موجود', 'Order not found') : errorText(error, t)}
         </p>
-        <button type="button" onClick={onBack} className="px-4 py-2 rounded-lg border border-[#cdbb9e] text-xs font-bold cursor-pointer">{t('← كل الطلبات', '← All orders')}</button>
+        <button type="button" onClick={onBack} className="px-4 py-2 rounded-lg border border-[#cfcac2] text-xs font-bold cursor-pointer">{t('← كل الطلبات', '← All orders')}</button>
       </section>
     );
   }
-  if (!order) return <div className="h-64 rounded-2xl bg-[#f7f3eb] animate-pulse" />;
+  if (!order) return <div className="h-64 rounded-2xl bg-[#f5f3ef] animate-pulse" />;
 
   const move = async (to: OrderStatus) => {
     if (to === 'Cancelled' && !(await confirm({
@@ -162,51 +162,51 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
 
   const date = (iso: string) => new Date(iso).toLocaleString(lang === 'ar' ? 'ar-EG' : 'en-GB', { dateStyle: 'medium', timeStyle: 'short' });
   const next = nextStatuses(order.status);
-  const card = 'bg-white rounded-2xl border border-[#e8e3d9] p-6 shadow-2xs';
+  const card = 'bg-white rounded-2xl border border-[#e6e3dd] p-6 shadow-2xs';
 
   return (
     <div className="space-y-5">
-      <button type="button" onClick={onBack} className="text-xs font-bold text-[#142b4a] hover:text-[#b99664] cursor-pointer">{t('← كل الطلبات', '← All orders')}</button>
+      <button type="button" onClick={onBack} className="text-xs font-bold text-[#141414] hover:text-[#7a6b58] cursor-pointer">{t('← كل الطلبات', '← All orders')}</button>
 
       <div className={`${card} flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
         <div>
-          <h3 className="text-2xl font-serif font-bold text-[#142b4a]" dir="ltr">{order.number}</h3>
-          <p className="text-xs text-[#77808b]">{date(order.createdAt)}</p>
+          <h3 className="text-2xl font-serif font-bold text-[#141414]" dir="ltr">{order.number}</h3>
+          <p className="text-xs text-[#77736c]">{date(order.createdAt)}</p>
         </div>
-        <span className="self-start px-4 py-2 rounded-full text-sm font-bold bg-[#142b4a] text-white">{t(...statusLabel[order.status])}</span>
+        <span className="self-start px-4 py-2 rounded-full text-sm font-bold bg-[#141414] text-white">{t(...statusLabel[order.status])}</span>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="xl:col-span-2 space-y-5">
           {/* What was ordered */}
           <section className={`${card} space-y-3`}>
-                <h4 className="font-bold text-[#142b4a]">{t('القطع', 'Items')}</h4>
-                <div className="divide-y divide-[#efe9df]">
+                <h4 className="font-bold text-[#141414]">{t('القطع', 'Items')}</h4>
+                <div className="divide-y divide-[#eeebe6]">
                   {order.lines.map((l) => (
                     <div key={l.variantId} className="py-2.5 flex items-center justify-between gap-3 text-sm">
                       <span className="min-w-0">
-                        <b className="block text-[#142b4a] truncate">{pick(lang, l.productNameAr, l.productNameEn)}</b>
-                        <span className="text-xs text-[#77808b]">{l.size} · {pick(lang, l.colorNameAr, l.colorNameEn)} · {money(l.unitPrice)} × {l.qty}</span>
+                        <b className="block text-[#141414] truncate">{pick(lang, l.productNameAr, l.productNameEn)}</b>
+                        <span className="text-xs text-[#77736c]">{l.size} · {pick(lang, l.colorNameAr, l.colorNameEn)} · {money(l.unitPrice)} × {l.qty}</span>
                       </span>
-                      <b className="text-[#142b4a] shrink-0">{money(l.lineTotal)}</b>
+                      <b className="text-[#141414] shrink-0">{money(l.lineTotal)}</b>
                     </div>
                   ))}
                 </div>
-                <div className="pt-3 border-t border-[#e8dfd1] text-sm space-y-1">
+                <div className="pt-3 border-t border-[#e6e3dd] text-sm space-y-1">
                   <div className="flex justify-between"><span>{t('المنتجات', 'Subtotal')}</span><b>{money(order.subtotal)}</b></div>
                   <div className="flex justify-between"><span>{t('التوصيل', 'Delivery')}</span><b>{money(order.deliveryFee)}</b></div>
-                  <div className="flex justify-between text-base"><b>{t('الإجمالي', 'Total')}</b><b className="text-[#b99664]">{money(order.total)}</b></div>
+                  <div className="flex justify-between text-base"><b>{t('الإجمالي', 'Total')}</b><b className="text-[#7a6b58]">{money(order.total)}</b></div>
                 </div>
           </section>
 
           {/* History */}
           <section className={`${card} space-y-3`}>
-            <h4 className="font-bold text-[#142b4a]">{t('سجل الحالات', 'Status history')}</h4>
+            <h4 className="font-bold text-[#141414]">{t('سجل الحالات', 'Status history')}</h4>
             <ol className="space-y-2.5">
               {order.history.map((h, i) => (
-                <li key={i} className="text-sm flex flex-wrap justify-between gap-2 border-b border-[#f1ece4] pb-2 last:border-0">
-                  <span><b className="text-[#142b4a]">{t(...statusLabel[h.to])}</b>{h.note ? <span className="text-[#5e605b]"> — {h.note}</span> : null}</span>
-                  <span className="text-xs text-[#77808b]">{date(h.at)}{h.changedBy ? ` · ${h.changedBy}` : ''}</span>
+                <li key={i} className="text-sm flex flex-wrap justify-between gap-2 border-b border-[#f1efeb] pb-2 last:border-0">
+                  <span><b className="text-[#141414]">{t(...statusLabel[h.to])}</b>{h.note ? <span className="text-[#5d5a55]"> — {h.note}</span> : null}</span>
+                  <span className="text-xs text-[#77736c]">{date(h.at)}{h.changedBy ? ` · ${h.changedBy}` : ''}</span>
                 </li>
               ))}
             </ol>
@@ -216,14 +216,14 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
         <div className="space-y-5">
           {/* Customer */}
           <section className={`${card} space-y-2 text-sm`}>
-            <h4 className="font-bold text-[#142b4a]">{t('العميل', 'Customer')}</h4>
-            <p className="font-bold text-[#142b4a]">{order.customer.name}</p>
-            <a href={`tel:${order.customer.phone}`} className="block text-[#b99664] font-bold" dir="ltr">{order.customer.phone}</a>
-            {order.customer.email && <p className="text-xs text-[#5e605b] break-all" dir="ltr">{order.customer.email}</p>}
-            <p className="text-xs text-[#5e605b]">{pick(lang, order.zone.nameAr, order.zone.nameEn)} · {order.customer.city}</p>
-            <p className="text-xs text-[#5e605b] whitespace-pre-line">{order.customer.address}</p>
-            {order.customer.notes && <p className="text-xs italic text-[#77808b]">“{order.customer.notes}”</p>}
-            <p className="text-xs pt-2 border-t border-[#f1ece4]">
+            <h4 className="font-bold text-[#141414]">{t('العميل', 'Customer')}</h4>
+            <p className="font-bold text-[#141414]">{order.customer.name}</p>
+            <a href={`tel:${order.customer.phone}`} className="block text-[#7a6b58] font-bold" dir="ltr">{order.customer.phone}</a>
+            {order.customer.email && <p className="text-xs text-[#5d5a55] break-all" dir="ltr">{order.customer.email}</p>}
+            <p className="text-xs text-[#5d5a55]">{pick(lang, order.zone.nameAr, order.zone.nameEn)} · {order.customer.city}</p>
+            <p className="text-xs text-[#5d5a55] whitespace-pre-line">{order.customer.address}</p>
+            {order.customer.notes && <p className="text-xs italic text-[#77736c]">“{order.customer.notes}”</p>}
+            <p className="text-xs pt-2 border-t border-[#f1efeb]">
               {t('الدفع عند الاستلام', 'Cash on delivery')} · <b className={order.paymentStatus === 'Paid' ? 'text-green-700' : 'text-amber-800'}>{order.paymentStatus === 'Paid' ? t('مدفوع', 'Paid') : t('غير مدفوع', 'Unpaid')}</b>
             </p>
           </section>
@@ -231,13 +231,13 @@ function OrderDetail({ id, onBack }: { id: number; onBack: () => void }) {
           {/* Next step */}
           {next.length > 0 && (
             <section className={`${card} space-y-3`}>
-              <h4 className="font-bold text-[#142b4a]">{t('الخطوة التالية', 'Next step')}</h4>
+              <h4 className="font-bold text-[#141414]">{t('الخطوة التالية', 'Next step')}</h4>
               <input value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} placeholder={t('ملاحظة (اختياري)', 'Note (optional)')}
-                className="w-full border border-[#e8e3d9] rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#b99664]" />
+                className="w-full border border-[#e6e3dd] rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58]" />
               <div className="flex flex-wrap gap-2">
                 {next.map((s) => (
                   <button key={s} type="button" disabled={busy} onClick={() => void move(s)}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer disabled:opacity-50 ${s === 'Cancelled' ? 'border border-[#efc9c9] bg-[#fff7f7] text-[#a34c4c] hover:bg-rose-100' : 'bg-[#142b4a] text-white hover:bg-[#1e3a61]'}`}>
+                    className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer disabled:opacity-50 ${s === 'Cancelled' ? 'border border-[#efc9c9] bg-[#fff7f7] text-[#a34c4c] hover:bg-rose-100' : 'bg-[#141414] text-white hover:bg-[#2b2926]'}`}>
                     {s === 'Cancelled' ? t('إلغاء الطلب', 'Cancel order') : `→ ${t(...statusLabel[s])}`}
                   </button>
                 ))}

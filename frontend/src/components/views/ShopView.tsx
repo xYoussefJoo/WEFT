@@ -41,23 +41,23 @@ export default function ShopView() {
   const pill = (active: boolean) =>
     `px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 cursor-pointer ${
       active
-        ? 'bg-[#142b4a] text-white shadow-md shadow-[#142b4a]/20 scale-[1.02]'
-        : 'bg-white text-[#2d3540] border border-[#e8dfd1] hover:border-[#b99664] hover:bg-[#f7f3eb]'
+        ? 'bg-[#141414] text-white shadow-md shadow-[#141414]/20 scale-[1.02]'
+        : 'bg-white text-[#2a2a28] border border-[#e6e3dd] hover:border-[#7a6b58] hover:bg-[#f5f3ef]'
     }`;
 
   return (
     <section className="max-w-[1240px] mx-auto px-4 sm:px-6 py-12 space-y-8 animate-scale-in">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-[#e8dfd1] reveal-init">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-4 border-b border-[#e6e3dd] reveal-init">
         <div>
-          <span className="text-xs text-[#b99664] font-bold tracking-[0.2em] uppercase">COLLECTION</span>
-          <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#142b4a] mt-1">
+          <span className="text-xs text-[#7a6b58] font-bold tracking-[0.2em] uppercase">COLLECTION</span>
+          <h2 className="text-2xl sm:text-4xl font-serif font-bold text-[#141414] mt-1">
             {t('المجموعة الكاملة', 'The complete collection')}
           </h2>
-          <p className="text-xs sm:text-sm text-[#77808b] mt-1 min-h-[1.25rem]">
+          <p className="text-xs sm:text-sm text-[#77736c] mt-1 min-h-[1.25rem]">
             {data &&
               t(
-                `تصفحي ${data.totalCount} قطعة مختارة ومتاحة للطلب الفوري`,
+                `تصفح ${data.totalCount} قطعة مختارة ومتاحة للطلب الفوري`,
                 `Browsing ${data.totalCount} curated pieces available for immediate order`,
               )}
           </p>
@@ -71,15 +71,15 @@ export default function ShopView() {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('ابحثي عن قطعة…', 'Search pieces…')}
-            className="w-full sm:w-56 px-4 py-2.5 rounded-full bg-white border border-[#e8dfd1] text-sm focus:outline-none focus:border-[#b99664]"
+            placeholder={t('ابحث عن هودي…', 'Search pieces…')}
+            className="w-full sm:w-56 px-4 py-2.5 rounded-full bg-white border border-[#e6e3dd] text-sm focus:outline-none focus:border-[#7a6b58]"
           />
           <label className="sr-only" htmlFor="shop-sort">{t('الترتيب', 'Sort')}</label>
           <select
             id="shop-sort"
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
-            className="px-4 py-2.5 rounded-full bg-white border border-[#e8dfd1] text-sm font-bold text-[#142b4a] focus:outline-none focus:border-[#b99664] cursor-pointer"
+            className="px-4 py-2.5 rounded-full bg-white border border-[#e6e3dd] text-sm font-bold text-[#141414] focus:outline-none focus:border-[#7a6b58] cursor-pointer"
           >
             <option value="newest">{t('الأحدث', 'Newest')}</option>
             <option value="price_asc">{t('السعر: من الأقل', 'Price: low to high')}</option>
@@ -104,11 +104,11 @@ export default function ShopView() {
 
       {/* Product Grid */}
       {error ? (
-        <div className="text-center py-16 bg-white rounded-3xl border border-[#e8dfd1] p-10 space-y-4">
+        <div className="text-center py-16 bg-white rounded-3xl border border-[#e6e3dd] p-10 space-y-4">
           <p className="text-sm font-bold text-[#a72f3e]">{errorText(error, t)}</p>
           <button
             type="button"
-            className="px-6 py-2.5 rounded-full bg-[#142b4a] text-white text-xs font-bold hover:bg-[#b99664] transition-colors cursor-pointer"
+            className="px-6 py-2.5 rounded-full bg-[#141414] text-white text-xs font-bold hover:bg-[#7a6b58] transition-colors cursor-pointer"
             onClick={reload}
           >
             {t('إعادة المحاولة', 'Try again')}
@@ -117,11 +117,11 @@ export default function ShopView() {
       ) : loading && !data ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2" aria-busy="true">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="rounded-2xl bg-white border border-[#e8e3d9] overflow-hidden animate-pulse">
-              <div className="h-[290px] sm:h-[330px] bg-[#f7f3eb]" />
+            <div key={i} className="rounded-2xl bg-white border border-[#e6e3dd] overflow-hidden animate-pulse">
+              <div className="h-[290px] sm:h-[330px] bg-[#f5f3ef]" />
               <div className="p-5 space-y-3">
-                <div className="h-4 bg-[#f1ebe0] rounded w-3/4" />
-                <div className="h-4 bg-[#f1ebe0] rounded w-1/3" />
+                <div className="h-4 bg-[#f1efeb] rounded w-3/4" />
+                <div className="h-4 bg-[#f1efeb] rounded w-1/3" />
               </div>
             </div>
           ))}
@@ -142,18 +142,18 @@ export default function ShopView() {
                 type="button"
                 disabled={page <= 1 || loading}
                 onClick={() => setPage((p) => p - 1)}
-                className="px-5 py-2 rounded-full bg-white border border-[#e8dfd1] text-xs font-bold text-[#142b4a] hover:border-[#b99664] disabled:opacity-40 cursor-pointer disabled:cursor-default"
+                className="px-5 py-2 rounded-full bg-white border border-[#e6e3dd] text-xs font-bold text-[#141414] hover:border-[#7a6b58] disabled:opacity-40 cursor-pointer disabled:cursor-default"
               >
                 {t('السابق', 'Previous')}
               </button>
-              <span className="text-xs font-bold text-[#77808b]">
+              <span className="text-xs font-bold text-[#77736c]">
                 {t(`صفحة ${data.page} من ${data.totalPages}`, `Page ${data.page} of ${data.totalPages}`)}
               </span>
               <button
                 type="button"
                 disabled={page >= data.totalPages || loading}
                 onClick={() => setPage((p) => p + 1)}
-                className="px-5 py-2 rounded-full bg-white border border-[#e8dfd1] text-xs font-bold text-[#142b4a] hover:border-[#b99664] disabled:opacity-40 cursor-pointer disabled:cursor-default"
+                className="px-5 py-2 rounded-full bg-white border border-[#e6e3dd] text-xs font-bold text-[#141414] hover:border-[#7a6b58] disabled:opacity-40 cursor-pointer disabled:cursor-default"
               >
                 {t('التالي', 'Next')}
               </button>
@@ -161,19 +161,19 @@ export default function ShopView() {
           )}
         </>
       ) : (
-        <div className="text-center py-20 bg-white rounded-3xl border border-[#e8dfd1] p-10 space-y-4">
+        <div className="text-center py-20 bg-white rounded-3xl border border-[#e6e3dd] p-10 space-y-4">
           <span className="text-5xl block animate-float select-none">👕</span>
-          <h3 className="text-lg font-bold text-[#142b4a]">
+          <h3 className="text-lg font-bold text-[#141414]">
             {q
               ? t('لا توجد نتائج لهذا البحث', 'No results for this search')
               : t('لا توجد قطع متاحة حالياً في هذا القسم', 'No pieces currently available in this category')}
           </h3>
-          <p className="text-xs text-[#77808b] max-w-sm mx-auto">
-            {t('جربي اختيار قسم آخر أو تصفح كل المعروضات.', 'Try selecting another category or view all pieces.')}
+          <p className="text-xs text-[#77736c] max-w-sm mx-auto">
+            {t('جرّب اختيار قسم آخر أو تصفح كل المعروضات.', 'Try selecting another category or view all pieces.')}
           </p>
           <button
             type="button"
-            className="px-6 py-2.5 rounded-full bg-[#142b4a] text-white text-xs font-bold hover:bg-[#b99664] transition-colors cursor-pointer"
+            className="px-6 py-2.5 rounded-full bg-[#141414] text-white text-xs font-bold hover:bg-[#7a6b58] transition-colors cursor-pointer"
             onClick={() => {
               setSearch('');
               setFilter('all');

@@ -44,24 +44,24 @@ export default function AdminPassword() {
     return errorText(error, t);
   };
 
-  const input = 'border border-[#cdbb9e] rounded-lg p-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#b99664]';
+  const input = 'border border-[#cfcac2] rounded-lg p-3 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58]';
   return (
-    <form onSubmit={submit} className="max-w-md bg-white p-6 rounded-2xl border border-[#e9e4dc] space-y-4">
-      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+    <form onSubmit={submit} className="max-w-md bg-white p-6 rounded-2xl border border-[#e8e6e1] space-y-4">
+      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
         <span>{t('كلمة المرور الحالية', 'Current password')}</span>
         <input type="password" required autoComplete="current-password" dir="ltr" value={current} onChange={(e) => setCurrent(e.target.value)} className={input} />
       </label>
-      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
+      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
         <span>{t('كلمة المرور الجديدة (10 أحرف على الأقل)', 'New password (10+ characters)')}</span>
         <input type="password" required minLength={10} autoComplete="new-password" dir="ltr" value={next} onChange={(e) => setNext(e.target.value)} className={input} />
       </label>
-      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2d3540]">
-        <span>{t('أعيدي كتابة كلمة المرور الجديدة', 'Repeat the new password')}</span>
+      <label className="flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]">
+        <span>{t('أعد كتابة كلمة المرور الجديدة', 'Repeat the new password')}</span>
         <input type="password" required minLength={10} autoComplete="new-password" dir="ltr" value={repeat} onChange={(e) => setRepeat(e.target.value)} className={input} />
         {mismatch && <small className="text-[11px] text-[#a72f3e]">{t('غير متطابقة', "Doesn't match")}</small>}
       </label>
       {error ? <p role="alert" className="text-xs font-bold text-[#a72f3e]">{message()}</p> : null}
-      <button type="submit" disabled={busy || mismatch} className="px-6 py-3 rounded-lg bg-[#142b4a] hover:bg-[#1e3a61] disabled:opacity-60 text-white text-xs font-bold cursor-pointer">
+      <button type="submit" disabled={busy || mismatch} className="px-6 py-3 rounded-lg bg-[#141414] hover:bg-[#2b2926] disabled:opacity-60 text-white text-xs font-bold cursor-pointer">
         {busy ? '…' : t('تغيير كلمة المرور', 'Change password')}
       </button>
     </form>

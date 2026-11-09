@@ -22,7 +22,7 @@ export default function AdminColors() {
       showToast(t('تم حذف اللون', 'Color deleted'), 'success');
       reload();
     } catch (err) {
-      showToast(err instanceof ApiError && err.code === 'IN_USE' ? t('هذا اللون مستخدم في منتجات، احذفيه منها أولاً', 'Products still use this color; remove it from them first') : errorText(err, t), 'error');
+      showToast(err instanceof ApiError && err.code === 'IN_USE' ? t('هذا اللون مستخدم في منتجات، احذفه منها أولاً', 'Products still use this color; remove it from them first') : errorText(err, t), 'error');
     }
   };
 
@@ -31,7 +31,7 @@ export default function AdminColors() {
       <PageHeader
         eyebrow="COLORS"
         title={t('الألوان', 'Colors')}
-        description={t('الألوان التي تختارين منها عند إضافة مقاسات المنتجات.', 'The colors you pick from when adding product sizes.')}
+        description={t('الألوان التي تختار منها عند إضافة مقاسات المنتجات.', 'The colors you pick from when adding product sizes.')}
         action={<Button onClick={() => setEditing('new')}>＋ {t('لون جديد', 'New color')}</Button>}
       />
 
@@ -48,8 +48,8 @@ export default function AdminColors() {
               <span className="flex items-center gap-3 min-w-0">
                 <span className="w-10 h-10 rounded-full border border-black/10 shrink-0 shadow-inner" style={{ backgroundColor: c.hex }} />
                 <span className="min-w-0">
-                  <b className="block text-sm text-[#142b4a] truncate">{c.nameAr} · {c.nameEn}</b>
-                  <small className="text-[11px] text-[#77808a]"><span dir="ltr" className="font-mono">{c.hex}</span> · {c.usageCount} {t('مقاس يستخدمه', 'variants')}</small>
+                  <b className="block text-sm text-[#141414] truncate">{c.nameAr} · {c.nameEn}</b>
+                  <small className="text-[11px] text-[#77736c]"><span dir="ltr" className="font-mono">{c.hex}</span> · {c.usageCount} {t('مقاس يستخدمه', 'variants')}</small>
                 </span>
               </span>
               <span className="flex gap-1.5 shrink-0">
@@ -79,7 +79,7 @@ export default function AdminColors() {
 
 function ColorForm({ color, onSaved }: { color: AdminColor | null; onSaved: () => void }) {
   const t = useWeftStore((state) => state.t);
-  const initial = { nameAr: color?.nameAr ?? '', nameEn: color?.nameEn ?? '', hex: color?.hex ?? '#d6b995' };
+  const initial = { nameAr: color?.nameAr ?? '', nameEn: color?.nameEn ?? '', hex: color?.hex ?? '#d9d4cc' };
   const [f, setF] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>();
@@ -103,9 +103,9 @@ function ColorForm({ color, onSaved }: { color: AdminColor | null; onSaved: () =
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-[#efe9df]">
+      <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-[#eeebe6]">
         <span className="w-16 h-16 rounded-full border border-black/10 shadow-inner shrink-0" style={{ backgroundColor: f.hex }} aria-hidden="true" />
-        <div className="text-sm"><b className="block text-[#142b4a]">{f.nameAr || '—'} · {f.nameEn || '—'}</b><span className="font-mono text-xs text-[#77808a]" dir="ltr">{f.hex}</span></div>
+        <div className="text-sm"><b className="block text-[#141414]">{f.nameAr || '—'} · {f.nameEn || '—'}</b><span className="font-mono text-xs text-[#77736c]" dir="ltr">{f.hex}</span></div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Field label={`${t('الاسم بالعربي', 'Arabic name')} *`}>
@@ -126,7 +126,7 @@ function ColorForm({ color, onSaved }: { color: AdminColor | null; onSaved: () =
           {error instanceof ApiError && error.code === 'DUPLICATE' ? t('يوجد لون بنفس الاسم', 'A color with that name exists') : errorText(error, t)}
         </p>
       ) : null}
-      <div className="flex justify-end gap-2 pt-2 border-t border-[#efe9df]">
+      <div className="flex justify-end gap-2 pt-2 border-t border-[#eeebe6]">
         <Button variant="secondary" onClick={() => modal?.requestClose()}>{t('إلغاء', 'Cancel')}</Button>
         <Button type="submit" busy={busy}>{color ? t('حفظ', 'Save') : t('إضافة اللون', 'Add color')}</Button>
       </div>

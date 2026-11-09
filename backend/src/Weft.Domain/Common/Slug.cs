@@ -5,7 +5,7 @@ using Weft.Domain.Exceptions;
 
 namespace Weft.Domain.Common;
 
-// URL-friendly names: "Modest Abaya" -> "modest-abaya". Built from the English name.
+// URL-friendly names: "WEFT Essential Hoodie" -> "weft-essential-hoodie". Built from the English name.
 public static partial class Slug
 {
     public const int MaxLength = 120;

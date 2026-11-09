@@ -77,8 +77,6 @@ builder.Services.AddRateLimiter(options =>
     PerIp(RateLimitPolicies.Login, 5, TimeSpan.FromMinutes(1));
     PerIp(RateLimitPolicies.PlaceOrder, 10, TimeSpan.FromMinutes(10));
     PerIp(RateLimitPolicies.Tracking, 30, TimeSpan.FromMinutes(1));
-    PerIp(RateLimitPolicies.PublicRead, 120, TimeSpan.FromMinutes(1));
-    PerIp(RateLimitPolicies.Estimate, 60, TimeSpan.FromMinutes(1));
     options.OnRejected = (context, _) =>
     {
         if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))

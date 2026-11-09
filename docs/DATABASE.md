@@ -1,6 +1,6 @@
 # WEFT — Database
 
-PostgreSQL 17 (Supabase) · EF Core · schema `weft`. Readable version: [database-erd.pdf](database-erd.pdf) (overview + one page per group) or the images in [database/](database/). GitHub draws the diagram below automatically.
+PostgreSQL 17 (Supabase) · EF Core · schema `weft`. GitHub draws the diagram below automatically.
 
 Every table that inherits `Entity` also has `CreatedAt` and `UpdatedAt` (set automatically when saving).
 
@@ -18,7 +18,6 @@ erDiagram
     Orders ||--o{ OrderLines : contains
     ProductVariants ||--o{ OrderLines : "ordered as"
     Orders ||--o{ OrderStatusHistory : tracks
-    Orders ||--o| TailoringSpecs : "custom details"
     AspNetUsers ||--o{ OrderStatusHistory : "changed by"
 
     %% ===== Identity (owner only) =====
@@ -90,7 +89,6 @@ erDiagram
         int Id PK
         string Number UK "WF-10234"
         string TrackingTokenHash "token itself never stored"
-        string Type "Ready | Custom"
         string Status
         string CustomerName
         string Phone "+201xxxxxxxxx"
@@ -130,26 +128,6 @@ erDiagram
         datetime ChangedAt
         string Note
     }
-    TailoringSpecs {
-        int Id PK
-        int OrderId FK "1 to 1"
-        string StyleId "null = own design"
-        string Garment
-        string Fabric
-        string Color
-        string Fit
-        string SizingMode
-        string StandardSize
-        jsonb Measurements "key to cm"
-        bool HasLining
-        jsonb Extras "embroidery, ..."
-        string ReferenceImageKey "private bucket"
-        decimal EstimatedPrice
-        decimal QuotedPrice
-        string QuoteNote
-        datetime QuoteValidUntil
-        datetime QuoteApprovedAt
-    }
     IdempotencyKeys {
         string Key PK
         string Endpoint
@@ -161,16 +139,6 @@ erDiagram
     SiteSettings {
         int Id PK "single row"
         jsonb Content "hero, contacts, social"
-        datetime UpdatedAt
-    }
-    TailoringCatalog {
-        int Id PK "single row"
-        jsonb Content "garments, styles, fabrics, fields"
-        datetime UpdatedAt
-    }
-    PriceRules {
-        int Id PK "single row"
-        jsonb Content "base per style + extras"
         datetime UpdatedAt
     }
     AspNetUsers {

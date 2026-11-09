@@ -4,7 +4,7 @@
 > **Machine-readable:** `docs/openapi.json` is exported from the running API. Generate TypeScript types from it with `npx openapi-typescript ../docs/openapi.json -o src/types/api.ts` (run in `frontend/`).
 > The backend is built against this file, and the Next.js UI uses the same file. Change the route or shape here and in the docs together.
 
-**47 endpoints:** 12 public · 4 auth · 31 admin (+ `GET /health`)
+**37 endpoints:** 7 public · 4 auth · 26 admin (+ `GET /health`). Numbers come from the Zamzam base this API was copied from; the gaps (#12–16, #38–40, #45–46) were the tailoring endpoints, removed for WEFT.
 
 ## 0. Conventions
 
@@ -19,9 +19,9 @@
 | Format | JSON camelCase · money in EGP with 2 decimals · ISO-8601 UTC dates · bilingual fields `nameAr` + `nameEn` · phones stored as `+201xxxxxxxxx` |
 | Pagination | `?page=1&pageSize=20` (max 100) → `{ items, page, pageSize, totalCount, totalPages }` |
 | Errors | RFC 9457 ProblemDetails with `code` and `traceId` (see Appendix B) |
-| Idempotency | `POST /api/orders` and `POST /api/tailoring/requests` require `Idempotency-Key: <uuid>` |
-| Rate limits (per IP) | every request 300/min (global) · login 5/min · order + tailoring creation 10 per 10 min combined · tracking and quote answers 30/min · estimate 60/min · tailoring catalog 120/min. A 429 has an empty body and a Retry-After header |
-| Caching | `Cache-Control: public, max-age=300` on categories, site settings, delivery zones and the tailoring catalog. Products are not cached yet |
+| Idempotency | `POST /api/orders` requires `Idempotency-Key: <uuid>` |
+| Rate limits (per IP) | every request 300/min (global) · login 5/min · order creation 10 per 10 min · tracking 30/min. A 429 has an empty body and a Retry-After header |
+| Caching | `Cache-Control: public, max-age=300` on categories, site settings and delivery zones. Products are not cached yet |
 | Behind Vercel | The API trusts `X-Forwarded-For` only when the request carries `X-Proxy-Secret` (= `Proxy:SharedSecret`, 32+ chars). Next.js `rewrites()` can't add it, so the frontend forwards `/api` from `src/proxy.ts` — **required before launch** |
 | Health | `GET /health` → `{ "status", "db", "storage" }`, `no-store`, no rate limit. 503 only when the database is down |
 | Security headers | Every response: `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `CSP default-src 'none'`, `CORP same-site`; HSTS outside Development. No CORS: only same-site calls |
@@ -137,17 +137,17 @@ Returns the visible category tree, sorted by sortOrder.
 [
   {
     "id": 1,
-    "slug": "dresses",
-    "nameAr": "فساتين",
-    "nameEn": "Dresses",
-    "imageUrl": "https://cdn…/dresses.webp",
+    "slug": "apparel",
+    "nameAr": "ملابس",
+    "nameEn": "Apparel",
+    "imageUrl": "https://cdn…/apparel.webp",
     "sortOrder": 0,
     "children": [
       {
         "id": 7,
-        "slug": "abayas",
-        "nameAr": "عبايات",
-        "nameEn": "Abayas",
+        "slug": "hoodies",
+        "nameAr": "هوديز",
+        "nameEn": "Hoodies",
         "imageUrl": null,
         "sortOrder": 0,
         "children": []
@@ -171,14 +171,14 @@ Paged product list with filters, search and sorting. Only visible products in vi
   "items": [
     {
       "id": 12,
-      "slug": "modest-abaya",
-      "nameAr": "عباية محتشمة",
-      "nameEn": "Modest Abaya",
+      "slug": "weft-essential-hoodie",
+      "nameAr": "WEFT Essential Hoodie",
+      "nameEn": "WEFT Essential Hoodie",
       "category": {
         "id": 3,
-        "slug": "dresses",
-        "nameAr": "فساتين",
-        "nameEn": "Dresses"
+        "slug": "apparel",
+        "nameAr": "ملابس",
+        "nameEn": "Apparel"
       },
       "minPrice": 1250,
       "maxPrice": 1250,
@@ -193,8 +193,8 @@ Paged product list with filters, search and sorting. Only visible products in vi
       "colors": [
         {
           "id": 3,
-          "nameAr": "بيج",
-          "nameEn": "Beige",
+          "nameAr": "كريمي",
+          "nameEn": "Cream",
           "hex": "#d6b995"
         }
       ],
@@ -230,14 +230,14 @@ Product page: gallery, description and every variant with its price and stock.
 ```json
 {
   "id": 12,
-  "slug": "modest-abaya",
-  "nameAr": "عباية محتشمة",
-  "nameEn": "Modest Abaya",
+  "slug": "weft-essential-hoodie",
+  "nameAr": "WEFT Essential Hoodie",
+  "nameEn": "WEFT Essential Hoodie",
   "category": {
     "id": 3,
-    "slug": "dresses",
-    "nameAr": "فساتين",
-    "nameEn": "Dresses"
+    "slug": "apparel",
+    "nameAr": "ملابس",
+    "nameEn": "Apparel"
   },
   "descriptionAr": "…",
   "descriptionEn": "…",
@@ -257,12 +257,12 @@ Product page: gallery, description and every variant with its price and stock.
   "variants": [
     {
       "id": 501,
-      "sku": "WF-12-M-beige",
+      "sku": "WF-1-M-CREAM",
       "size": "M",
       "color": {
         "id": 3,
-        "nameAr": "بيج",
-        "nameEn": "Beige",
+        "nameAr": "كريمي",
+        "nameEn": "Cream",
         "hex": "#d6b995"
       },
       "price": 1250,
@@ -354,7 +354,7 @@ Lists the active governorates with their delivery fee and delivery time.
 
 Places a ready-made order. The server re-prices it and reserves stock in a single transaction.
 
-- **Access:** Public · 10 per 10 min per IP (shared with #14) · **Day 3**
+- **Access:** Public · 10 per 10 min per IP · **Day 3**
 - **Headers:** Idempotency-Key: <uuid> (required; a repeated key returns the original response)
 
 **Payload**
@@ -436,11 +436,11 @@ Public order tracking page data. Personal data is masked.
   "lines": [
     {
       "variantId": 501,
-      "productNameAr": "عباية محتشمة",
-      "productNameEn": "Modest Abaya",
+      "productNameAr": "WEFT Essential Hoodie",
+      "productNameEn": "WEFT Essential Hoodie",
       "size": "M",
-      "colorNameAr": "بيج",
-      "colorNameEn": "Beige",
+      "colorNameAr": "كريمي",
+      "colorNameEn": "Cream",
       "unitPrice": 850,
       "qty": 2,
       "lineTotal": 1700,
@@ -458,273 +458,14 @@ Public order tracking page data. Personal data is masked.
       "to": "PendingConfirmation",
       "at": "…"
     }
-  ],
-  "tailoring": null
-}
-```
-
-**Rules**
-- For a Custom order, tailoring = { garment, fabric, color, fit, estimatedPrice, quotedPrice, quoteNote, quoteValidUntil } and lines is empty.
-
-**Errors**
-- 404 Not Found for an unknown number or a wrong token (never reveal which)
-
-
----
-
-## 4. Tailoring (Made-to-Measure) APIs (`/api/tailoring`)
-
-_Custom orders: instant price estimate → request → owner confirms or adjusts the price → customer approval (only if the price changed) → production._
-
-### #12 `GET /api/tailoring/catalog`
-
-Returns the styles, garment types, fabrics, fits and measurement fields used by the request form.
-
-- **Access:** Public · cache 5 min · 120/min · **Day 4**
-
-**Response 200 OK**
-
-```json
-{
-  "garments": [
-    {
-      "key": "pants",
-      "nameAr": "بناطيل",
-      "nameEn": "Trousers",
-      "measurementGroups": [
-        "common",
-        "pants"
-      ],
-      "isActive": true
-    }
-  ],
-  "styles": [
-    {
-      "id": "wide_pants",
-      "garment": "pants",
-      "nameAr": "بنطلون واسع",
-      "nameEn": "Wide-leg trousers",
-      "defaultFabric": "linen",
-      "defaultFit": "Relaxed",
-      "imageUrl": null,
-      "isActive": true
-    }
-  ],
-  "fabrics": [
-    {
-      "key": "linen",
-      "nameAr": "كتان",
-      "nameEn": "Linen",
-      "isActive": true
-    }
-  ],
-  "fits": [
-    {
-      "key": "Relaxed",
-      "nameAr": "واسع",
-      "nameEn": "Relaxed",
-      "isActive": true
-    }
-  ],
-  "measurementGroups": {
-    "common": [
-      {
-        "key": "bust",
-        "nameAr": "محيط الصدر",
-        "nameEn": "Bust circumference",
-        "required": false
-      }
-    ]
-  },
-  "standardSizes": [
-    "XS",
-    "S",
-    "M",
-    "L",
-    "XL",
-    "XXL",
-    "3XL",
-    "FreeSize"
-  ],
-  "extras": [
-    {
-      "key": "embroidery",
-      "nameAr": "تطريز",
-      "nameEn": "Embroidery",
-      "price": 300
-    }
-  ],
-  "liningPrice": 150
-}
-```
-
-**Rules**
-- Seeded from the old demo: 6 garment types, 12 styles and about 45 fields.
-- Only active items are returned (isActive is always true here); extras and liningPrice let the form show prices next to each option.
-
-### #13 `POST /api/tailoring/estimate`
-
-Instant price estimate from the price rules while the customer fills in the form.
-
-- **Access:** Public · 60/min · **Day 4**
-
-**Payload**
-
-```json
-{
-  "styleId": "abaya",
-  "garment": "dress",
-  "fabric": "crepe",
-  "fit": "Relaxed",
-  "lining": true,
-  "sizingMode": "StandardSize",
-  "standardSize": "XL",
-  "extras": [
-    "embroidery"
   ]
 }
 ```
 
-**Response 200 OK**
-
-```json
-{
-  "basePrice": 1400,
-  "items": [
-    {
-      "key": "fabric",
-      "labelAr": "القماش",
-      "labelEn": "Fabric",
-      "amount": 250
-    },
-    {
-      "key": "lining",
-      "labelAr": "البطانة",
-      "labelEn": "Lining",
-      "amount": 150
-    },
-    {
-      "key": "size",
-      "labelAr": "مقاس كبير",
-      "labelEn": "Size XL",
-      "amount": 100
-    },
-    {
-      "key": "embroidery",
-      "labelAr": "تطريز",
-      "labelEn": "Embroidery",
-      "amount": 300
-    }
-  ],
-  "estimatedPrice": 2200,
-  "currency": "EGP",
-  "noteAr": "السعر النهائي يؤكده المحل.",
-  "noteEn": "The final price is confirmed by the shop."
-}
-```
-
 **Rules**
-- Calculated on the server from the active price rules; the same function prices the request in POST /api/tailoring/requests.
-- styleId is optional; garment, fabric and fit are required and must exist in the active catalog.
-- Base price = the style's price if it has one, otherwise the garment's base price.
 
 **Errors**
-- 400 VALIDATION_FAILED
-
-### #14 `POST /api/tailoring/requests`
-
-Submits a tailoring request with an optional reference photo.
-
-- **Access:** Public · 10 per 10 min per IP (shared with #10) · **Day 4**
-- **Headers:** Idempotency-Key: <uuid> · Content-Type: multipart/form-data
-- **Form data:** data (JSON string, below) · referenceImage (file, optional: jpeg/png/webp, max 5 MB)
-
-**Payload**
-
-```json
-{
-  "customer": {
-    "name": "",
-    "phone": "",
-    "email": "",
-    "deliveryZoneId": 1,
-    "city": "",
-    "address": ""
-  },
-  "styleId": "wide_pants",
-  "garment": "pants",
-  "fabric": "linen",
-  "color": "Beige",
-  "fit": "Relaxed",
-  "sizingMode": "Measurements",
-  "standardSize": null,
-  "measurements": {
-    "waist": 72,
-    "hips": 98,
-    "inseam": 76
-  },
-  "lining": false,
-  "extras": [
-    "embroidery"
-  ],
-  "notes": "Side pockets",
-  "acceptTerms": true
-}
-```
-
-**Response 201 Created**
-
-```json
-{
-  "number": "WF-10235",
-  "trackingToken": "…",
-  "trackingUrl": "…",
-  "status": "AwaitingQuote",
-  "estimatedPrice": 2200
-}
-```
-
-**Rules**
-- Measurement keys must belong to the chosen garment's groups; values are 1–300 cm.
-- In StandardSize mode, standardSize is required and measurements must be empty.
-- Email is optional; when given, the customer gets the tracking link and price updates by email.
-- lining and extras use the same keys as POST /api/tailoring/estimate; the server recalculates the estimate and stores it.
-- The photo's real file type is checked, it is re-encoded to WebP with EXIF removed, and it is stored in a private bucket.
-
-**Errors**
-- 400 VALIDATION_FAILED
-- 413 FILE_TOO_LARGE
-- 415 UNSUPPORTED_FILE_TYPE
-
-### #15 `POST /api/orders/{number}/quote/approve`
-
-The customer accepts the price adjusted by the owner from the secure link.
-
-- **Access:** Tracking token · 30/min · **Day 4**
-- **Headers:** X-Tracking-Token: <token>
-
-**Response 200 OK — public order view with status QuoteApproved; the owner is emailed**
-
-**Errors**
-- 409 INVALID_STATUS_TRANSITION unless the order is a Custom order in QuoteSent
-- 422 QUOTE_EXPIRED
-
-### #16 `POST /api/orders/{number}/quote/reject`
-
-The customer declines the quote. The order becomes Cancelled.
-
-- **Access:** Tracking token · 30/min · **Day 4**
-- **Headers:** X-Tracking-Token: <token>
-
-**Payload**
-
-```json
-{
-  "reason": "Too expensive"
-}
-```
-
-**Response 200 OK — public order view with status Cancelled**
+- 404 Not Found for an unknown number or a wrong token (never reveal which)
 
 
 ---
@@ -810,12 +551,12 @@ Paged product table for the dashboard.
   "items": [
     {
       "id": 12,
-      "slug": "modest-abaya",
-      "nameAr": "عباية محتشمة",
-      "nameEn": "Modest Abaya",
+      "slug": "weft-essential-hoodie",
+      "nameAr": "WEFT Essential Hoodie",
+      "nameEn": "WEFT Essential Hoodie",
       "categoryId": 3,
-      "categoryNameAr": "فساتين",
-      "categoryNameEn": "Dresses",
+      "categoryNameAr": "ملابس",
+      "categoryNameEn": "Apparel",
       "basePrice": 1250,
       "totalStock": 9,
       "variantCount": 6,
@@ -853,8 +594,8 @@ Creates a product, optionally with its first variants.
 ```json
 {
   "categoryId": 3,
-  "nameAr": "عباية محتشمة",
-  "nameEn": "Modest Abaya",
+  "nameAr": "WEFT Essential Hoodie",
+  "nameEn": "WEFT Essential Hoodie",
   "slug": null,
   "descriptionAr": "",
   "descriptionEn": "",
@@ -1012,7 +753,7 @@ Deletes an image and its stored files.
 
 ## 9. Admin · Color APIs (`/api/admin/colors`)
 
-_Seeded with the 10 colors from the old demo (Black, White, Beige, Navy, Brown, Pink, Olive, Gray, Cream, Off-white)._
+_Seeded with the 8 WEFT colours (Black, Cream, Navy, Olive, Burgundy, Gray, Blue, Pink)._
 
 ### #31 `GET /api/admin/colors`
 
@@ -1026,8 +767,8 @@ Lists colors with usageCount.
 [
   {
     "id": 3,
-    "nameAr": "بيج",
-    "nameEn": "Beige",
+    "nameAr": "كريمي",
+    "nameEn": "Cream",
     "hex": "#d6b995",
     "usageCount": 14
   }
@@ -1076,14 +817,14 @@ Deletes an unused color.
 
 ## 10. Admin · Order APIs (`/api/admin/orders`)
 
-_Access: Owner. Covers both ready-made and custom orders._
+_Access: Owner._
 
 ### #35 `GET /api/admin/orders`
 
 Paged order board with filters.
 
 - **Access:** Owner · **Day 3**
-- **Query:** `?status=PendingConfirmation&status=Confirmed&type=Ready|Custom&q={number|phone|name}&from=&to=&page=1&pageSize=20`
+- **Query:** `?status=PendingConfirmation&status=Confirmed&q={number|phone|name}&from=&to=&page=1&pageSize=20`
 
 **Response 200 OK**
 
@@ -1114,7 +855,7 @@ Paged order board with filters.
 
 ### #36 `GET /api/admin/orders/{id}`
 
-Full order: unmasked customer data, lines, tailoring spec with a 10-minute signed photo URL, and the full status history with who made each change.
+Full order: unmasked customer data, lines, and the full status history with who made each change.
 
 - **Access:** Owner · **Day 3**
 
@@ -1144,59 +885,6 @@ Moves the order to the next status.
 
 **Errors**
 - 409 INVALID_STATUS_TRANSITION
-
-### #38 `POST /api/admin/orders/{id}/quote`
-
-Confirms or adjusts the estimated price of a Custom order.
-
-- **Access:** Owner · **Day 4**
-
-**Payload**
-
-```json
-{
-  "price": 2400,
-  "note": "Lined crepe, 2 fittings",
-  "validDays": 7
-}
-```
-
-**Response 200 OK — status QuoteSent**
-
-**Rules**
-- Same price as the estimate → the order moves straight to QuoteApproved (the customer already accepted it).
-- Different price → status QuoteSent, and the customer gets the approval link.
-- price > 0, validDays 1–30 (default 7).
-
-
----
-
-## 11. Admin · Tailoring Catalog APIs (`/api/admin/tailoring/catalog`)
-
-_Access: Owner. Lets the owner change styles and measurements without new code._
-
-### #39 `GET /api/admin/tailoring/catalog`
-
-Full catalog, including inactive items.
-
-- **Access:** Owner · **Day 4**
-
-**Response 200 OK — same shape as #12, plus isActive**
-
-### #40 `PUT /api/admin/tailoring/catalog`
-
-Replaces the whole catalog.
-
-- **Access:** Owner · **Day 4**
-
-**Response 200 OK**
-
-**Rules**
-- Every garment's groups must exist, and all keys must be unique.
-- Existing orders keep their own snapshot of the measurement fields.
-
-
----
 
 ## 12. Admin · Delivery Zone APIs (`/api/admin/delivery-zones`)
 
@@ -1262,75 +950,6 @@ Saves home page content, contacts and social links.
 
 ---
 
-## 14. Admin · Price Rules APIs (`/api/admin/tailoring/pricing`)
-
-_Access: Owner. The rules behind the price calculator._
-
-### #45 `GET /api/admin/tailoring/pricing`
-
-Current price rules: base price per style, fabric extras, lining, size and extra options.
-
-- **Access:** Owner · **Day 4**
-
-**Response 200 OK**
-
-```json
-{
-  "garmentBasePrices": [
-    {
-      "garment": "dress",
-      "basePrice": 1200
-    }
-  ],
-  "styleBasePrices": [
-    {
-      "styleId": "abaya",
-      "basePrice": 1400
-    }
-  ],
-  "fabrics": [
-    {
-      "fabric": "crepe",
-      "extra": 250
-    }
-  ],
-  "liningPrice": 150,
-  "sizeExtras": [
-    {
-      "fromSize": "XL",
-      "extra": 100
-    }
-  ],
-  "extras": [
-    {
-      "key": "embroidery",
-      "nameAr": "تطريز",
-      "nameEn": "Embroidery",
-      "price": 300
-    }
-  ]
-}
-```
-
-**Rules**
-- Base price = the style's price when it has one in styleBasePrices, otherwise the garment's price in garmentBasePrices.
-
-### #46 `PUT /api/admin/tailoring/pricing`
-
-Saves the price rules (same body as the GET response). New estimates use them immediately.
-
-- **Access:** Owner · **Day 4**
-
-**Response 200 OK — the saved rules**
-
-**Rules**
-- All amounts ≥ 0. Every garment in the tailoring catalog must have a base price; style prices are optional overrides.
-- Garment, style and fabric keys must be unique.
-- Existing orders keep the price they were given.
-
-
----
-
 ## 15. Admin · Dashboard API (`/api/admin`)
 
 ### #47 `GET /api/admin/dashboard`
@@ -1345,17 +964,16 @@ Home screen numbers for the admin panel.
 {
   "ordersToday": 7,
   "pendingConfirmation": 3,
-  "awaitingQuote": 2,
-  "waitingForCustomer": 1,
-  "inProduction": 4,
+  "toPack": 4,
   "readyToShip": 5,
+  "outForDelivery": 2,
   "deliveredRevenueLast30Days": 48250,
   "lowStock": [
     {
       "variantId": 501,
-      "sku": "WF-12-M-beige",
-      "productNameAr": "عباية محتشمة",
-      "productNameEn": "Modest Abaya",
+      "sku": "WF-1-M-BLACK",
+      "productNameAr": "WEFT Essential Hoodie",
+      "productNameEn": "WEFT Essential Hoodie",
       "size": "M",
       "stock": 1
     }
@@ -1367,7 +985,7 @@ Home screen numbers for the admin panel.
 ```
 
 **Rules**
-- waitingForCustomer = Custom orders in QuoteSent (the customer hasn't approved the new price yet).
+- toPack = Confirmed · readyToShip = Packing · outForDelivery = Shipped.
 
 
 ---
@@ -1380,27 +998,21 @@ Home screen numbers for the admin panel.
 ## Appendix A — Enums & order status machine
 
 ```ts
-type OrderType     = "Ready" | "Custom";
-type OrderStatus   = "PendingConfirmation" | "Confirmed" | "AwaitingQuote" | "QuoteSent"
-                   | "QuoteApproved" | "InProduction" | "QualityCheck" | "Packing"
+type OrderStatus   = "PendingConfirmation" | "Confirmed" | "Packing"
                    | "Shipped" | "Delivered" | "Cancelled";
 type PaymentMethod = "CashOnDelivery";           // Paymob comes in phase 2
 type PaymentStatus = "Unpaid" | "Paid";
-type SizingMode    = "Measurements" | "StandardSize";
 type Role          = "Owner";                    // "Staff" can be added later
 type StandardSize  = "XS" | "S" | "M" | "L" | "XL" | "XXL" | "3XL" | "FreeSize";
 ```
 
 ```
-Ready:   PendingConfirmation → Confirmed → Packing → Shipped → Delivered
-Custom:  AwaitingQuote → QuoteSent → QuoteApproved → InProduction ⇄ QualityCheck → Packing → Shipped → Delivered
-         AwaitingQuote → QuoteApproved directly when the owner keeps the estimated price
-Cancel:  from PendingConfirmation, Confirmed, AwaitingQuote, QuoteSent, QuoteApproved
+Order:   PendingConfirmation → Confirmed → Packing → Shipped → Delivered
+Cancel:  from PendingConfirmation or Confirmed (the pieces go back to stock)
 ```
 
-- Ready orders reserve stock at checkout; **Cancelled** puts it back.
+- Orders reserve stock at checkout; **Cancelled** puts it back.
 - **Delivered** sets `paymentStatus = Paid` (cash on delivery).
-- `QuoteSent → QuoteApproved` happens only through the customer endpoint (#15).
 - Every status change writes one `OrderStatusHistory` row.
 - Anything else → `409 INVALID_STATUS_TRANSITION`.
 
@@ -1410,7 +1022,7 @@ Cancel:  from PendingConfirmation, Confirmed, AwaitingQuote, QuoteSent, QuoteApp
 |---|---|---|
 | 400 | `VALIDATION_FAILED` | A field failed validation; see `errors{}` |
 | 400 | `MISSING_CSRF_HEADER` | Admin mutation without `X-Requested-With` |
-| 400 | `IDEMPOTENCY_KEY_REQUIRED` | `POST /api/orders` or a tailoring request without an `Idempotency-Key` header |
+| 400 | `IDEMPOTENCY_KEY_REQUIRED` | `POST /api/orders` without an `Idempotency-Key` header |
 | 409 | `REQUEST_IN_PROGRESS` | The same `Idempotency-Key` is still being processed |
 | 422 | `IDEMPOTENCY_KEY_REUSED` | The `Idempotency-Key` was already used for a different request |
 | 401 | `INVALID_CREDENTIALS` / — | Wrong login (ProblemDetails), or not signed in (empty body) |
@@ -1418,7 +1030,6 @@ Cancel:  from PendingConfirmation, Confirmed, AwaitingQuote, QuoteSent, QuoteApp
 | 409 | `OUT_OF_STOCK` · `PRICE_CHANGED` · `INVALID_STATUS_TRANSITION` · `CONCURRENCY_CONFLICT` · `IN_USE` · `DUPLICATE` | Business conflicts |
 | 413 | `FILE_TOO_LARGE` | Photo over 5 MB or 40 megapixels |
 | 415 | `UNSUPPORTED_FILE_TYPE` | Not a real JPEG, PNG or WebP (checked by the file bytes) |
-| 422 | `QUOTE_EXPIRED` | Approval after `quoteValidUntil` |
 | 423 | `LOCKED_OUT` | 5 failed logins |
 | 429 | — | Rate limited; empty body, read `Retry-After` (seconds) |
 | 500 | — | Unexpected; only `traceId` returned |
@@ -1438,11 +1049,6 @@ Cancel:  from PendingConfirmation, Confirmed, AwaitingQuote, QuoteSent, QuoteApp
 | 9 | GET | `/api/delivery-zones` | Public | 3 |
 | 10 | POST | `/api/orders` | Public | 3 |
 | 11 | GET | `/api/orders/{number}` | Tracking token | 3 |
-| 12 | GET | `/api/tailoring/catalog` | Public | 4 |
-| 13 | POST | `/api/tailoring/estimate` | Public | 4 |
-| 14 | POST | `/api/tailoring/requests` | Public | 4 |
-| 15 | POST | `/api/orders/{number}/quote/approve` | Tracking token | 4 |
-| 16 | POST | `/api/orders/{number}/quote/reject` | Tracking token | 4 |
 | 17 | GET | `/api/admin/categories` | Owner | 2 |
 | 18 | POST | `/api/admin/categories` | Owner | 2 |
 | 19 | PUT | `/api/admin/categories/{id}` | Owner | 2 |
@@ -1464,15 +1070,10 @@ Cancel:  from PendingConfirmation, Confirmed, AwaitingQuote, QuoteSent, QuoteApp
 | 35 | GET | `/api/admin/orders` | Owner | 3 |
 | 36 | GET | `/api/admin/orders/{id}` | Owner | 3 |
 | 37 | POST | `/api/admin/orders/{id}/status` | Owner | 3 |
-| 38 | POST | `/api/admin/orders/{id}/quote` | Owner | 4 |
-| 39 | GET | `/api/admin/tailoring/catalog` | Owner | 4 |
-| 40 | PUT | `/api/admin/tailoring/catalog` | Owner | 4 |
 | 41 | GET | `/api/admin/delivery-zones` | Owner | 3 |
 | 42 | PUT | `/api/admin/delivery-zones` | Owner | 3 |
 | 43 | GET | `/api/admin/site-settings` | Owner | 4 |
 | 44 | PUT | `/api/admin/site-settings` | Owner | 4 |
-| 45 | GET | `/api/admin/tailoring/pricing` | Owner | 4 |
-| 46 | PUT | `/api/admin/tailoring/pricing` | Owner | 4 |
 | 47 | GET | `/api/admin/dashboard` | Owner | 4 |
 
 ## Phase 2 — not built now

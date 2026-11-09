@@ -165,14 +165,6 @@ try {
     $zones = @($r.Json)
     Check '#9 delivery zones' ($r.Status -eq 200 -and $zones.Count -ge 1 -and @($zones | Where-Object { $_.fee -lt 0 -or $_.etaDaysMin -gt $_.etaDaysMax }).Count -eq 0) "($($zones.Count) active)"
 
-    $catalog = (Call GET '/api/tailoring/catalog').Json
-    Check '#12 tailoring catalog' ($catalog.garments.Count -gt 0 -and $catalog.styles.Count -gt 0 -and $catalog.fabrics.Count -gt 0) "($($catalog.garments.Count) garments, $($catalog.styles.Count) styles)"
-    $estimate = @{ styleId = 'maxi'; garment = 'dress'; fabric = 'crepe'; fit = 'Relaxed'; lining = $true; sizingMode = 'StandardSize'; standardSize = 'M'; extras = @('embroidery') }
-    $r = Call POST '/api/tailoring/estimate' $estimate -NoCsrf
-    $sum = [decimal]$r.Json.basePrice + [decimal](@($r.Json.items | ForEach-Object { [decimal]$_.amount }) | Measure-Object -Sum).Sum
-    Check '#13 estimate adds up' ($r.Status -eq 200 -and [decimal]$r.Json.estimatedPrice -eq $sum -and $r.Json.noteEn) "($($r.Json.estimatedPrice) EGP)"
-    $r = Call POST '/api/tailoring/estimate' @{ styleId = 'maxi'; garment = 'spaceship'; fabric = 'crepe'; fit = 'Relaxed'; lining = $false; sizingMode = 'StandardSize'; standardSize = 'M'; extras = @() } -NoCsrf
-    Check '#13 unknown garment refused' ($r.Status -eq 400) "($($r.Status) $($r.Json.code))"
 
     # ============================================================ B. security
     Section 'B. Security (every rule that must refuse)'
@@ -185,8 +177,7 @@ try {
     Check 'no Server / X-Powered-By header' (-not (Header $r 'Server') -and -not (Header $r 'X-Powered-By'))
 
     $adminReads = @('/api/auth/me', '/api/admin/categories', '/api/admin/products', '/api/admin/products/1', '/api/admin/colors',
-        '/api/admin/orders', '/api/admin/orders/1', '/api/admin/delivery-zones', '/api/admin/tailoring/catalog',
-        '/api/admin/tailoring/pricing', '/api/admin/site-settings', '/api/admin/dashboard')
+        '/api/admin/orders', '/api/admin/orders/1', '/api/admin/delivery-zones', '/api/admin/site-settings', '/api/admin/dashboard')
     $open = @($adminReads | Where-Object { (Call GET $_).Status -ne 401 })
     Check "all $($adminReads.Count) admin reads need login (401)" ($open.Count -eq 0) $(if ($open) { "(open: $($open -join ', '))" } else { '' })
 
@@ -196,8 +187,8 @@ try {
         @('DELETE', '/api/admin/products/1'), @('POST', '/api/admin/products/1/variants'), @('PUT', '/api/admin/variants/1'),
         @('DELETE', '/api/admin/variants/1'), @('POST', '/api/admin/products/1/images'), @('DELETE', '/api/admin/images/1'),
         @('POST', '/api/admin/colors'), @('PUT', '/api/admin/colors/1'), @('DELETE', '/api/admin/colors/1'),
-        @('POST', '/api/admin/orders/1/status'), @('POST', '/api/admin/orders/1/quote'), @('PUT', '/api/admin/delivery-zones'),
-        @('PUT', '/api/admin/tailoring/catalog'), @('PUT', '/api/admin/tailoring/pricing'), @('PUT', '/api/admin/site-settings'))
+        @('POST', '/api/admin/orders/1/status'), @('PUT', '/api/admin/delivery-zones'),
+        @('PUT', '/api/admin/site-settings'))
     # The photo upload only accepts multipart (anything else is 415 before login is checked), so send it a real file.
     $tiny = Join-Path $tmp 'tiny.png'; NewPng $tiny 4 4
     function Attempt($write, [switch]$NoCsrf) {
@@ -249,7 +240,7 @@ try {
         $r = Call PUT "/api/admin/categories/$($category.id)" @{ parentId = $null; nameAr = 'قسم اختبار'; nameEn = "Test Suite $run"; slug = $category.slug; imageUrl = $null; isVisible = $true; sortOrder = 99 }
         Check '#19 update category (now visible)' ($r.Status -eq 200 -and $r.Json.isVisible -eq $true) "($($r.Status))"
 
-        $r = Call POST '/api/admin/products' @{ categoryId = $category.id; nameAr = 'عباية اختبار'; nameEn = "Test Abaya $run"; slug = $null
+        $r = Call POST '/api/admin/products' @{ categoryId = $category.id; nameAr = 'هودي اختبار'; nameEn = "Test Hoodie $run"; slug = $null
             descriptionAr = $null; descriptionEn = 'Created by the full test'; basePrice = 999; isVisible = $true
             variants = @(@{ size = 'M'; colorId = $color.id; stock = 3; priceOverride = $null; sku = $null }) }
         Check '#23 create product with a variant' ($r.Status -eq 201 -and @($r.Json.variants).Count -eq 1) "($($r.Json.slug))"
@@ -263,7 +254,7 @@ try {
         Check '#27 stale version: 409 CONCURRENCY_CONFLICT' ($r.Status -eq 409 -and $r.Json.code -eq 'CONCURRENCY_CONFLICT')
         $r = Call PUT "/api/admin/variants/$($variant.id)" @{ size = 'M'; colorId = $color.id; stock = 3; priceOverride = 1050; version = $variant.version }
         Check '#27 current version: price saved' ($r.Status -eq 200 -and [decimal]$r.Json.price -eq 1050)
-        $r = Call PUT "/api/admin/products/$($product.id)" @{ categoryId = $category.id; nameAr = 'عباية اختبار'; nameEn = "Test Abaya $run"; slug = $product.slug
+        $r = Call PUT "/api/admin/products/$($product.id)" @{ categoryId = $category.id; nameAr = 'هودي اختبار'; nameEn = "Test Hoodie $run"; slug = $product.slug
             descriptionAr = 'وصف'; descriptionEn = 'Updated by the full test'; basePrice = 999; isVisible = $true }
         Check '#24 update product' ($r.Status -eq 200 -and $r.Json.descriptionEn -eq 'Updated by the full test') "($($r.Status))"
 
@@ -361,47 +352,10 @@ try {
         $r = Call GET "/api/orders/$number" -Headers @{ 'X-Tracking-Token' = $token }
         Check '#11 customer sees the full timeline' (@($r.Json.timeline).Count -ge 3 -and $r.Json.timeline[-1].to -eq 'Cancelled') "($(@($r.Json.timeline).Count) steps)"
 
-        # ======================================================== F. tailoring
-        Section 'F. Tailoring and quotes'
-        $data = Join-Path $tmp 'request.json'
-        function Tailor([string]$photo) {
-            $request = @{ customer = @{ name = "Test Tailor $run"; phone = '01112345678'; email = $null; deliveryZoneId = $zone.id
-                    city = 'Nasr City'; address = '1 Test Street, apt 1'; notes = $null }
-                styleId = 'maxi'; garment = 'dress'; fabric = 'crepe'; color = 'Navy'; fit = 'Relaxed'
-                sizingMode = 'Measurements'; standardSize = $null; measurements = @{ bust = 92; waist = 74; dressLength = 140 }
-                lining = $true; extras = @('embroidery'); notes = 'Full test - please ignore'; acceptTerms = $true }
-            [IO.File]::WriteAllText($data, (ConvertTo-Json -InputObject $request -Depth 6 -Compress), [Text.UTF8Encoding]::new($false))
-            $form = @("data=<$data;type=application/json")
-            if ($photo) { $form += "referenceImage=@$photo;type=image/png" }
-            Call POST '/api/tailoring/requests' -Form $form -NoCsrf -Headers @{ 'Idempotency-Key' = [guid]::NewGuid() }
-        }
-        $one = Tailor $png
-        Check '#14 tailoring request with photo' ($one.Status -eq 201 -and $one.Json.status -eq 'AwaitingQuote' -and $one.Json.estimatedPrice -gt 0) "($($one.Json.number), $($one.Json.estimatedPrice) EGP)"
-        $oneId = (Call GET "/api/admin/orders?q=$($one.Json.number)").Json.items[0].id
-        $r = Call GET "/api/admin/orders/$oneId"
-        Check '#36 private photo through a signed link' ($r.Json.tailoring.referenceImageUrl -match '/object/sign/')
-        $r = Call POST "/api/admin/orders/$oneId/quote" @{ price = [decimal]$one.Json.estimatedPrice + 300; note = 'Test price'; validDays = 3 }
-        Check '#38 new price: QuoteSent + customer link' ($r.Status -eq 200 -and $r.Json.order.status -eq 'QuoteSent' -and $r.Json.customerLink)
-        $newToken = ([regex]::Match("$($r.Json.customerLink)", '[?&]t=([^&]+)')).Groups[1].Value
-        $r = Call POST "/api/orders/$($one.Json.number)/quote/reject" @{ reason = 'Too expensive (test)' } -NoCsrf -Headers @{ 'X-Tracking-Token' = $one.Json.trackingToken }
-        Check 'old link stops working after a new quote' ($r.Status -eq 404) "($($r.Status))"
-        $r = Call POST "/api/orders/$($one.Json.number)/quote/reject" @{ reason = 'Too expensive (test)' } -NoCsrf -Headers @{ 'X-Tracking-Token' = $newToken }
-        Check '#16 customer declines: Cancelled' ($r.Status -eq 200 -and $r.Json.status -eq 'Cancelled')
-
-        $two = Tailor $null
-        Check '#14 tailoring request without photo' ($two.Status -eq 201) "($($two.Json.number))"
-        $twoId = (Call GET "/api/admin/orders?q=$($two.Json.number)").Json.items[0].id
-        $r = Call POST "/api/admin/orders/$twoId/quote" @{ price = $two.Json.estimatedPrice; note = 'Same as the estimate'; validDays = 7 }
-        Check '#38 same price as the estimate: straight to QuoteApproved' ($r.Status -eq 200 -and $r.Json.order.status -eq 'QuoteApproved')
-        $r = Call POST "/api/orders/$($two.Json.number)/quote/approve" -NoCsrf -Headers @{ 'X-Tracking-Token' = $two.Json.trackingToken }
-        Check '#15 approving twice: 409 INVALID_STATUS_TRANSITION' ($r.Status -eq 409 -and $r.Json.code -eq 'INVALID_STATUS_TRANSITION') "($($r.Status))"
-        $r = Call POST "/api/admin/orders/$twoId/status" @{ to = 'Cancelled'; note = 'Full test clean-up' }
-        Check 'tailoring test order cleaned up' ($r.Status -eq 200 -and $r.Json.status -eq 'Cancelled')
-
         # ======================================================== G. settings
         Section 'G. Admin: settings (read, save unchanged, compare)'
-        foreach ($s in @(@('#41/#42 delivery zones', '/api/admin/delivery-zones'), @('#39/#40 tailoring catalog', '/api/admin/tailoring/catalog'),
-                         @('#45/#46 price rules', '/api/admin/tailoring/pricing'), @('#43/#44 site settings', '/api/admin/site-settings'))) {
+        foreach ($s in @(@('#41/#42 delivery zones', '/api/admin/delivery-zones'),
+                         @('#43/#44 site settings', '/api/admin/site-settings'))) {
             $before = (Call GET $s[1]).Json
             $body = if ($s[1] -like '*delivery-zones') { @($before | ForEach-Object { @{ id = $_.id; fee = $_.fee; etaDaysMin = $_.etaDaysMin; etaDaysMax = $_.etaDaysMax; isActive = $_.isActive } }) } else { $before }
             $put = Call PUT $s[1] $body
@@ -413,7 +367,7 @@ try {
 
         # ======================================================== H. clean-up
         Section 'H. Clean-up (everything the test made)'
-        $r = Call PUT "/api/admin/products/$($product.id)" @{ categoryId = $category.id; nameAr = 'عباية اختبار'; nameEn = "Test Abaya $run"; slug = $product.slug
+        $r = Call PUT "/api/admin/products/$($product.id)" @{ categoryId = $category.id; nameAr = 'هودي اختبار'; nameEn = "Test Hoodie $run"; slug = $product.slug
             descriptionAr = 'وصف'; descriptionEn = 'Updated by the full test'; basePrice = 999; isVisible = $false }
         $r = Call GET "/api/products/$($product.slug)"
         Check 'hidden product leaves the shop (404)' ($r.Status -eq 404) "($($r.Status))"

@@ -70,7 +70,7 @@ try {
     $categoryId = $r.Json.id
 
     $r = Call POST '/api/admin/products' @{
-        categoryId = $categoryId; nameAr = 'عباية تجربة'; nameEn = 'Smoke Test Abaya'; slug = $null
+        categoryId = $categoryId; nameAr = 'هودي تجربة'; nameEn = 'Smoke Test Hoodie'; slug = $null
         descriptionAr = $null; descriptionEn = 'Created by the smoke test'; basePrice = 999; isVisible = $true
         variants = @(@{ size = 'M'; colorId = $colorId; stock = 3 })
     }
@@ -141,7 +141,7 @@ try {
     $r = Call PUT '/api/admin/delivery-zones' @(@{ id = $z.id; fee = $z.fee; etaDaysMin = $z.etaDaysMin; etaDaysMax = $z.etaDaysMax; isActive = $true })
     Check '#42 update delivery zones' ($r.Status -eq 200) "($($r.Status))"
 
-    $r = Call GET '/api/products/classic-blouse'
+    $r = Call GET '/api/products/weft-essential-hoodie'
     $v = $r.Json.variants | Where-Object { $_.inStock } | Select-Object -First 1
     $stockBefore = if ($v.stock -ne $null) { $v.stock } else { 'more than 5' }
     $order = @{
@@ -174,57 +174,15 @@ try {
     $r = Call POST "/api/admin/orders/$orderId/status" @{ to = 'Cancelled'; note = 'Smoke test clean-up' }
     Check '#37 cancel' ($r.Status -eq 200 -and $r.Json.status -eq 'Cancelled')
 
-    $after = (Call GET '/api/products/classic-blouse').Json.variants | Where-Object { $_.id -eq $v.id }
+    $after = (Call GET '/api/products/weft-essential-hoodie').Json.variants | Where-Object { $_.id -eq $v.id }
     $stockAfter = if ($after.stock -ne $null) { $after.stock } else { 'more than 5' }
     Check 'cancel put the stock back' ("$stockAfter" -eq "$stockBefore") "(before $stockBefore, after $stockAfter)"
 
-    # ---------- Day 4: custom tailoring (#12-15, #38) + settings (#39-40, #43-47)
-    $catalog = (Call GET '/api/tailoring/catalog').Json
-    Check '#12 tailoring catalog' ($catalog.garments.Count -gt 0 -and $catalog.liningPrice -ge 0) "($($catalog.garments.Count) garments)"
-    $r = Call POST '/api/tailoring/estimate' @{ styleId = 'maxi'; garment = 'dress'; fabric = 'crepe'; fit = 'Relaxed'
-        lining = $true; sizingMode = 'StandardSize'; standardSize = 'M'; extras = @('embroidery') }
-    Check '#13 estimate' ($r.Status -eq 200 -and $r.Json.estimatedPrice -gt 0) "($($r.Json.estimatedPrice) EGP)"
-
-    $zoneId = (Call GET '/api/delivery-zones').Json[0].id
-    $dataFile = Join-Path $tmp 'request.json'
-    $request = @{
-        customer = @{ name = 'Smoke Tailor'; phone = '01112345678'; email = $null; deliveryZoneId = $zoneId
-            city = 'Nasr City'; address = '1 Smoke Test Street, apt 1'; notes = $null }
-        styleId = 'maxi'; garment = 'dress'; fabric = 'crepe'; color = 'Navy'; fit = 'Relaxed'
-        sizingMode = 'Measurements'; standardSize = $null; measurements = @{ bust = 92; waist = 74; dressLength = 140 }
-        lining = $true; extras = @('embroidery'); notes = 'Smoke test - please ignore'; acceptTerms = $true
-    }
-    [IO.File]::WriteAllText($dataFile, ($request | ConvertTo-Json -Depth 6 -Compress), [Text.UTF8Encoding]::new($false))
-    # The PNG from the photo test above doubles as the reference photo.
-    $placed = & curl.exe -s -X POST "$api/api/tailoring/requests" -H "Idempotency-Key: smoke-$([guid]::NewGuid())" `
-        -F "data=<$dataFile;type=application/json" -F "referenceImage=@$png;type=image/png" | ConvertFrom-Json
-    Check '#14 tailoring request (with photo)' ($placed.status -eq 'AwaitingQuote') "($($placed.number), estimate $($placed.estimatedPrice))"
-
-    $customId = (Call GET "/api/admin/orders?q=$($placed.number)").Json.items[0].id
-    $r = Call GET "/api/admin/orders/$customId"
-    Check '#36 notes + private photo link' ($r.Json.tailoring.notes -like 'Smoke*' -and $r.Json.tailoring.referenceImageUrl -match '/object/sign/')
-
-    $r = Call POST "/api/admin/orders/$customId/quote" @{ price = $placed.estimatedPrice + 250; note = 'Smoke test price'; validDays = 3 }
-    Check '#38 new price -> QuoteSent + one-time link' ($r.Status -eq 200 -and $r.Json.order.status -eq 'QuoteSent' -and $r.Json.customerLink)
-    $newToken = ([regex]::Match("$($r.Json.customerLink)", '[?&]t=([^&]+)')).Groups[1].Value
-
-    $old = & curl.exe -s -o NUL -w '%{http_code}' -X POST "$api/api/orders/$($placed.number)/quote/approve" -H "X-Tracking-Token: $($placed.trackingToken)"
-    Check 'old link stops working' ($old -eq '404') "($old)"
-    $answer = & curl.exe -s -X POST "$api/api/orders/$($placed.number)/quote/approve" -H "X-Tracking-Token: $newToken" | ConvertFrom-Json
-    Check '#15 customer approves' ($answer.status -eq 'QuoteApproved')
-
+    # ---------- settings (#41-44, #47)
     $r = Call GET '/api/admin/dashboard'
     Check '#47 dashboard' ($r.Status -eq 200 -and $null -ne $r.Json.latestOrders) "(today $($r.Json.ordersToday), low stock $($r.Json.lowStock.Count))"
-    $r = Call POST "/api/admin/orders/$customId/status" @{ to = 'Cancelled'; note = 'Smoke test clean-up' }
-    Check 'custom order cleaned up' ($r.Status -eq 200 -and $r.Json.status -eq 'Cancelled')
 
     # Read + write back the same settings: proves the PUTs work without changing anything.
-    $r = Call GET '/api/admin/tailoring/catalog'
-    $r2 = Call PUT '/api/admin/tailoring/catalog' $r.Json
-    Check '#39/#40 tailoring catalog' ($r.Status -eq 200 -and $r2.Status -eq 200) "($($r2.Status))"
-    $r = Call GET '/api/admin/tailoring/pricing'
-    $r2 = Call PUT '/api/admin/tailoring/pricing' $r.Json
-    Check '#45/#46 price rules' ($r.Status -eq 200 -and $r2.Status -eq 200) "($($r2.Status))"
     $r = Call GET '/api/admin/site-settings'
     $r2 = Call PUT '/api/admin/site-settings' $r.Json
     Check '#43/#44 site settings' ($r.Status -eq 200 -and $r2.Status -eq 200) "($($r2.Status))"

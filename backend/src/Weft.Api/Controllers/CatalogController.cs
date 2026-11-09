@@ -19,7 +19,7 @@ public sealed class CatalogController : ApiControllerBase
     public Task<IReadOnlyList<CategoryNode>> Categories([FromServices] GetCategoryTreeHandler handler, CancellationToken ct) =>
         handler.HandleAsync(ct);
 
-    // #6 ?category=dresses&q=abaya&size=M&size=L&color=3&minPrice=&maxPrice=&inStock=true&sort=newest&page=1&pageSize=20
+    // #6 ?category=hoodies&q=essential&size=M&size=L&color=3&minPrice=&maxPrice=&inStock=true&sort=newest&page=1&pageSize=20
     // Products are cached 60 s (#6, #7): the shop stays fast and an owner's edit shows within a minute.
     // Checkout re-checks stock and price, so a minute-old card can't sell what isn't there.
     [HttpGet("products")]

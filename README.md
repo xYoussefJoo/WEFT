@@ -1,7 +1,7 @@
 # WEFT
 
-Bilingual (Arabic / English) online store for ready-made clothes and made-to-measure tailoring.
-Guest checkout with cash on delivery, an instant price calculator for custom orders, and an owner dashboard.
+WEFT — The Thread Co. Bilingual (Arabic / English) online store for hoodies.
+Guest checkout with cash on delivery, order tracking by link, and an owner dashboard.
 
 ## Stack
 
@@ -23,7 +23,7 @@ WEFT/
 │  │  └─ Weft.Api/             controllers, Program.cs
 │  └─ tests/Weft.Tests/
 ├─ frontend/                 Next.js app (storefront + /admin)
-├─ docs/                     API plan, API contract, production plan
+├─ docs/                     API contract, database, backup, OpenAPI
 ├─ docker-compose.yml        local PostgreSQL
 └─ .github/workflows/ci.yml  build + test on every push
 ```
@@ -49,10 +49,11 @@ dotnet user-secrets set "Storage:ServiceKey" "<service_role key>" --project src/
 dotnet user-secrets set "Seed:OwnerEmail" "owner@example.com" --project src/Weft.Api
 dotnet user-secrets set "Seed:OwnerPassword" "<at least 10 characters>" --project src/Weft.Api
 dotnet user-secrets set "Seed:OwnerName" "Owner Name" --project src/Weft.Api
-# on start the API applies migrations (schema "weft"), seeds governorates, colors, tailoring catalog,
-# prices, the owner, a demo catalog (Development only) and creates the storage buckets
+# on start (Development) the API applies migrations (schema "weft"), seeds the 27 governorates, the WEFT
+# colours and hoodies (only into an empty catalog; Seed:Catalog=false turns it off), the owner,
+# and creates the product-images storage bucket
 dotnet run --project src/Weft.Api
-dotnet test   # 133 unit tests (+4 PostgreSQL integration tests that run in GitHub Actions; skipped without Docker)
+dotnet test   # 110 unit tests (+4 PostgreSQL integration tests that run in GitHub Actions; skipped without Docker)
 
 # 3. Frontend → http://localhost:3000
 cd frontend
@@ -65,9 +66,10 @@ The frontend forwards `/api/*` to the backend (see `frontend/next.config.ts`), s
 
 ## Docs
 
-- `docs/Weft-API-Plan.docx` — the 47 endpoints, one line each
 - `docs/API-CONTRACT.md` — full request/response contract
-- `docs/Weft-Fashion-Production-Plan.pdf` — audit of the old prototype and the 7-day plan
+- `docs/openapi.json` — generated from the API; `npm run api:types` turns it into `frontend/src/types/api.ts`
+- `docs/DATABASE.md` — tables and relations (Mermaid diagram)
+- `docs/BACKUP.md` — nightly encrypted database backup
 
 ## Workflow
 

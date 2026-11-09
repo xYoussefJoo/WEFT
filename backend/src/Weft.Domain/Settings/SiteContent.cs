@@ -11,8 +11,9 @@ public sealed record SiteContent(
 {
     public static SiteContent Default => new(
         "توصيل لجميع المحافظات", "Delivery across Egypt",
-        new HeroContent("", "", "", "", null),
-        new CollectionContent(true, "الكولكشن الجديد", "New collection"),
+        new HeroContent("", "", "هوديز بتصميم بسيط وخامات مريحة وتفاصيل مميزة.",
+            "Hoodies with a simple design, comfortable fabrics and standout details.", null),
+        new CollectionContent(true, "كولكشن WEFT", "The WEFT collection"),
         new ContactInfo(null, null, null, null, null),
         new SocialLinks(null, null, null));
 }

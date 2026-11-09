@@ -34,48 +34,42 @@ public class DatabaseSeeder(
 
         await db.SaveChangesAsync(cancellationToken);
 
-        if (configuration.GetValue<bool>("Seed:DemoCatalog")) await SeedDemoCatalogAsync(cancellationToken);
+        if (configuration.GetValue("Seed:Catalog", true)) await SeedCatalogAsync(cancellationToken);
 
         // A storage hiccup must not stop the API from starting; uploads will report the problem.
         try { await storage.EnsureBucketsAsync(cancellationToken); }
         catch (Exception ex) { logger.LogWarning(ex, "Could not check the storage buckets."); }
     }
 
-    // Development only (Seed:DemoCatalog = true), and only into an empty catalog.
-    private async Task SeedDemoCatalogAsync(CancellationToken ct)
+    // The WEFT catalog from the prototype, only into an empty catalog (turn off with Seed:Catalog = false).
+    private async Task SeedCatalogAsync(CancellationToken ct)
     {
         if (await db.Products.AnyAsync(ct) || await db.Categories.AnyAsync(ct)) return;
 
         var categories = new Dictionary<string, Category>();
-        foreach (var c in Seed.SeedData.DemoCategories())
+        foreach (var c in Seed.SeedData.Categories())
         {
-            var category = new Category(c.NameAr, c.NameEn, c.Slug, c.ParentSlug is null ? null : categories[c.ParentSlug], null, c.SortOrder);
+            var category = new Category(c.NameAr, c.NameEn, c.Slug, null, null, c.SortOrder);
             categories[c.Slug] = category;
             db.Categories.Add(category);
         }
         await db.SaveChangesAsync(ct);
 
         var colors = await db.Colors.ToDictionaryAsync(c => c.NameEn, ct);
-        var demo = Seed.SeedData.DemoProducts();
-        var products = demo.Select(d => new Product(categories[d.CategorySlug].Id, d.NameAr, d.NameEn, null,
+        var seed = Seed.SeedData.Products();
+        var products = seed.Select(d => new Product(categories[d.CategorySlug].Id, d.NameAr, d.NameEn, null,
             d.DescriptionAr, d.DescriptionEn, d.Price)).ToList();
         db.Products.AddRange(products);
         await db.SaveChangesAsync(ct); // ids are needed for the SKUs
 
         for (var i = 0; i < products.Count; i++)
         {
-            var sizes = demo[i].Sizes;
-            var colorNames = demo[i].Colors;
-            for (var s = 0; s < sizes.Length; s++)
-                for (var c = 0; c < colorNames.Length; c++)
-                {
-                    var color = colors[colorNames[c]];
-                    var stock = (i + s * 3 + c * 2) % 7 + 1; // 1–7 pieces, so some show "only N left" / low stock
-                    products[i].AddVariant(sizes[s], color.Id, Sku.For(products[i].Id, sizes[s], color.NameEn), stock);
-                }
+            foreach (var size in seed[i].Sizes)
+                foreach (var color in seed[i].Colors.Select(name => colors[name]))
+                    products[i].AddVariant(size, color.Id, Sku.For(products[i].Id, size, color.NameEn), seed[i].StockPerVariant);
         }
         await db.SaveChangesAsync(ct);
-        logger.LogInformation("Demo catalog added: {Categories} categories, {Products} products.", categories.Count, products.Count);
+        logger.LogInformation("WEFT catalog added: {Categories} categories, {Products} products.", categories.Count, products.Count);
     }
 
     // The owner's first login comes from user-secrets / environment variables, never from code.

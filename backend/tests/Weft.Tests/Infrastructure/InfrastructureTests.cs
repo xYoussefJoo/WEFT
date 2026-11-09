@@ -18,7 +18,19 @@ public class SeedDataTests
     }
 
     [Fact]
-    public void Ten_valid_colors() => Assert.Equal(10, SeedData.Colors().Count());
+    public void Eight_valid_colors_from_the_weft_prototype() => Assert.Equal(8, SeedData.Colors().Count());
+
+    [Fact]
+    public void Seeded_products_use_known_colors_and_categories()
+    {
+        var colors = SeedData.Colors().Select(c => c.NameEn).ToHashSet();
+        var categories = SeedData.Categories().Select(c => c.Slug).ToHashSet();
+        var products = SeedData.Products();
+
+        Assert.Equal(4, products.Count);
+        Assert.All(products, p => Assert.Contains(p.CategorySlug, categories));
+        Assert.All(products.SelectMany(p => p.Colors), c => Assert.Contains(c, colors));
+    }
 }
 
 public class DatabaseModelTests

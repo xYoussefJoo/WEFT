@@ -28,3 +28,11 @@ export const assetPath = (path?: string | null) => {
   if (path.startsWith('data:') || path.startsWith('http://') || path.startsWith('https://')) return path;
   return path.startsWith('/') ? path : `/${path}`;
 };
+
+// Until the owner uploads real photos, a product shows the WEFT hoodie in its colour (public/assets/hoodies).
+const hoodieColors = ['black', 'cream', 'navy', 'olive', 'burgundy', 'gray', 'blue', 'pink'];
+
+export const hoodiePhoto = (colorNameEn?: string | null) => {
+  const name = (colorNameEn ?? '').trim().toLowerCase();
+  return `/assets/hoodies/${hoodieColors.includes(name) ? name : 'black'}.webp`;
+};

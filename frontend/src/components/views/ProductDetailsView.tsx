@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
+import { hoodiePhoto } from '@/lib/labels';
 import { useApi } from '@/lib/useApi';
 import { ApiError, errorText } from '@/lib/api';
 import { getProduct, pick, searchProducts, type ProductDetail } from '@/lib/shop';
@@ -199,9 +200,9 @@ function Details({ product }: { product: ProductDetail }) {
                 className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
               />
             ) : (
-              <span className="text-8xl select-none group-hover:scale-110 transition-transform duration-500" aria-hidden="true">
-                👕
-              </span>
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={hoodiePhoto(variants.find((v) => v.color.id === selectedColorId)?.color.nameEn)} alt={title}
+                className="w-full h-full object-contain p-8 mix-blend-multiply transition-transform duration-700 ease-out group-hover:scale-105" />
             )}
 
             <div className="absolute top-4 start-4 flex flex-col gap-2">

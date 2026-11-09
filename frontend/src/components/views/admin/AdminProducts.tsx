@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
+import { hoodiePhoto } from '@/lib/labels';
 import { useApi, usePage } from '@/lib/useApi';
 import { errorText } from '@/lib/api';
 import { deleteProduct, getAdminCategories, getAdminProduct, getAdminProducts, updateProduct, type AdminProductRow } from '@/lib/admin';
@@ -124,7 +125,8 @@ export default function AdminProducts() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={p.thumbnailUrl} alt="" loading="lazy" className="w-full h-full object-cover" />
                     ) : (
-                      <span aria-hidden="true">👕</span>
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={hoodiePhoto(null)} alt="" className="w-full h-full object-contain p-1 opacity-60 mix-blend-multiply" />
                     )}
                   </div>
                   <div className="min-w-0">

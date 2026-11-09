@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
+import { hoodiePhoto } from '@/lib/labels';
 import { useApi } from '@/lib/useApi';
 import { ApiError, errorText } from '@/lib/api';
 import { pick, rememberOrder, statusLabel, trackOrder, type PublicOrder } from '@/lib/shop';
@@ -107,7 +108,8 @@ function OrderDetails({ order }: { order: PublicOrder }) {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={l.imageUrl} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <span aria-hidden="true">👕</span>
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={hoodiePhoto(l.colorNameEn)} alt="" className="w-full h-full object-contain p-1 mix-blend-multiply" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0 text-sm">

@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, FormEvent } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
+import { hoodiePhoto } from '@/lib/labels';
 import { useApi } from '@/lib/useApi';
 import { ApiError, errorText, fieldError } from '@/lib/api';
 import { getDeliveryZones, newKey, pick, placeOrder, rememberOrder } from '@/lib/shop';
@@ -152,7 +153,8 @@ export default function CartView() {
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={c.imageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       ) : (
-                        <span className="text-2xl" aria-hidden="true">👕</span>
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={hoodiePhoto(c.colorNameEn)} alt="" className="w-full h-full object-contain p-1 mix-blend-multiply" />
                       )}
                     </div>
 

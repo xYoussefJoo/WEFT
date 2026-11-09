@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useWeftStore } from '@/store/useWeftStore';
+import { hoodiePhoto } from '@/lib/labels';
 import { pick, type ProductCard as Card } from '@/lib/shop';
 
 interface ProductCardProps {
@@ -50,9 +51,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="w-full h-full object-cover object-top group-hover:scale-[1.07] transition-transform duration-700 ease-out"
           />
         ) : (
-          <span className="text-6xl select-none group-hover:scale-110 transition-transform duration-500" aria-hidden="true">
-            👕
-          </span>
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={hoodiePhoto(product.colors[0]?.nameEn)} alt={title} loading="lazy"
+            className="w-full h-full object-contain p-4 mix-blend-multiply group-hover:scale-[1.05] transition-transform duration-700 ease-out" />
         )}
 
         {/* Floating Category Pill */}

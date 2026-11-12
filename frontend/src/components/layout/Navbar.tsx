@@ -67,7 +67,7 @@ export default function Navbar() {
             <b className="text-lg sm:text-xl font-bold tracking-tight text-[#141414] group-hover:text-[#7a6b58] transition-colors duration-200">
               WEFT
             </b>
-            <small className="text-[9px] sm:text-[10px] tracking-widest text-[#6b5d4c] font-semibold uppercase">
+            <small className="text-[14px] sm:text-[14px] tracking-widest text-[#6b5d4c] font-semibold uppercase">
               THE THREAD CO.
             </small>
           </div>
@@ -118,7 +118,7 @@ export default function Navbar() {
             <span className="text-[#7a6b58] text-m"><FaShoppingCart /></span>
             <span>{t('السلة', 'Cart')}</span>
             {cartCount > 0 && (
-              <span className="w-5 h-5 rounded-full bg-[#7a6b58] text-white text-[10px] font-bold flex items-center justify-center animate-pulse-gold">
+              <span className="w-5 h-5 rounded-full bg-[#7a6b58] text-white text-[14px] font-bold flex items-center justify-center animate-pulse-gold">
                 {cartCount}
               </span>
             )}

@@ -40,8 +40,17 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
+      suppressHydrationWarning
       className={`${tajawal.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        {/* Apply the saved language before the first paint, so English visitors don't see the page flip from right-to-left. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{if(localStorage.getItem('weft_lang')==='en'){var d=document.documentElement;d.lang='en';d.dir='ltr'}}catch(e){}",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

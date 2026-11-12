@@ -60,7 +60,7 @@ export default function TrackOrderView() {
   return <OrderDetails order={data} />;
 }
 
-function OrderDetails({ order }: { order: PublicOrder }) {
+export function OrderDetails({ order }: { order: PublicOrder }) {
   const lang = useWeftStore((state) => state.lang);
   const t = useWeftStore((state) => state.t);
   const money = useWeftStore((state) => state.money);

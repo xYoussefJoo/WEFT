@@ -46,7 +46,7 @@ function AdminZonesEditor({ data, reload }: { data: AdminZone[]; reload: () => v
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead className="text-[11px] text-[#6e6a63] uppercase border-b border-[#eeebe6]">
+          <thead className="text-xs text-[#6e6a63] uppercase border-b border-[#eeebe6]">
             <tr>
               <th className="py-2 text-start">{t('المحافظة', 'Governorate')}</th>
               <th className="py-2 text-start">{t('الرسوم (ج.م)', 'Fee (EGP)')}</th>

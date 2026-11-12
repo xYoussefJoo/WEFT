@@ -211,7 +211,7 @@ function Details({ product }: { product: ProductDetail }) {
                 {categoryName}
               </span>
               {variant?.inStock && variant.stock != null && variant.stock <= 3 && (
-                <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-[#7a6b58] text-white shadow-xs">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#7a6b58] text-white shadow-xs">
                   {t('آخر قطع متوفرة', 'Few pieces left')}
                 </span>
               )}
@@ -402,7 +402,7 @@ function Details({ product }: { product: ProductDetail }) {
 
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[#e6e3dd] text-[11px] text-[#141414] font-bold">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-[#e6e3dd] text-xs text-[#141414] font-bold">
             <div className="flex items-center gap-2 bg-[#faf9f7] p-2.5 rounded-xl">
               <span>{t('شحن لجميع المحافظات', 'Fast Egypt delivery')}</span>
             </div>

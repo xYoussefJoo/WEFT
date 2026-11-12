@@ -309,6 +309,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/media/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    key: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": unknown;
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/delivery-zones": {
         parameters: {
             query?: never;
@@ -378,6 +415,47 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["PlacedOrderDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/orders/lookup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["LookupOrderCommand"];
+                    "text/json": components["schemas"]["LookupOrderCommand"];
+                    "application/*+json": components["schemas"]["LookupOrderCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PublicOrderDto"];
                     };
                 };
             };
@@ -565,6 +643,9 @@ export interface paths {
                     q?: string;
                     isVisible?: boolean;
                     lowStock?: boolean;
+                    colorId?: number;
+                    size?: string;
+                    status?: string;
                     sort?: string;
                     page?: number;
                     pageSize?: number;
@@ -788,6 +869,129 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/inventory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    q?: string;
+                    status?: string;
+                    categoryId?: number;
+                    colorId?: number;
+                    size?: string;
+                    page?: number;
+                    pageSize?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["InventoryDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/variants/{id}/stock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["AdjustStockCommand"];
+                    "text/json": components["schemas"]["AdjustStockCommand"];
+                    "application/*+json": components["schemas"]["AdjustStockCommand"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AdminVariantDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/variants/{id}/movements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["StockMovementDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1300,6 +1504,14 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AdjustStockCommand: {
+            /** Format: int32 */
+            change: number;
+            reason: components["schemas"]["StockReason"];
+            note: null | string;
+            /** Format: uint64 */
+            version: number;
+        };
         AdminCategoryNode: {
             /** Format: int32 */
             id: number;
@@ -1417,6 +1629,8 @@ export interface components {
             isVisible: boolean;
             thumbnailUrl: null | string;
             lowStock: boolean;
+            /** Format: int32 */
+            lowVariants: number;
         };
         AdminVariantDto: {
             /** Format: int32 */
@@ -1557,11 +1771,47 @@ export interface components {
             /** Format: int32 */
             sortOrder: number;
         };
+        InventoryDto: {
+            rows: components["schemas"]["PagedOfInventoryRow"];
+            /** Format: int32 */
+            variants: number;
+            /** Format: int32 */
+            units: number;
+            /** Format: int32 */
+            low: number;
+            /** Format: int32 */
+            soldOut: number;
+            /** Format: int32 */
+            lowStockAtOrBelow: number;
+            sizes: string[];
+        };
+        InventoryRow: {
+            /** Format: int32 */
+            variantId: number;
+            /** Format: int32 */
+            productId: number;
+            productNameAr: string;
+            productNameEn: string;
+            productVisible: boolean;
+            sku: string;
+            size: string;
+            color: components["schemas"]["ColorDto"];
+            /** Format: int32 */
+            stock: number;
+            /** Format: double */
+            priceOverride: null | number;
+            /** Format: uint64 */
+            version: number;
+        };
         LoginRequest: {
             email: string;
             password: string;
             /** @default false */
             rememberMe: boolean;
+        };
+        LookupOrderCommand: {
+            number: string;
+            contact: string;
         };
         LowStockItem: {
             /** Format: int32 */
@@ -1577,8 +1827,6 @@ export interface components {
             size: string;
             /** Format: int32 */
             colorId: number;
-            /** Format: int32 */
-            stock: number;
             /** Format: double */
             priceOverride?: null | number;
             sku?: null | string;
@@ -1614,6 +1862,17 @@ export interface components {
         };
         PagedOfAdminProductRow: {
             items: components["schemas"]["AdminProductRow"][];
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            pageSize: number;
+            /** Format: int32 */
+            totalCount: number;
+            /** Format: int32 */
+            totalPages: number;
+        };
+        PagedOfInventoryRow: {
+            items: components["schemas"]["InventoryRow"][];
             /** Format: int32 */
             page: number;
             /** Format: int32 */
@@ -1753,6 +2012,19 @@ export interface components {
             instagram: null | string;
             tikTok: null | string;
         };
+        StockMovementDto: {
+            /** Format: int32 */
+            id: number;
+            /** Format: int32 */
+            change: number;
+            reason: components["schemas"]["StockReason"];
+            note: null | string;
+            /** Format: date-time */
+            createdAt: string;
+            createdBy: string;
+        };
+        /** @enum {unknown} */
+        StockReason: "Received" | "Sold" | "Returned" | "Damaged" | "Correction";
         TimelineEvent: {
             from: null | components["schemas"]["OrderStatus"];
             to: components["schemas"]["OrderStatus"];
@@ -1775,8 +2047,6 @@ export interface components {
             size: string;
             /** Format: int32 */
             colorId: number;
-            /** Format: int32 */
-            stock: number;
             /** Format: double */
             priceOverride: null | number;
             /** Format: uint64 */

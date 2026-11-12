@@ -103,7 +103,7 @@ export default function HomeView() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#141414]/45 via-transparent to-transparent pointer-events-none" />
 
           {/* Floating glass badge */}
-          <span className="absolute bottom-6 end-6 bg-white/85 backdrop-blur-md px-4 py-2 text-[10px] sm:text-xs tracking-widest font-bold text-[#141414] rounded-full shadow-sm">
+          <span className="absolute bottom-6 end-6 bg-white/85 backdrop-blur-md px-4 py-2 text-[14px] sm:text-xs tracking-widest font-bold text-[#141414] rounded-full shadow-sm">
             THE HOODIE COLLECTION — 2026
           </span>
 

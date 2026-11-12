@@ -10,6 +10,7 @@ import {
 } from '@/lib/admin';
 import { pick, statusLabel } from '@/lib/shop';
 import { useConfirm } from '@/components/admin/ui';
+import Select from '@/components/ui/Select';
 
 const ALL_STATUSES = Object.keys(statusLabel) as OrderStatus[];
 
@@ -48,10 +49,10 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
           <p className="text-xs text-[#6e6a63] mt-0.5">{data && t(`عدد النتائج: ${data.totalCount}`, `${data.totalCount} orders`)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <select aria-label={t('الحالة', 'Status')} value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | '')} className={select}>
+          <Select aria-label={t('الحالة', 'Status')} value={status} onChange={(e) => setStatus(e.target.value as OrderStatus | '')} className={select}>
             <option value="">{t('كل الحالات', 'All statuses')}</option>
             {ALL_STATUSES.map((s) => <option key={s} value={s}>{t(...statusLabel[s])}</option>)}
-          </select>
+          </Select>
           <input type="search" aria-label={t('بحث', 'Search')} placeholder={t('رقم الطلب أو الهاتف أو الاسم', 'Number, phone or name')}
             value={search} onChange={(e) => setSearch(e.target.value)} className={`${select} cursor-text w-56`} />
         </div>
@@ -67,9 +68,9 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
       ) : data.items.length > 0 ? (
         <div className={`overflow-x-auto ${loading ? 'opacity-60' : ''}`}>
           <table className="w-full text-sm text-start">
-            <thead className="bg-[#f5f3ef] text-[#6e6a63] text-[11px] uppercase tracking-wider border-b border-[#e6e3dd]">
+            <thead className="bg-[#f5f3ef] text-[#6e6a63] text-xs uppercase tracking-wider border-b border-[#e6e3dd]">
               <tr>
-                <th className="px-5 py-3.5 text-start font-bold">#</th>
+                <th className="px-5 py-3.5 text-start font-bold">{t('الكود', 'Code')}</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('العميل', 'Customer')}</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('الإجمالي', 'Total')}</th>
                 <th className="px-5 py-3.5 text-start font-bold">{t('الحالة', 'Status')}</th>
@@ -78,9 +79,9 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
             <tbody className="divide-y divide-[#e6e3dd]">
               {data.items.map((o) => (
                 <tr key={o.id} onClick={() => onOpen(o.id)} className="hover:bg-[#f8f7f4] transition-colors duration-150 cursor-pointer">
-                  <td className="px-5 py-4 font-mono text-xs text-[#141414] font-bold" dir="ltr">
+                  <td className="px-5 py-4 font-mono text-sm text-[#141414] font-bold whitespace-nowrap" dir="ltr">
                     {o.number}
-                    <div className="text-[10px] text-[#6e6a63] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB')}</div>
+                    <div className="text-[14px] text-[#6e6a63] font-sans font-normal">{new Date(o.createdAt).toLocaleDateString(lang === 'ar' ? 'ar-EG-u-nu-latn' : 'en-GB')}</div>
                   </td>
                   <td className="px-5 py-4">
                     <div className="font-bold text-[#141414]">{o.customerName}</div>
@@ -89,7 +90,7 @@ function OrderBoard({ onOpen }: { onOpen: (id: number) => void }) {
                   </td>
                   <td className="px-5 py-4 font-extrabold text-[#7a6b58]">
                     {money(o.total)}
-                    <div className={`text-[11px] font-bold ${o.paymentStatus === 'Paid' ? 'text-green-700' : 'text-amber-800'}`}>
+                    <div className={`text-xs font-bold ${o.paymentStatus === 'Paid' ? 'text-green-700' : 'text-amber-800'}`}>
                       {o.paymentStatus === 'Paid' ? t('مدفوع', 'Paid') : t('غير مدفوع', 'Unpaid')}
                     </div>
                   </td>

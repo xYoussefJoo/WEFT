@@ -5,6 +5,7 @@ import { useWeftStore } from '@/store/useWeftStore';
 import { useApi } from '@/lib/useApi';
 import { ApiError } from '@/lib/api';
 import { savedOrders, statusLabel, trackOrder, type SavedOrder } from '@/lib/shop';
+import TrackLookup from '@/components/views/TrackLookup';
 
 // "My orders": the orders placed on this device (number + tracking token in local storage), each with its live status.
 export default function OrdersView() {
@@ -39,6 +40,9 @@ export default function OrdersView() {
           {t('الطلبات التي أرسلتها من هذا الجهاز، بحالتها الحالية', 'Orders placed from this device, with their current status')}
         </p>
       </div>
+
+      <TrackLookup />
+
 
       <form onSubmit={openLink} className="bg-[#f5f3ef] rounded-2xl border border-[#e6e3dd] p-4 flex flex-col sm:flex-row gap-3 sm:items-center">
         <label htmlFor="track-link" className="text-xs font-bold text-[#141414] shrink-0">

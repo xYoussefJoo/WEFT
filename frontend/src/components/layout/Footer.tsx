@@ -43,7 +43,7 @@ export default function Footer() {
               />
               <div>
                 <b className="text-xl font-bold tracking-tight block">WEFT</b>
-                <small className="text-[10px] tracking-widest text-[#a39b90] font-semibold uppercase">
+                <small className="text-[14px] tracking-widest text-[#a39b90] font-semibold uppercase">
                   THE THREAD CO.
                 </small>
               </div>

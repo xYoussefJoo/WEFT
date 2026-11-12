@@ -12,8 +12,8 @@ export const ui = {
   input: 'w-full border border-[#dedbd5] rounded-xl px-3 py-2.5 bg-white text-[#2b2926] text-sm focus:outline-none focus:ring-2 focus:ring-[#7a6b58] focus:border-[#7a6b58] transition-colors',
   inputSm: 'border border-[#dedbd5] rounded-lg px-2 py-1.5 bg-white text-[#2b2926] text-xs focus:outline-none focus:ring-2 focus:ring-[#7a6b58]',
   label: 'flex flex-col gap-1.5 text-xs font-bold text-[#2a2a28]',
-  hint: 'text-[11px] font-medium text-[#6e6a63]',
-  error: 'text-[11px] font-semibold text-[#a72f3e]',
+  hint: 'text-xs font-medium text-[#6e6a63]',
+  error: 'text-xs font-semibold text-[#a72f3e]',
 };
 
 const buttonStyles = {
@@ -32,7 +32,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 export function Button({ variant = 'primary', size = 'md', busy, disabled, className = '', children, type = 'button', ...rest }: ButtonProps) {
-  const sizes = size === 'sm' ? 'px-3 py-1.5 text-[11px] rounded-lg' : 'px-5 py-2.5 text-xs rounded-xl';
+  const sizes = size === 'sm' ? 'px-3 py-1.5 text-xs rounded-lg' : 'px-5 py-2.5 text-xs rounded-xl';
   return (
     <button
       type={type}
@@ -75,7 +75,7 @@ export function PageHeader({ eyebrow, title, description, action }: { eyebrow: s
   return (
     <div className={`${ui.card} ${ui.cardPad} flex flex-col sm:flex-row sm:items-center justify-between gap-4`}>
       <div className="space-y-1">
-        <span className="text-[11px] font-bold tracking-[0.2em] text-[#6b5d4c] uppercase">{eyebrow}</span>
+        <span className="text-xs font-bold tracking-[0.2em] text-[#6b5d4c] uppercase">{eyebrow}</span>
         <h3 className="text-lg sm:text-xl font-serif font-bold text-[#141414]">{title}</h3>
         {description && <p className="text-xs text-[#6e6a63] max-w-2xl">{description}</p>}
       </div>
@@ -162,7 +162,7 @@ export function Modal({ open, title, subtitle, onClose, size = 'md', children }:
         <header className="flex items-start justify-between gap-4 px-6 py-4 bg-[#141414] text-white border-b-2 border-[#7a6b58]">
           <div className="min-w-0">
             <h2 id={titleId} className="text-lg font-serif font-bold truncate">{title}</h2>
-            {subtitle && <p className="text-[11px] text-[#dcd8d1] mt-0.5">{subtitle}</p>}
+            {subtitle && <p className="text-xs text-[#dcd8d1] mt-0.5">{subtitle}</p>}
           </div>
           <button type="button" onClick={api.requestClose} aria-label={t('إغلاق', 'Close')}
             className="w-8 h-8 shrink-0 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7a6b58]">✕</button>

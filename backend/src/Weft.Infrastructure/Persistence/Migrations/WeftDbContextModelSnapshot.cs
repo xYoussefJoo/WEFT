@@ -679,6 +679,44 @@ namespace Weft.Infrastructure.Persistence.Migrations
                     b.ToTable("SiteSettings", "weft");
                 });
 
+            modelBuilder.Entity("Weft.Domain.Entities.StockMovement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Change")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VariantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VariantId", "CreatedAt");
+
+                    b.ToTable("StockMovements", "weft");
+                });
+
             modelBuilder.Entity("Weft.Infrastructure.Identity.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -994,6 +1032,15 @@ namespace Weft.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Color");
+                });
+
+            modelBuilder.Entity("Weft.Domain.Entities.StockMovement", b =>
+                {
+                    b.HasOne("Weft.Domain.Entities.ProductVariant", null)
+                        .WithMany()
+                        .HasForeignKey("VariantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Weft.Domain.Entities.Category", b =>

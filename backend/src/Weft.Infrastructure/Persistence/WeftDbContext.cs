@@ -34,6 +34,7 @@ public class WeftDbContext(DbContextOptions<WeftDbContext> options, TimeProvider
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
+    public DbSet<StockMovement> StockMovements => Set<StockMovement>();
     public DbSet<ProductImage> ProductImages => Set<ProductImage>();
     public DbSet<Color> Colors => Set<Color>();
 

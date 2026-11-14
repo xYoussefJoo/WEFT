@@ -29,6 +29,7 @@ export default function AdminView() {
   const productModal = useWeftStore((state) => state.productModal);
   const closeProductModal = useWeftStore((state) => state.closeProductModal);
   const go = useWeftStore((state) => state.go);
+  const [menuOpen, setMenuOpen] = useState(false); // phones: the tab list behind the ☰ button
   const t = useWeftStore((state) => state.t);
 
   // The cookie may still be valid from an earlier visit; and any 401 later sends the owner back to the login.
@@ -63,16 +64,31 @@ export default function AdminView() {
   return (
     <ConfirmProvider>
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-[calc(100vh-120px)] bg-[#f8f7f4]">
-      <aside className="bg-[#2b2926] text-white p-6 flex flex-col justify-between border-b md:border-b-0 md:border-e border-white/10">
-        <div className="space-y-6">
-          <div className="flex items-center gap-3 pb-4 border-b border-white/15">
+      <aside className="bg-[#2b2926] text-white p-3 md:p-6 flex flex-col justify-between gap-3 md:gap-0 border-b md:border-b-0 md:border-e border-white/10">
+        <div className="space-y-3 md:space-y-6">
+          <div className="flex items-center gap-3 pb-3 md:pb-4 border-b border-white/15">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={assetPath('assets/weft-mark-white-128.webp')} alt="WEFT" className="w-12 h-12 object-contain" />
+            <img src={assetPath('assets/weft-mark-white-128.webp')} alt="WEFT" className="w-9 h-9 md:w-12 md:h-12 object-contain" />
             <div>
               <strong className="block text-sm font-serif font-bold text-white">WEFT</strong>
               <small className="text-[14px] tracking-wider text-[#dcd8d1] uppercase font-semibold">{t('إدارة المتجر', 'STORE MANAGEMENT')}</small>
             </div>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((o) => !o)}
+              aria-expanded={menuOpen}
+              aria-controls="admin-menu"
+              className="md:hidden ms-auto flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-sm font-bold cursor-pointer"
+            >
+              <span className="truncate max-w-[9rem]">{t(...adminTabsLabels[tab])}</span>
+              <span aria-hidden="true" className="text-lg leading-none">{menuOpen ? '✕' : '☰'}</span>
+              <span className="sr-only">{t('القائمة', 'Menu')}</span>
+            </button>
           </div>
+
+          {/* Phones: the list opens from the ☰ button; md and up: always shown. */}
+
+          <nav id="admin-menu" className={`${menuOpen ? 'block' : 'hidden'} md:block space-y-4 md:space-y-6`}>
 
           {groups.map(([ar, en, keys]) => (
             <div key={en} className="space-y-1">
@@ -87,7 +103,7 @@ export default function AdminView() {
                     className={`w-full text-start flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-bold transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                       isActive ? 'bg-[#a39b90] text-[#17283e]' : 'text-[#dedbd5] hover:bg-white/10'
                     }`}
-                    onClick={() => setAdminTab(key)}
+                    onClick={() => { setAdminTab(key); setMenuOpen(false); }}
                   >
                     <span className="w-2 h-2 rounded-full bg-current opacity-60" />
                     <span>{t(...adminTabsLabels[key])}</span>
@@ -96,9 +112,10 @@ export default function AdminView() {
               })}
             </div>
           ))}
+        </nav>
         </div>
 
-        <div className="pt-6 border-t border-white/15 space-y-2 mt-8 md:mt-0">
+        <div className={`${menuOpen ? 'block' : 'hidden'} md:block pt-3 md:pt-6 border-t border-white/15 space-y-2`}>
           <p className="px-2 text-xs text-[#c9c5be] truncate" title={user.email}>{user.fullName || user.email}</p>
           <button type="button" className="w-full text-start text-xs text-[#dedbd5] hover:text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer" onClick={() => go('home')}>
             ↗ {t('عرض المتجر', 'View storefront')}
@@ -109,7 +126,7 @@ export default function AdminView() {
         </div>
       </aside>
 
-      <main className="p-6 sm:p-10 min-w-0 max-w-[1450px] w-full mx-auto space-y-6">
+      <main className="p-4 sm:p-10 min-w-0 max-w-[1450px] w-full mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e8e6e1]">
           <div>
             <span className="text-xs font-bold tracking-widest text-[#6b5d4c] uppercase">{t('WEFT / لوحة الإدارة', 'WEFT / ADMIN')}</span>

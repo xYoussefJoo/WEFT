@@ -29,11 +29,22 @@ export default function AppShell({ route }: { route?: InitialRoute }) {
   const setAdminTab = useWeftStore((state) => state.setAdminTab);
   const go = useWeftStore((state) => state.go);
   const initialize = useWeftStore((state) => state.initialize);
+  const authChecked = useWeftStore((state) => state.authChecked);
+  const checkSession = useWeftStore((state) => state.checkSession);
 
   useEffect(() => {
     initialize(route);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialize]);
+
+  // Is the owner still logged in (cookie valid)? Then the header shows the Dashboard button.
+
+  useEffect(() => {
+
+    if (!authChecked) void checkSession();
+
+  }, [authChecked, checkSession]);
+
 
   useScrollReveal([page]);
 
